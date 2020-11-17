@@ -1,6 +1,6 @@
 {
   "name": "hms-app-web",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "A web app built using 100mslive",
   "main": "src/index.jsx",
   "scripts": {

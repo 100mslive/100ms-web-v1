@@ -28,7 +28,9 @@ cp example.env .env
 
 ### Token generation
 
-Update the `TOKEN_ENDPOINT` in `.env` file to your runkit endpoint (eg `https://ms-token-generation-service-4w7npt7zb4ol.runkit.sh/`)
+Clone and publish [this document on runkit](https://runkit.com/aniketbehera/100ms-token-generation-service)
+
+Update the `TOKEN_ENDPOINT` in `.env` file with your runkit endpoint (eg. `https://ms-token-generation-service-4w7npt7zb4ol.runkit.sh/`)
 
 ### Firebase config
 

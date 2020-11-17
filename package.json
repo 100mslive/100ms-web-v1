@@ -1,0 +1,61 @@
+{
+  "name": "hms-app-web",
+  "version": "0.0.1",
+  "description": "A web app built using 100mslive",
+  "main": "src/index.jsx",
+  "scripts": {
+    "build": "webpack --mode production --env.production",
+    "start": "webpack-dev-server --config ./webpack.config.js --mode development --open --https --cert ./server.cert --key  ./server.key",
+    "format": "prettier --write src"
+  },
+  "author": "100mslive",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "7.10.2",
+    "@babel/plugin-proposal-class-properties": "7.10.1",
+    "@babel/plugin-transform-runtime": "7.10.1",
+    "@babel/preset-env": "7.10.2",
+    "@babel/preset-react": "7.10.1",
+    "@babel/runtime": "7.10.2",
+    "babel-loader": "8.1.0",
+    "babel-plugin-import": "1.13.0",
+    "clean-webpack-plugin": "3.0.0",
+    "copy-webpack-plugin": "5.1.1",
+    "css-loader": "3.5.3",
+    "extract-text-webpack-plugin": "4.0.0-beta.0",
+    "file-loader": "6.0.0",
+    "html-webpack-plugin": "4.3.0",
+    "node-sass": "4.14.1",
+    "prettier": "^2.1.2",
+    "sass-loader": "8.0.2",
+    "style-loader": "1.2.1",
+    "webpack": "4.43.0",
+    "webpack-cli": "3.3.11",
+    "webpack-dev-server": "3.11.0"
+  },
+  "dependencies": {
+    "@100mslive/hmsvideo-web": "^0.8.1",
+    "@material-ui/core": "^4.11.0",
+    "antd": "^3.26.16",
+    "bowser": "^2.11.0",
+    "copy-webpack-plugin": "^5.0.5",
+    "dotenv": "^8.2.0",
+    "firebase": "^8.0.0",
+    "formik": "^2.1.7",
+    "mdi-react": "^6.4.0",
+    "react": "^16.13.1",
+    "react-container-dimensions": "^1.4.1",
+    "react-dom": "^16.13.1",
+    "react-mdi": "^0.5.7",
+    "react-router": "^5.0.1",
+    "reactjs-localstorage": "1.0.1",
+    "rect-scaler": "^1.0.0"
+  },
+  "keywords": [
+    "100mslive",
+    "hmsvideo",
+    "sfu",
+    "webrtc",
+    "js"
+  ]
+}

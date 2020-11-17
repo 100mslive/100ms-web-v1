@@ -1,0 +1,10 @@
+localhost:9090 {
+  root * /app/dist
+  file_server
+
+  tls /app/certs/server.cert /app/certs/server.key
+
+  reverse_proxy /ws conf.brytecam.com:8443 {
+    header_up Sec-WebSocket-Protocol {>Sec-WebSocket-Protocol}
+  }
+}

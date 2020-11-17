@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  web:
+    build: .
+    volumes:
+      # Uncomment for production
+      - "./configs/caddy/Caddyfile:/etc/caddy/Caddyfile"
+      # Dev caddyfile
+      # - "./configs/caddy/local.Caddyfile:/etc/caddy/Caddyfile"
+      - "caddy:/data"
+    ports:
+      # Prod ports
+      - 80:80
+      - 443:443
+      - 9090:9090
+    networks:
+      - ionnet
+    environment:
+    - conf.brytecam.com 
+    - admin@brytecam.com
+
+volumes:
+  caddy:
+
+networks:
+  ionnet:
+    external: true
+    name: ionnet

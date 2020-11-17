@@ -1,0 +1,27 @@
+version: 2.1
+
+orbs:
+  aws-ecr: circleci/aws-ecr@6.13.0
+
+workflows:
+
+  staging:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          repo: ion-web
+          extra-build-args: --build-arg TOKEN=${STAGING_TOKEN}
+          tag: staging-${CIRCLE_SHA1}
+          filters:
+            branches:
+              only: main
+  production:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          repo: ion-web
+          extra-build-args: --build-arg TOKEN=${PRODUCTION_TOKEN}
+          tag: ${CIRCLE_TAG}
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/

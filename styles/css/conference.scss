@@ -1,0 +1,61 @@
+/*------------------conference--------------------*/
+
+.conference-layout-wating {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.conference-local-video-layout {
+  position: absolute;
+  top: 30px;
+  left: 24px;
+}
+
+.conference-local-screen-layout {
+  position: absolute;
+  top: 30px;
+  right: 24px;
+}
+
+
+@media (orientation:portrait) {
+  .conference-layout {
+    flex-direction: column;
+  }
+  .v1>div {
+    height: 100%;
+  }
+  .v2>div,
+  .v3>div,
+  .v4>div {
+    height: 50%;
+  }
+  .v3>div,
+  .v4>div {
+    width: 50%;
+  }
+}
+@media (orientation:landscape) {
+  .conference-layout {
+    flex-direction: row;
+  }
+  .v1 > div {
+    width: 100%;
+  }
+  .v2 > div,
+  .v3 > div,
+  .v4 > div  {
+    width: 50%;
+  }
+  .v3 > div,
+  .v4 > div {
+    height: 50%;
+  }
+}

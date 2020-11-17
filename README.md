@@ -20,13 +20,13 @@ Once cloned, open the terminal in the project directory, and install dependencie
 npm install
 ```
 
-### Token generation
-
 Create a new file `.env` and copy the values from `example.env`
 
 ```
 cp example.env .env
 ```
+
+### Token generation
 
 Update the `TOKEN_ENDPOINT` in `.env` file to your runkit endpoint (eg `https://ms-token-generation-service-4w7npt7zb4ol.runkit.sh/`)
 

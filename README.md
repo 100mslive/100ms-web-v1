@@ -4,7 +4,7 @@ This is an example web app to demo 100mslive's web SDK
 
 ## Prerequisites
 
-You will need [Node.js](https://nodejs.org) version v14.15.0 or greater installed on your system
+You will need [Node.js](https://nodejs.org) version v12.13.0 or greater installed on your system
 
 ## Setup
 
@@ -20,11 +20,17 @@ Once cloned, open the terminal in the project directory, and install dependencie
 npm install
 ```
 
-### Token generation (To be updated)
+### Token generation
 
-Create a new file `.env` and copy the values from `example.env`. Update the `TOKEN_ENDPOINT` to point to runkit endpoint (or `https://ms-internal-apps-token-service-klly5pwlrz1c.runkit.sh/`)
+Create a new file `.env` and copy the values from `example.env`
 
-### Firebase config (To be updated)
+```
+cp example.env .env
+```
+
+Update the `TOKEN_ENDPOINT` in `.env` file to your runkit endpoint (eg `https://ms-token-generation-service-4w7npt7zb4ol.runkit.sh/`)
+
+### Firebase config
 
 Update the following values from your firebase project settings:
 
@@ -46,4 +52,4 @@ Then start the app with:
 npm start
 ```
 
-The app should now be up and running at https://localhost:8080 🚀
+The app should now be up and running at http://localhost:8080 🚀

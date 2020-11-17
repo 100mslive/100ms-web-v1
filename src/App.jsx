@@ -71,7 +71,11 @@ class App extends React.Component {
   }
 
   _cleanUp = async () => {
-    window.history.pushState({}, '100ms', 'https://' + window.location.host);
+    window.history.pushState(
+      {},
+      '100ms',
+      `${window.location.protocol}//${window.location.host}`
+    );
     await this.conference.cleanUp();
     await this.client.disconnect();
   };
@@ -180,12 +184,7 @@ class App extends React.Component {
       window.history.pushState(
         {},
         '100ms',
-        'https://' +
-          window.location.host +
-          '/?room=' +
-          values.roomId +
-          '&env=' +
-          values.env
+        `${window.location.protocol}//${window.location.host}/?room=${values.roomId}&env=${values.env}`
       );
       this.setState({
         login: true,

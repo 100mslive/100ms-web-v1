@@ -100,14 +100,6 @@ module.exports = env => {
     ],
     devServer: {
       hot: true,
-      proxy: {
-        '/ws': {
-          target: 'ws://conf.brytecam.com',
-          ws: true,
-          changeOrigin: true,
-          logLevel: 'debug',
-        },
-      },
     },
   };
 };

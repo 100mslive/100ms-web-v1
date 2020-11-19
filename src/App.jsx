@@ -136,12 +136,12 @@ class App extends React.Component {
       await this._cleanUp();
     };
 
-    client.on('peer-join', (id, info) => {
-      //this._notification("Peer Join", "peer => " + info.name + ", join!")
+    client.on('peer-join', (room, peer) => {
+      this._notification('Peer Join', `peer => ${peer.name} joined ${room}!`);
     });
 
-    client.on('peer-leave', id => {
-      //this._notification("Peer Leave", "peer => " + id + ", leave!")
+    client.on('peer-leave', (room, peer) => {
+      this._notification('Peer Leave', `peer => ${peer.name} left ${room}!`);
     });
 
     client.on('connect', () => {
@@ -156,19 +156,17 @@ class App extends React.Component {
       });
     });
 
-    client.on('stream-add', (id, info) => {
-      console.log('stream-add %s,%s!', id, info);
-      //this._notification("Stream Add", "id => " + id + ", name => " + info.name)
+    client.on('stream-add', (room, streamInfo) => {
+      console.log('stream-add %s,%s!', room, streamInfo.mid);
     });
 
-    client.on('stream-remove', stream => {
-      console.log('stream-remove %s,%', stream.id);
-      //this._notification("Stream Remove", "id => " + stream.id)
+    client.on('stream-remove', (room, streamInfo) => {
+      console.log(`stream-remove: ${room}, ${streamInfo.mid}`);
     });
 
-    client.on('broadcast', (mid, info) => {
-      console.log('broadcast %s,%s!', mid, info);
-      this._onMessageReceived(info);
+    client.on('broadcast', (room, peer, message) => {
+      console.log('broadcast: ', room, peer.name, message);
+      this._onMessageReceived(peer.name, message);
     });
 
     this.client = client;
@@ -325,13 +323,11 @@ class App extends React.Component {
     if (reloadPage) window.location.reload();
   };
 
-  _onMessageReceived = data => {
-    console.log('Received message:' + data.senderName + ':' + data.msg);
+  _onMessageReceived = (from, message) => {
+    console.log('Received message:' + from + ':' + message);
     let messages = this.state.messages;
-    let uid = 1;
-    messages.push(
-      new Message({ id: uid, message: data.msg, senderName: data.senderName })
-    );
+    let uid = 1; // @DISCUSS: Why is uid 1?
+    messages.push(new Message({ id: uid, message: message, senderName: from }));
     this.setState({ messages });
   };
 

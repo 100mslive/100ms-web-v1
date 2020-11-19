@@ -273,23 +273,26 @@ class Conference extends React.Component {
     }
   };
 
-  _handleAddStream = async (mid, info) => {
+  _handleAddStream = async (room, peer, streamInfo) => {
     const { client } = this.props;
     let streams = this.state.streams;
-    let stream = await client.subscribe(mid, client.rid);
-    stream.info = info;
-    console.log(mid, info, stream);
-    streams.push({ mid: stream.mid, stream, sid: mid });
+    let stream = await client.subscribe(streamInfo.mid, room);
+    stream.info = { name: peer.name }; // @NOTE: Just because stream is expected to have info in this format at the moment by the UI
+    streams.push({ mid: stream.mid, stream, sid: streamInfo.mid });
     this.setState({ streams });
     this.tuneLocalStream(streams.length);
   };
 
-  _handleRemoveStream = async stream => {
+  _handleRemoveStream = async (room, streamInfo) => {
+    // `room` might be used later in future
     let streams = this.state.streams;
-    streams = streams.filter(item => item.sid !== stream.mid);
+    streams = streams.filter(item => item.sid !== streamInfo.mid);
     this.setState({ streams });
     this.tuneLocalStream(streams.length);
-    if (this.state.mode === modes.PINNED && this.state.pinned === stream.mid) {
+    if (
+      this.state.mode === modes.PINNED &&
+      this.state.pinned === streamInfo.mid
+    ) {
       this.setState({
         mode: modes.GALLERY,
       });

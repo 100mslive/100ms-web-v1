@@ -36,6 +36,7 @@ import VideoCheckIcon from 'mdi-react/VideoCheckIcon';
 import UploadLockIcon from 'mdi-react/UploadLockIcon';
 import SwapVerticalIcon from 'mdi-react/SwapVerticalIcon';
 import DownloadLockIcon from 'mdi-react/DownloadLockIcon';
+let testUpdateLoop;
 
 const TEST_STEPS = {
   biz: { title: 'Biz Websocket', icon: <ServerNetworkIcon /> },
@@ -267,7 +268,7 @@ class LoginForm extends React.Component {
     this.setState({ test: true });
     this._testStep('biz', 'pending');
     let client = this.props.createClient();
-    let testUpdateLoop = null;
+    testUpdateLoop = null;
 
     window.onunload = () => {
       cleanup();

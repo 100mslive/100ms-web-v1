@@ -198,7 +198,7 @@ class Conference extends React.Component {
             },
           };
         }
-        localStream = await LocalStream.getUserMedia({
+        localStream = await client.getLocalStream({
           codec: settings.codec.toUpperCase(),
           resolution: settings.resolution,
           bandwidth: settings.bandwidth,

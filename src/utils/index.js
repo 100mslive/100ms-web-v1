@@ -3,7 +3,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import Bowser from 'bowser';
 
 const closeMediaStream = function (stream) {
   if (!stream) {
@@ -116,50 +115,9 @@ const SingleSelect = ({ field, form, ...props }) => {
   );
 };
 
-const isSupported = () => {
-  //TODO replace with firebase
-  const browser = Bowser.getParser(window.navigator.userAgent);
-  const isValidBrowser = browser.satisfies({
-    //TODO add precise versions after checking with browserstack
-    windows: {
-      'internet explorer': '>10',
-      safari: '>9999',
-      chrome: '>57',
-      firefox: '>52',
-      opera: '>44',
-    },
-    linux: {
-      safari: '>9999',
-      chrome: '>57',
-      firefox: '>52',
-      opera: '>44',
-    },
-    macos: {
-      safari: '>9999',
-      chrome: '>57',
-      firefox: '>52',
-      opera: '>44',
-    },
-    ios: {
-      safari: '>9999',
-      firefox: '>9999',
-      opera: '>9999',
-      chrome: '>9999',
-    },
-    android: {
-      safari: '>9999',
-      chrome: '>57',
-      firefox: '>52',
-      opera: '>44',
-    },
-  });
-  return isValidBrowser;
-};
-
 export {
   closeMediaStream,
   attachMediaStream,
   updateInputDevices,
   SingleSelect,
-  isSupported,
 };

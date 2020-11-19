@@ -10,14 +10,13 @@ import {
   Tooltip,
 } from 'antd';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { LocalStream } from '@100mslive/hmsvideo-web';
+import { LocalStream, isSupported } from '@100mslive/hmsvideo-web';
 import { reactLocalStorage } from 'reactjs-localstorage';
 import {
   updateInputDevices,
   SingleSelect,
   closeMediaStream,
   attachMediaStream,
-  isSupported,
 } from '../src/utils';
 import SoundMeter from './settings/soundmeter';
 import logo from '../public/brytecam-logo.png';

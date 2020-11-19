@@ -616,7 +616,7 @@ class LoginForm extends React.Component {
                     if (!values.roomId) {
                       errors.roomId = 'Required';
                     }
-                    if (!values.env) {
+                    if (process.env.INTERNAL && !values.env) {
                       errors.env = 'Required';
                     }
                     return errors;
@@ -680,22 +680,26 @@ class LoginForm extends React.Component {
                                   label="Name"
                                   name="displayName"
                                   className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 ${
+                                    process.env.INTERNAL ? '' : 'rounded-b-md'
+                                  } ${
                                     initialValues.roomId ? 'rounded-t-md' : ''
                                   }`}
                                   placeholder="Name"
                                 />
                               )}
                             </div>
-                            <div className="-mt-px">
-                              {initialValues && (
-                                <Field
-                                  label="Environment"
-                                  name="env"
-                                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5`}
-                                  placeholder="Environment (conf/staging/...)"
-                                />
-                              )}
-                            </div>
+                            {process.env.INTERNAL && (
+                              <div className="-mt-px">
+                                {initialValues && (
+                                  <Field
+                                    label="Environment"
+                                    name="env"
+                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5`}
+                                    placeholder="Environment (conf/staging/...)"
+                                  />
+                                )}
+                              </div>
+                            )}
                           </div>
 
                           <div className="mt-6">

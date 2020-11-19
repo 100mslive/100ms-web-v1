@@ -88,7 +88,7 @@ class App extends React.Component {
     });
   };
 
-  _createClient = async ({ userName, env = 'conf' }) => {
+  _createClient = async ({ userName, env = 'staging' }) => {
     let url = `wss://${env}.brytecam.com`;
     let authToken = await getToken(env);
 
@@ -126,7 +126,7 @@ class App extends React.Component {
 
     let client = await this._createClient({
       userName: values.displayName,
-      env: values.env ? values.env : 'conf',
+      env: values.env ? values.env : 'staging',
     });
     client.connect().catch(error => {
       alert(error.message);
@@ -179,11 +179,10 @@ class App extends React.Component {
     try {
       await this.client.join(values.roomId);
       //TODO ugly hack
-      window.history.pushState(
-        {},
-        '100ms',
-        `${window.location.protocol}//${window.location.host}/?room=${values.roomId}&env=${values.env}`
-      );
+      let redirectURL = process.env.INTERNAL
+        ? `${window.location.protocol}//${window.location.host}/?room=${values.roomId}&env=${values.env}`
+        : `${window.location.protocol}//${window.location.host}/?room=${values.roomId}`;
+      window.history.pushState({}, '100ms', redirectURL);
       this.setState({
         login: true,
         loading: false,

@@ -366,7 +366,7 @@ class App extends React.Component {
           }}
         >
           <div className="app-header-left">
-            <a href="https://brytecam.dev" target="_blank">
+            <a href="https://100ms.live/" target="_blank">
               <img src={bLogo} className="h-8" />
             </a>
           </div>

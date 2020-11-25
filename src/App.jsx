@@ -27,11 +27,11 @@ import {
   HMSClientConfig,
 } from '@100mslive/hmsvideo-web';
 
-async function getToken(env) {
+async function getToken(env, roomId) {
   const endpoint = process.env.TOKEN_ENDPOINT;
   const { token } = await fetch(endpoint, {
     method: 'POST',
-    body: JSON.stringify({ room_id: 'demo', peer_id: 'demo', env }),
+    body: JSON.stringify({ room_id: roomId, peer_id: 'demo', env }),
   })
     .then(response => response.json())
     .catch(console.error);
@@ -88,9 +88,9 @@ class App extends React.Component {
     });
   };
 
-  _createClient = async ({ userName, env = 'staging' }) => {
+  _createClient = async ({ userName, env = 'staging', roomId }) => {
     let url = `wss://${env}.brytecam.com`;
-    let authToken = await getToken(env);
+    let authToken = await getToken(env, roomId);
 
     console.log(`%cTOKEN IS: ${authToken}`, 'color: orange');
 
@@ -111,6 +111,8 @@ class App extends React.Component {
   _handleJoin = async values => {
     this.setState({ loading: true });
     let settings = this._settings;
+    this.roomName = values.roomName;
+    this.roomId = values.roomId;
     settings.selectedVideoDevice = values.selectedVideoDevice;
     settings.selectedAudioDevice = values.selectedAudioDevice;
     //TODO this should reflect in initialization as well
@@ -127,6 +129,7 @@ class App extends React.Component {
     let client = await this._createClient({
       userName: values.displayName,
       env: values.env ? values.env : 'staging',
+      roomId: values.roomId,
     });
     client.connect().catch(error => {
       alert(error.message);
@@ -145,6 +148,7 @@ class App extends React.Component {
     });
 
     client.on('connect', () => {
+      console.log('In connect', values)
       console.log('connected!');
       this._handleTransportOpen(values);
     });
@@ -173,7 +177,7 @@ class App extends React.Component {
   };
 
   _handleTransportOpen = async values => {
-    console.log(values);
+    console.log('in _handleTransportOpen', values);
     reactLocalStorage.remove('loginInfo');
     reactLocalStorage.setObject('loginInfo', values);
     try {
@@ -400,6 +404,8 @@ class App extends React.Component {
                 <Content style={{ flex: 1, position: 'relative' }}>
                   <div>
                     <Conference
+                      roomName={this.roomName}
+                      roomId={this.roomId}
                       collapsed={this.state.collapsed}
                       client={this.client}
                       settings={this._settings}

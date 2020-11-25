@@ -93,7 +93,12 @@ const ConnectionStep = ({ step }) => {
 };
 
 class LoginForm extends React.Component {
-  state = DEFAULT_STATE;
+  constructor(props) {
+    super(props);
+    this.state = DEFAULT_STATE;
+    this.state.formStage = 'ROOM';
+  }
+
   testUpdateLoop = null;
   localStorage = reactLocalStorage.getObject('loginInfo');
   roomId =
@@ -141,7 +146,7 @@ class LoginForm extends React.Component {
         window.location.query
     );
     console.log('Making test client');
-    let formStage = 'NAME';
+    let formStage = 'ROOM';
 
     this.state.settings =
       reactLocalStorage.getObject('settings').codec !== undefined
@@ -181,7 +186,7 @@ class LoginForm extends React.Component {
           const handleLogin = this.props.handleLogin;
           handleLogin({
             displayName: this.displayName,
-            roomId: this.roomId,
+            roomName: this.roomName,
             env: this.env,
             audioOnly: this.state.audioOnly,
             videoOnly: this.state.videoOnly,
@@ -206,6 +211,10 @@ class LoginForm extends React.Component {
         });
       }
     } else {
+      console.log(`[FormStage: ${formStage}]`);
+      if (this.roomId != '') {
+        formStage = 'JOIN_ROOM';
+      }
       this.setState({
         ...this.state,
         formStage: formStage,
@@ -275,6 +284,7 @@ class LoginForm extends React.Component {
     };
 
     client.on('transport-open', async () => {
+      console.log('{{{{{{');
       this._testStep('biz', 'connected', client.url);
       this._testStep('lobby', 'pending');
       const rid = 'lobby-' + Math.floor(1000000 * Math.random());
@@ -404,6 +414,35 @@ class LoginForm extends React.Component {
     });
   };
 
+  handleCreateSubmit = async values => {
+    const endpoint = process.env.CREATE_ROOM_ENDPOINT;
+    
+    console.log('endpoint', endpoint);
+
+    const roomEntry = await fetch(endpoint, {
+      method: 'POST',
+      body: JSON.stringify({
+        room_name: values.roomName,
+        isRecording: values.isRecording,
+      }),
+    })
+      .then(response => response.json())
+      .catch(err => console.log(err));
+
+    console.log('RoomEntry: ', roomEntry);
+    values.roomId = roomEntry.id;
+    this._notification(
+      'Room Created',
+      `Room Id: ${values.roomId} Room Name: ${values.roomName}`
+    );
+    this.handleNameSubmit(values);
+  };
+
+  handleJoinSubmit = values => {
+    // TODO: How to get roomName from roomId
+    this.handleNameSubmit(values);
+  };
+
   handleNameSubmit = values => {
     console.log(this.state.permissionGranted);
     if (this.state.permissionGranted) {
@@ -427,6 +466,7 @@ class LoginForm extends React.Component {
             ? values.displayName
             : this.displayName,
           roomId: values.roomId ? values.roomId : this.roomId,
+          roomName: values.roomName ? values.roomName : this.roomName,
           env: values.env ? values.env : this.env,
           //TODO audioOnly should be moved into settings
           //TODO this is repeated from componentdidmount
@@ -464,9 +504,9 @@ class LoginForm extends React.Component {
       displayName: this.state.formValues
         ? this.state.formValues.displayName
         : this.displayName,
-      roomId: this.state.formValues
-        ? this.state.formValues.roomId
-        : this.roomId,
+      roomName: this.state.formValues
+        ? this.state.formValues.roomName
+        : this.roomName,
       env: this.state.formValues ? this.state.formValues.env : this.env,
       audioOnly: values.audioOnly,
       videoOnly: values.videoOnly,
@@ -588,12 +628,195 @@ class LoginForm extends React.Component {
 
   render() {
     const steps = this.state.steps;
-
+    console.log(this.state.formStage);
     return (
       <>
         {this.state.isSupported && (
           <div className="relative -mt-24 z-0">
-            {this.state.formStage && this.state.formStage === 'NAME' && (
+            {!this.roomId &&
+              this.state.formStage &&
+              this.state.formStage === 'ROOM' && (
+                <>
+                  <div
+                    className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
+                    style={{ backgroundColor: '#1a1619' }}
+                  >
+                    <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
+                      <div className="">
+                        {/* <img className="mx-auto h-12 w-auto" src={logo} /> */}
+                        <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
+                          <>
+                            VC Demo
+                            <span
+                              className="text-xs rounded-md text-white font-medium ml-1"
+                              style={{
+                                verticalAlign: 'text-top',
+                                padding: '4px 4px',
+                                background: '#312A30',
+                                //                                color:"#EE6A5F",
+                                fontFamily: 'monospace',
+                                // background:"#1a1619"
+                              }}
+                            >
+                              Powered by 100ms
+                            </span>
+                          </>
+                        </h2>
+                      </div>
+
+                      <div className="mt-6 space-y-6">
+                        <button
+                          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          onClick={() =>
+                            this.setState({ formStage: 'CREATE_ROOM' })
+                          }
+                        >
+                          Create Meeting
+                        </button>
+                        <button
+                          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-700 hover:border-indigo-700 focus:outline-none border-indigo-600 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
+                          onClick={() =>
+                            this.setState({ formStage: 'JOIN_ROOM' })
+                          }
+                        >
+                          Join Meeting
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+            {!this.roomId &&
+              this.state.formStage &&
+              this.state.formStage === 'CREATE_ROOM' && (
+                <>
+                  <Formik
+                    initialValues={{
+                      roomName: this.roomName
+                        ? this.roomName
+                        : this.state.formValues
+                        ? this.state.formValues.roomName
+                        : '',
+                      displayName: this.displayName,
+                      env: this.env
+                        ? this.env
+                        : this.state.formValues
+                        ? this.state.formValues.env
+                        : '',
+                    }}
+                    validate={values => {
+                      const errors = {};
+                      if (!values.displayName) {
+                        errors.displayName = 'Required';
+                      }
+                      if (!values.roomName) {
+                        errors.roomName = 'Required';
+                      }
+                      if (process.env.INTERNAL && !values.env) {
+                        errors.env = 'Required';
+                      }
+                      return errors;
+                    }}
+                    onSubmit={values => {
+                      this.handleCreateSubmit(values);
+                    }}
+                  >
+                    {({ values, initialValues }) => (
+                      <Form>
+                        <div
+                          className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
+                          style={{ backgroundColor: '#1a1619' }}
+                        >
+                          <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
+                            <div className="">
+                              {/* <img className="mx-auto h-12 w-auto" src={logo} /> */}
+                              <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
+                                {initialValues && (
+                                  <>
+                                    VC Demo
+                                    <span
+                                      className="text-xs rounded-md text-white font-medium ml-1"
+                                      style={{
+                                        verticalAlign: 'text-top',
+                                        padding: '4px 4px',
+                                        background: '#312A30',
+                                        //                                color:"#EE6A5F",
+                                        fontFamily: 'monospace',
+                                        // background:"#1a1619"
+                                      }}
+                                    >
+                                      Powered by 100ms
+                                    </span>
+                                  </>
+                                )}
+                              </h2>
+                            </div>
+                            <div className="rounded-md shadow-sm">
+                              <div>
+                                {initialValues && !initialValues.roomName && (
+                                  <Field
+                                    label="Room Name"
+                                    name="roomName"
+                                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+                                    placeholder="Room Name"
+                                  />
+                                )}
+                              </div>
+                              <div className="-mt-px">
+                                {initialValues && (
+                                  <Field
+                                    label="Username"
+                                    name="displayName"
+                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 ${
+                                      process.env.INTERNAL ? '' : 'rounded-b-md'
+                                    } ${
+                                      initialValues.roomName
+                                        ? 'rounded-t-md'
+                                        : ''
+                                    }`}
+                                    placeholder="Username"
+                                  />
+                                )}
+                              </div>
+                              {process.env.INTERNAL && (
+                                <div className="-mt-px">
+                                  {initialValues && (
+                                    <Field
+                                      label="Environment"
+                                      name="env"
+                                      className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5`}
+                                      placeholder="Environment (conf/staging/...)"
+                                    />
+                                  )}
+                                </div>
+                              )}
+
+                              <div className="mt-6">
+                                <label>
+                                  <Field type="checkbox" name="isRecording" />
+                                  {'  '} Record Room?
+                                </label>
+                              </div>
+                            </div>
+
+                            <div className="mt-6">
+                              <button
+                                type="submit"
+                                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
+                              >
+                                <span className="absolute left-0 inset-y-0 flex items-center pl-3"></span>
+                                Create Room
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </Form>
+                    )}
+                  </Formik>
+                </>
+              )}
+            {this.state.formStage && this.state.formStage === 'JOIN_ROOM' && (
               <>
                 <Formik
                   initialValues={{
@@ -623,7 +846,7 @@ class LoginForm extends React.Component {
                     return errors;
                   }}
                   onSubmit={values => {
-                    this.handleNameSubmit(values);
+                    this.handleJoinSubmit(values);
                   }}
                 >
                   {({ values, initialValues }) => (
@@ -678,14 +901,14 @@ class LoginForm extends React.Component {
                             <div className="-mt-px">
                               {initialValues && (
                                 <Field
-                                  label="Name"
+                                  label="Username"
                                   name="displayName"
                                   className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 ${
                                     process.env.INTERNAL ? '' : 'rounded-b-md'
                                   } ${
                                     initialValues.roomId ? 'rounded-t-md' : ''
                                   }`}
-                                  placeholder="Name"
+                                  placeholder="Username"
                                 />
                               )}
                             </div>
@@ -709,7 +932,7 @@ class LoginForm extends React.Component {
                               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
                             >
                               <span className="absolute left-0 inset-y-0 flex items-center pl-3"></span>
-                              Continue
+                              Join Room
                             </button>
                           </div>
                         </div>
@@ -786,8 +1009,8 @@ class LoginForm extends React.Component {
                     // if (!values.displayName) {
                     //   errors.displayName = 'Required';
                     // }
-                    // if (!values.roomId){
-                    //   errors.roomId = 'Required';
+                    // if (!values.roomName){
+                    //   errors.roomName = 'Required';
                     // }
                     return errors;
                   }}
@@ -828,8 +1051,8 @@ class LoginForm extends React.Component {
                               You are about to join{' '}
                               <span className="font-semibold">
                                 {this.state.formValues
-                                  ? this.state.formValues.roomId
-                                  : this.roomId}
+                                  ? this.state.formValues.roomName
+                                  : this.roomName}
                               </span>{' '}
                               as{' '}
                               <span className="font-semibold">

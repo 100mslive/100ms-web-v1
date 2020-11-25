@@ -2,6 +2,7 @@ node_modules
 dist
 .vscode
 .env
+debug.log
 
 *.pid
 nohup.out

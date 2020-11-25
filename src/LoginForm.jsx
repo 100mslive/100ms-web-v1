@@ -238,12 +238,23 @@ class LoginForm extends React.Component {
     this._cleanup();
   };
 
-  _notification = (message, description) => {
-    notification.info({
-      message: message,
-      description: description,
-      placement: 'bottomRight',
-    });
+  _notification = (message, description, type = "info") => {
+
+    if(type == "info") {
+      notification.info({
+        message: message,
+        description: description,
+        placement: 'bottomRight',
+      });
+    }
+    else if(type == "error") {
+      notification.error({
+        message: message,
+        description: description,
+        placement: 'bottomRight',
+      });
+    }
+    
   };
 
   _testStep(step, status, info = null) {
@@ -419,23 +430,32 @@ class LoginForm extends React.Component {
     
     console.log('endpoint', endpoint);
 
-    const roomEntry = await fetch(endpoint, {
+    const respose = await fetch(endpoint, {
       method: 'POST',
       body: JSON.stringify({
         room_name: values.roomName,
         isRecording: values.isRecording,
       }),
     })
-      .then(response => response.json())
-      .catch(err => console.log(err));
-
-    console.log('RoomEntry: ', roomEntry);
-    values.roomId = roomEntry.id;
-    this._notification(
-      'Room Created',
-      `Room Id: ${values.roomId} Room Name: ${values.roomName}`
-    );
-    this.handleNameSubmit(values);
+      .then()
+      .catch(err => {
+        console.log(err);
+      });
+      
+      console.log('Respose: ', respose);
+      if(respose.status != 200) {
+        this._notification('Room already exists', 'Try a new room name', 'error');
+      }
+      else {
+        const roomEntry = await respose.json();
+        console.log('roomEntry:', roomEntry);
+        values.roomId = roomEntry.id;
+        this._notification(
+          'Room Created',
+          `Room Id: ${values.roomId} Room Name: ${values.roomName}`
+        );
+        this.handleNameSubmit(values);
+      }
   };
 
   handleJoinSubmit = values => {

@@ -60,7 +60,7 @@ class App extends React.Component {
       resolution: 'qvga',
       bandwidth: 256,
       codec: 'vp8',
-      //codec: "h264",
+      frameRate: 20,
       isDevMode: true,
     };
 
@@ -121,6 +121,7 @@ class App extends React.Component {
       settings.resolution,
       settings.bandwidth,
       settings.codec,
+      settings.framerate,
       settings.isDevMode
     );
 
@@ -306,6 +307,7 @@ class App extends React.Component {
     resolution,
     bandwidth,
     codec,
+    frameRate,
     isDevMode,
     reloadPage = false
   ) => {

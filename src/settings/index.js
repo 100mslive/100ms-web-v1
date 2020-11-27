@@ -61,6 +61,7 @@ export default class MediaSettings extends React.Component {
       selectedVideoDevice: settings.selectedVideoDevice,
       codec: settings.codec,
       isDevMode: settings.isDevMode,
+      frameRate: settings.frameRate,
     };
 
     try {
@@ -193,6 +194,7 @@ export default class MediaSettings extends React.Component {
         this.state.bandwidth,
         this.state.codec,
         this.state.isDevMode,
+        this.state.frameRate,
         true
       );
     }
@@ -227,6 +229,10 @@ export default class MediaSettings extends React.Component {
     this.setState({ bandwidth: e });
   };
 
+  handleFrameRateChange = e => {
+    this.setState({ frameRate: e.target.value });
+  };
+
   handleDevChange = checked => {
     this.setState({
       isDevMode: checked,
@@ -254,15 +260,6 @@ export default class MediaSettings extends React.Component {
           okText="Ok"
           cancelText="Cancel"
         >
-          <div className="settings-item">
-            <span className="settings-item-left">DevMode</span>
-            <div className="settings-item-right">
-              <Switch
-                checked={this.state.isDevMode}
-                onChange={this.handleDevChange}
-              />
-            </div>
-          </div>
           <div className="settings-item">
             <span className="settings-item-left">Micphone</span>
             <div className="settings-item-right">
@@ -368,6 +365,12 @@ export default class MediaSettings extends React.Component {
               </Select>
             </div>
           </div>
+          {/* <div className="settings-item">
+            <span className="settings-item-left">Framerate</span>
+            <div className="settings-item-right">
+              <input value={this.state.frameRate} onChange={this.handleFrameRateChange} />
+            </div>
+          </div> */}
         </Modal>
       </div>
     );

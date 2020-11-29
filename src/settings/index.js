@@ -365,12 +365,15 @@ export default class MediaSettings extends React.Component {
               </Select>
             </div>
           </div>
-          {/* <div className="settings-item">
+          <div className="settings-item">
             <span className="settings-item-left">Framerate</span>
             <div className="settings-item-right">
-              <input value={this.state.frameRate} onChange={this.handleFrameRateChange} />
+              <input
+                value={this.state.frameRate}
+                onChange={this.handleFrameRateChange}
+              />
             </div>
-          </div> */}
+          </div>
         </Modal>
       </div>
     );

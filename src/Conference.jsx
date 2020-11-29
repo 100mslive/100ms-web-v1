@@ -198,7 +198,6 @@ class Conference extends React.Component {
         //     },
         //   };
         // }
-        console.warn('SETTINGS', settings);
         localStream = await client.getLocalStream({
           codec: settings.codec.toUpperCase(),
           resolution: settings.resolution,

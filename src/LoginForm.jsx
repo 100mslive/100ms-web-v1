@@ -36,6 +36,7 @@ import VideoCheckIcon from 'mdi-react/VideoCheckIcon';
 import UploadLockIcon from 'mdi-react/UploadLockIcon';
 import SwapVerticalIcon from 'mdi-react/SwapVerticalIcon';
 import DownloadLockIcon from 'mdi-react/DownloadLockIcon';
+import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 let testUpdateLoop;
 
 const TEST_STEPS = {
@@ -55,6 +56,7 @@ const ICONS = {
   joined: CheckIcon,
   published: CheckIcon,
   subscribed: CheckIcon,
+  back: ArrowLeftIcon,
 };
 
 const DEFAULT_STATE = {
@@ -238,23 +240,20 @@ class LoginForm extends React.Component {
     this._cleanup();
   };
 
-  _notification = (message, description, type = "info") => {
-
-    if(type == "info") {
+  _notification = (message, description, type = 'info') => {
+    if (type == 'info') {
       notification.info({
         message: message,
         description: description,
         placement: 'bottomRight',
       });
-    }
-    else if(type == "error") {
+    } else if (type == 'error') {
       notification.error({
         message: message,
         description: description,
         placement: 'bottomRight',
       });
     }
-    
   };
 
   _testStep(step, status, info = null) {
@@ -427,7 +426,7 @@ class LoginForm extends React.Component {
 
   handleCreateSubmit = async values => {
     const endpoint = process.env.CREATE_ROOM_ENDPOINT;
-    
+
     console.log('endpoint', endpoint);
 
     const respose = await fetch(endpoint, {
@@ -441,21 +440,20 @@ class LoginForm extends React.Component {
       .catch(err => {
         console.log(err);
       });
-      
-      console.log('Respose: ', respose);
-      if(respose.status != 200) {
-        this._notification('Room already exists', 'Try a new room name', 'error');
-      }
-      else {
-        const roomEntry = await respose.json();
-        console.log('roomEntry:', roomEntry);
-        values.roomId = roomEntry.id;
-        this._notification(
-          'Room Created',
-          `Room Id: ${values.roomId} Room Name: ${values.roomName}`
-        );
-        this.handleNameSubmit(values);
-      }
+
+    console.log('Respose: ', respose);
+    if (respose.status != 200) {
+      this._notification('Room already exists', 'Try a new room name', 'error');
+    } else {
+      const roomEntry = await respose.json();
+      console.log('roomEntry:', roomEntry);
+      values.roomId = roomEntry.id;
+      this._notification(
+        'Room Created',
+        `Room Id: ${values.roomId} Room Name: ${values.roomName}`
+      );
+      this.handleNameSubmit(values);
+    }
   };
 
   handleJoinSubmit = values => {
@@ -751,6 +749,12 @@ class LoginForm extends React.Component {
                           <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
                             <div className="">
                               {/* <img className="mx-auto h-12 w-auto" src={logo} /> */}
+                              <ArrowLeftIcon
+                                className="text-gray-700 hover:text-black"
+                                onClick={() =>
+                                  this.setState({ formStage: 'ROOM' })
+                                }
+                              />
                               <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
                                 {initialValues && (
                                   <>
@@ -878,6 +882,12 @@ class LoginForm extends React.Component {
                         <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
                           <div className="">
                             {/* <img className="mx-auto h-12 w-auto" src={logo} /> */}
+                            <ArrowLeftIcon
+                              className="text-gray-700 hover:text-black"
+                              onClick={() =>
+                                this.setState({ formStage: 'ROOM' })
+                              }
+                            />
                             <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
                               {initialValues && (
                                 <>

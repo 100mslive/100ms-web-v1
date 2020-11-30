@@ -60,13 +60,13 @@ class App extends React.Component {
       resolution: 'qvga',
       bandwidth: 256,
       codec: 'vp8',
-      //codec: "h264",
+      frameRate: 20,
       isDevMode: true,
     };
 
     let settings = reactLocalStorage.getObject('settings');
     if (settings.codec !== undefined) {
-      this._settings = settings;
+      this._settings = { ...this._settings, ...settings };
     }
   }
 
@@ -123,6 +123,7 @@ class App extends React.Component {
       settings.resolution,
       settings.bandwidth,
       settings.codec,
+      settings.frameRate,
       settings.isDevMode
     );
 
@@ -177,7 +178,6 @@ class App extends React.Component {
   };
 
   _handleTransportOpen = async values => {
-    console.log('in _handleTransportOpen', values);
     reactLocalStorage.remove('loginInfo');
     reactLocalStorage.setObject('loginInfo', values);
     try {
@@ -310,6 +310,7 @@ class App extends React.Component {
     resolution,
     bandwidth,
     codec,
+    frameRate,
     isDevMode,
     reloadPage = false
   ) => {
@@ -319,10 +320,11 @@ class App extends React.Component {
       resolution,
       bandwidth,
       codec,
+      frameRate,
       isDevMode,
     };
     reactLocalStorage.setObject('settings', this._settings);
-    //TODO hack to make sure settings change happens. Should be replaced by applyMediaConstraints
+    // // TODO hack to make sure settings change happens. Should be replaced by applyMediaConstraints
     if (reloadPage) window.location.reload();
   };
 

@@ -183,27 +183,28 @@ class Conference extends React.Component {
 
     try {
       if (enabled) {
-        let videoOptions = {
-          deviceId: settings.selectedVideoDevice,
-          frameRate: 20,
-        };
-        // @TODO: This is a kludge. Clean this up
-        if (settings.resolution === 'qqvga') {
-          videoOptions = {
-            ...videoOptions,
-            ...{
-              width: { ideal: 160 },
-              height: { ideal: 90 },
-              frameRate: { ideal: 15 },
-            },
-          };
-        }
+        // let videoOptions = {
+        //   deviceId: settings.selectedVideoDevice,
+        //   frameRate: 20,
+        // };
+        // // @TODO: This is a kludge. Clean this up
+        // if (settings.resolution === 'qqvga') {
+        //   videoOptions = {
+        //     ...videoOptions,
+        //     ...{
+        //       width: { ideal: 160 },
+        //       height: { ideal: 90 },
+        //       frameRate: { ideal: 15 },
+        //     },
+        //   };
+        // }
         localStream = await client.getLocalStream({
           codec: settings.codec.toUpperCase(),
           resolution: settings.resolution,
-          bandwidth: settings.bandwidth,
-          audio: true,
-          video: videoOptions,
+          bitrate: settings.bandwidth,
+          frameRate: settings.frameRate,
+          shouldPublishAudio: true,
+          shouldPublishVideo: true,
         });
         await client.publish(localStream, client.rid);
       } else {

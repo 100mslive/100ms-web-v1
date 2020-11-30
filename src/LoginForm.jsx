@@ -651,7 +651,7 @@ class LoginForm extends React.Component {
       <>
         {this.state.isSupported && (
           <div className="relative -mt-24 z-0">
-            {!this.roomId &&
+            {
               this.state.formStage &&
               this.state.formStage === 'ROOM' && (
                 <>
@@ -685,8 +685,9 @@ class LoginForm extends React.Component {
                       <div className="mt-6 space-y-2">
                         <button
                           className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                          onClick={() =>
+                          onClick={() => 
                             this.setState({ formStage: 'CREATE_ROOM' })
+                        
                           }
                         >
                           Create Meeting
@@ -746,19 +747,23 @@ class LoginForm extends React.Component {
                           className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
                           style={{ backgroundColor: '#1a1619' }}
                         >
-                          <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
-                            <div className="">
-                              {/* <img className="mx-auto h-12 w-auto" src={logo} /> */}
-                              <ArrowLeftIcon
-                                className="text-gray-700 hover:text-black"
-                                onClick={() =>
-                                  this.setState({ formStage: 'ROOM' })
-                                }
-                              />
-                              <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
+                          <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 sm:p-6 bg-gray-100">
+                            <div>
+
+                              <h2 className="text-center justify-center items-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
                                 {initialValues && (
                                   <>
+                                    <ArrowLeftIcon
+                                      className="text-gray-700 hover:text-black"
+                                      onClick={() => {
+                                        this.setState({ formStage: 'ROOM' })
+                                        this.roomId = "";
+                                      }
+                                      }
+                                    />
+
                                     VC Demo
+                                    
                                     <span
                                       className="text-xs rounded-md text-white font-medium ml-1"
                                       style={{
@@ -879,18 +884,20 @@ class LoginForm extends React.Component {
                         className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
                         style={{ backgroundColor: '#1a1619' }}
                       >
-                        <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
-                          <div className="">
+                        <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 sm:p-6 bg-gray-100">
+                          <div>
                             {/* <img className="mx-auto h-12 w-auto" src={logo} /> */}
-                            <ArrowLeftIcon
-                              className="text-gray-700 hover:text-black"
-                              onClick={() =>
-                                this.setState({ formStage: 'ROOM' })
-                              }
-                            />
-                            <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
+                            
+                            <h2 className="text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
                               {initialValues && (
                                 <>
+                                  <ArrowLeftIcon
+                              className="text-gray-700 hover:text-black"
+                              onClick={() => {
+                                this.setState({ formStage: 'ROOM' });
+                                this.roomId = "";
+                              }}
+                            />
                                   VC Demo
                                   <span
                                     className="text-xs rounded-md text-white font-medium ml-1"

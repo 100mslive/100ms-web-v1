@@ -148,7 +148,7 @@ class App extends React.Component {
     });
 
     client.on('connect', () => {
-      console.log('In connect', values)
+      console.log('In connect', values);
       console.log('connected!');
       this._handleTransportOpen(values);
     });

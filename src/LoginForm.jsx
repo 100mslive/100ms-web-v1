@@ -188,6 +188,7 @@ class LoginForm extends React.Component {
           const handleLogin = this.props.handleLogin;
           handleLogin({
             displayName: this.displayName,
+            roomId: this.roomId,
             roomName: this.roomName,
             env: this.env,
             audioOnly: this.state.audioOnly,
@@ -434,6 +435,7 @@ class LoginForm extends React.Component {
       body: JSON.stringify({
         room_name: values.roomName,
         isRecording: values.isRecording,
+        env: values.env
       }),
     })
       .then()

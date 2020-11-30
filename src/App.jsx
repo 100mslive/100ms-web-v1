@@ -34,7 +34,7 @@ async function getToken(env, roomId) {
     body: JSON.stringify({ room_id: roomId, peer_id: 'demo', env }),
   })
     .then(response => response.json())
-    .catch(console.error);
+    .catch(err => console.log('Error client token: ', err));
   return token;
 }
 

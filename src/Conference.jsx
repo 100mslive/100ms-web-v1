@@ -206,6 +206,7 @@ class Conference extends React.Component {
           shouldPublishAudio: true,
           shouldPublishVideo: true,
         });
+        console.log({ settings });
         await client.publish(localStream, client.rid);
       } else {
         if (localStream) {
@@ -228,21 +229,17 @@ class Conference extends React.Component {
     let { localScreen } = this.state;
     const { client, settings } = this.props;
     if (enabled) {
-      let screenStream = await navigator.mediaDevices.getDisplayMedia({
-        // codec: settings.codec.toUpperCase(),
-        // resolution: settings.resolution,
-        // bandwidth: settings.bandwidth,
-        video: {
-          frameRate: {
-            max: 1,
-          },
-        },
-      });
-      localScreen = new LocalStream(screenStream, {
-        bandwidth: settings.bandwidth,
+      localScreen = await client.getLocalScreen({
+        bitrate: settings.bandwidth,
         codec: settings.codec.toUpperCase(),
         resolution: settings.resolution,
       });
+      localScreen.getVideoTracks().forEach(track => {
+        if ('contentHint' in track) {
+          track.contentHint = 'text';
+        }
+      });
+      console.log({ localScreen });
       await client.publish(localScreen, client.rid);
       let track = localScreen.getVideoTracks()[0];
       if (track) {

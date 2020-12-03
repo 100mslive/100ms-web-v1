@@ -41,6 +41,7 @@ async function getToken(env, roomId) {
 class App extends React.Component {
   constructor() {
     super();
+    this.client = null;
     this.state = {
       login: false,
       loading: false,
@@ -78,6 +79,7 @@ class App extends React.Component {
     );
     await this.conference.cleanUp();
     await this.client.disconnect();
+    this.client = null;
   };
 
   _notification = (message, description) => {
@@ -149,7 +151,6 @@ class App extends React.Component {
     });
 
     client.on('connect', () => {
-      console.log('In connect', values);
       console.log('connected!');
       this._handleTransportOpen(values);
     });
@@ -212,7 +213,6 @@ class App extends React.Component {
       title: 'Leave Now?',
       content: 'Do you want to leave the room?',
       async onOk() {
-        console.log('OK');
         await this2._cleanUp();
         this2.setState({ login: false });
       },
@@ -324,14 +324,20 @@ class App extends React.Component {
       isDevMode,
     };
     reactLocalStorage.setObject('settings', this._settings);
-    // // TODO hack to make sure settings change happens. Should be replaced by applyMediaConstraints
-    if (reloadPage) window.location.reload();
+    const constraints = {
+      frameRate: frameRate,
+      bitrate: bandwidth,
+      resolution: resolution,
+    };
+    if (reloadPage) {
+      this.client && this.client.applyConstraints(constraints);
+    }
   };
 
   _onMessageReceived = (from, message) => {
     console.log('Received message:' + from + ':' + message);
     let messages = this.state.messages;
-    let uid = 1; // @DISCUSS: Why is uid 1?
+    let uid = 1;
     messages.push(new Message({ id: uid, message: message, senderName: from }));
     this.setState({ messages });
   };

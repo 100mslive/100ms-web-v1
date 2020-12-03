@@ -435,14 +435,13 @@ class LoginForm extends React.Component {
       body: JSON.stringify({
         room_name: values.roomName,
         recording_info: {
-          enabled: values.isRecording
+          enabled: values.isRecording,
         },
-        env: values.env
+        env: values.env,
       }),
-    })
-      .catch(err => {
-        console.log('Error', err);
-      });
+    }).catch(err => {
+      console.log('Error', err);
+    });
 
     console.log('Response: ', response);
     if (response.status != 200) {
@@ -683,27 +682,26 @@ class LoginForm extends React.Component {
                       </h2>
                     </div>
 
-                      <div className="mt-6 space-y-2">
-                        <button
-                          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                          onClick={() => 
-                            this.setState({ formStage: 'CREATE_ROOM' })
-                        
-                          }
-                        >
-                          Create Room
-                        </button>
-                        <button
-                          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-700 hover:border-indigo-700 focus:outline-none border-indigo-600 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
-                          onClick={() =>
-                            this.setState({ formStage: 'JOIN_ROOM' })
-                          }
-                        >
-                          Join Room
-                        </button>
-                      </div>
+                    <div className="mt-6 space-y-2">
+                      <button
+                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        onClick={() =>
+                          this.setState({ formStage: 'CREATE_ROOM' })
+                        }
+                      >
+                        Create Room
+                      </button>
+                      <button
+                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-700 hover:border-indigo-700 focus:outline-none border-indigo-600 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
+                        onClick={() =>
+                          this.setState({ formStage: 'JOIN_ROOM' })
+                        }
+                      >
+                        Join Room
+                      </button>
                     </div>
                   </div>
+                </div>
               </>
             )}
 

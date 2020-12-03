@@ -181,7 +181,6 @@ export default class MediaSettings extends React.Component {
   };
 
   handleOk = e => {
-    console.log(e);
     this.setState({
       visible: false,
     });
@@ -193,8 +192,8 @@ export default class MediaSettings extends React.Component {
         this.state.resolution,
         this.state.bandwidth,
         this.state.codec,
-        this.state.isDevMode,
         this.state.frameRate,
+        this.state.isDevMode,
         true
       );
     }

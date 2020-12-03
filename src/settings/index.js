@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button, Select, Tooltip, Switch } from 'antd';
+import { Modal, Button, Select, Tooltip, Switch, InputNumber } from 'antd';
 import SoundMeter from './soundmeter';
 import PropTypes from 'prop-types';
 import { reactLocalStorage } from 'reactjs-localstorage';
@@ -229,7 +229,7 @@ export default class MediaSettings extends React.Component {
   };
 
   handleFrameRateChange = e => {
-    this.setState({ frameRate: e.target.value });
+    this.setState({ frameRate: e });
   };
 
   handleDevChange = checked => {
@@ -319,7 +319,7 @@ export default class MediaSettings extends React.Component {
             </div>
           </div>
           <div className="settings-item">
-            <span className="settings-item-left">Quality</span>
+            <span className="settings-item-left">Resolution</span>
             <div className="settings-item-right">
               <Select
                 style={{ width: 350 }}
@@ -334,8 +334,8 @@ export default class MediaSettings extends React.Component {
               </Select>
             </div>
           </div>
-          <div className="settings-item">
-            <span className="settings-item-left">VideoCode</span>
+          {!this.props.isLoggedIn && <div className="settings-item">
+            <span className="settings-item-left">Codec</span>
             <div className="settings-item-right">
               <Select
                 style={{ width: 350 }}
@@ -347,9 +347,9 @@ export default class MediaSettings extends React.Component {
                 <Option value="vp9">VP9</Option>
               </Select>
             </div>
-          </div>
+          </div>}
           <div className="settings-item">
-            <span className="settings-item-left">Bandwidth</span>
+            <span className="settings-item-left">Bitrate</span>
             <div className="settings-item-right">
               <Select
                 style={{ width: 350 }}
@@ -365,10 +365,12 @@ export default class MediaSettings extends React.Component {
             </div>
           </div>
           <div className="settings-item">
-            <span className="settings-item-left">Framerate</span>
+            <span className="settings-item-left">Frame Rate</span>
             <div className="settings-item-right">
-              <input
-                value={this.state.frameRate}
+              <InputNumber
+                min={1}
+                max={30}
+                defaultValue={this.state.frameRate}
                 onChange={this.handleFrameRateChange}
               />
             </div>

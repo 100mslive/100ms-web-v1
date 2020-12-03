@@ -200,7 +200,8 @@ class App extends React.Component {
         'Connected!',
         'Welcome to the brytecam room => ' + values.roomId
       );
-      this.conference.handleLocalStream(true);
+      await this.conference.handleLocalStream(true);
+      // this.client.local.transport.pc.getStats().then(console.log)
     } catch (error) {
       console.error('HANDLE THIS ERROR: ', error);
     }
@@ -386,6 +387,7 @@ class App extends React.Component {
             <MediaSettings
               onMediaSettingsChanged={this._onMediaSettingsChanged}
               settings={this._settings}
+              isLoggedIn={login}
             />
           </div>
         </Header>

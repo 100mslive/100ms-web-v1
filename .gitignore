@@ -3,6 +3,6 @@ dist
 .vscode
 .env
 debug.log
-
+iframe_parent_app/node_modules
 *.pid
 nohup.out

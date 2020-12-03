@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parent App</title>
+  </head>
+  <body>
+    <div id="container">
+      <iframe id="the-iframe" allow="camera;microphone" height="400" width="600"></iframe>
+    </div>
+
+    <div id="notifications"></div>
+
+    <button id="leave">Leave Room</button>
+
+    <script>
+      var ifrm = document.getElementById("the-iframe");
+      ifrm.setAttribute(
+        "src",
+        "http://localhost:8080/?displayname=nk_a&logoSrc=https://julianrossdunn.files.wordpress.com/2013/03/url.jpeg?w=808"
+      );
+
+      window.addEventListener("message", (event) => {
+        console.log("IN PARENT EVENT", event.origin, event.data);
+        if (!event.origin.startsWith("http://localhost:8080")) return;
+
+        switch (event.data[0]) {
+          case "NOTIFICATION":
+            document.getElementById("notifications").innerHTML = event.data[1];
+            break;
+        }
+      });
+
+      document.getElementById("leave").addEventListener('click', () => {
+        ifrm.contentWindow.postMessage(["LEAVE"], "http://localhost:8080");
+      });
+    </script>
+  </body>
+</html>

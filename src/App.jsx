@@ -52,6 +52,10 @@ class App extends React.Component {
       vidFit: false,
       loginInfo: {},
       messages: [],
+      logoSrc:
+        this.getRequest() && this.getRequest().hasOwnProperty('logoSrc')
+          ? this.getRequest().logoSrc
+          : bLogo,
     };
 
     this._settings = {
@@ -68,6 +72,38 @@ class App extends React.Component {
     if (settings.codec !== undefined) {
       this._settings = settings;
     }
+  }
+
+  _handleWindowEvents = (event) => {
+    console.log('IN IFRAME EVENT', event.origin, event.data);
+      if (!event.origin.startsWith('http://localhost:5000')) return;
+
+      switch (event.data[0]) {
+        case 'LEAVE':
+          this._handleLeave();
+          break;
+      }
+  }
+
+  componentDidMount() {
+    window.addEventListener('message', this._handleWindowEvents);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('message', this._handleWindowEvents);
+  }
+
+  getRequest() {
+    let url = location.search;
+    let theRequest = new Object();
+    if (url.indexOf('?') != -1) {
+      let str = url.substr(1);
+      let strs = str.split('&');
+      for (let i = 0; i < strs.length; i++) {
+        theRequest[strs[i].split('=')[0]] = decodeURI(strs[i].split('=')[1]);
+      }
+    }
+    return theRequest;
   }
 
   _cleanUp = async () => {
@@ -148,7 +184,7 @@ class App extends React.Component {
     });
 
     client.on('connect', () => {
-      console.log('In connect', values)
+      console.log('In connect', values);
       console.log('connected!');
       this._handleTransportOpen(values);
     });
@@ -199,6 +235,14 @@ class App extends React.Component {
         'Connected!',
         'Welcome to the brytecam room => ' + values.roomId
       );
+
+      // Post message to parent window about transport open
+
+      window.parent.postMessage(
+        ['NOTIFICATION', 'Connection successful'],
+        'http://localhost:5000/'
+      );
+
       this.conference.handleLocalStream(true);
     } catch (error) {
       console.error('HANDLE THIS ERROR: ', error);
@@ -371,7 +415,7 @@ class App extends React.Component {
         >
           <div className="app-header-left">
             <a href="https://100ms.live/" target="_blank">
-              <img src={bLogo} className="h-8" />
+              <img src={this.state.logoSrc} className="h-8" />
             </a>
           </div>
           <div className="app-header-right">

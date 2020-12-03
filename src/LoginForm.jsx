@@ -111,11 +111,15 @@ class LoginForm extends React.Component {
     this.getRequest() && this.getRequest().hasOwnProperty('env')
       ? this.getRequest().env
       : '';
-  displayName = this.localStorage
-    ? this.localStorage.displayName
+  displayName =
+    this.getRequest() && this.getRequest().hasOwnProperty('displayname')
+      ? this.getRequest().displayname
+      : this.localStorage
       ? this.localStorage.displayName
-      : ''
-    : '';
+        ? this.localStorage.displayName
+        : ''
+      : '';
+
   audioOnly = this.localStorage
     ? this.localStorage.audioOnly
       ? this.localStorage.audioOnly
@@ -435,7 +439,7 @@ class LoginForm extends React.Component {
       body: JSON.stringify({
         room_name: values.roomName,
         isRecording: values.isRecording,
-        env: values.env
+        env: values.env,
       }),
     })
       .then()
@@ -653,60 +657,57 @@ class LoginForm extends React.Component {
       <>
         {this.state.isSupported && (
           <div className="relative -mt-24 z-0">
-            {
-              this.state.formStage &&
-              this.state.formStage === 'ROOM' && (
-                <>
-                  <div
-                    className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
-                    style={{ backgroundColor: '#1a1619' }}
-                  >
-                    <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
-                      <div className="">
-                        {/* <img className="mx-auto h-12 w-auto" src={logo} /> */}
-                        <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
-                          <>
-                            VC Demo
-                            <span
-                              className="text-xs rounded-md text-white font-medium ml-1"
-                              style={{
-                                verticalAlign: 'text-top',
-                                padding: '4px 4px',
-                                background: '#312A30',
-                                //                                color:"#EE6A5F",
-                                fontFamily: 'monospace',
-                                // background:"#1a1619"
-                              }}
-                            >
-                              Powered by 100ms
-                            </span>
-                          </>
-                        </h2>
-                      </div>
+            {this.state.formStage && this.state.formStage === 'ROOM' && (
+              <>
+                <div
+                  className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
+                  style={{ backgroundColor: '#1a1619' }}
+                >
+                  <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
+                    <div className="">
+                      {/* <img className="mx-auto h-12 w-auto" src={logo} /> */}
+                      <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
+                        <>
+                          VC Demo
+                          <span
+                            className="text-xs rounded-md text-white font-medium ml-1"
+                            style={{
+                              verticalAlign: 'text-top',
+                              padding: '4px 4px',
+                              background: '#312A30',
+                              //                                color:"#EE6A5F",
+                              fontFamily: 'monospace',
+                              // background:"#1a1619"
+                            }}
+                          >
+                            Powered by 100ms
+                          </span>
+                        </>
+                      </h2>
+                    </div>
 
-                      <div className="mt-6 space-y-2">
-                        <button
-                          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                          onClick={() => 
-                            this.setState({ formStage: 'CREATE_ROOM' })
-                        
-                          }
-                        >
-                          Create Meeting
-                        </button>
-                        <button
-                          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-700 hover:border-indigo-700 focus:outline-none border-indigo-600 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
-                          onClick={() =>
-                            this.setState({ formStage: 'JOIN_ROOM' })
-                          }
-                        >
-                          Join Meeting
-                        </button>
-                      </div>
+                    <div className="mt-6 space-y-2">
+                      <button
+                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        onClick={() =>
+                          this.setState({ formStage: 'CREATE_ROOM' })
+                        }
+                      >
+                        Create Room
+                      </button>
+                      <button
+                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-700 hover:border-indigo-700 focus:outline-none border-indigo-600 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
+                        onClick={() =>
+                          this.setState({ formStage: 'JOIN_ROOM' })
+                        }
+                      >
+                        Join Room
+                      </button>
                     </div>
                   </div>
-                </>
-              )}
+                </div>
+              </>
+            )}
 
             {!this.roomId &&
               this.state.formStage &&
@@ -749,23 +750,19 @@ class LoginForm extends React.Component {
                           className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
                           style={{ backgroundColor: '#1a1619' }}
                         >
-                          <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 sm:p-6 bg-gray-100">
+                          <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
                             <div>
-
                               <h2 className="text-center justify-center items-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
                                 {initialValues && (
                                   <>
                                     <ArrowLeftIcon
                                       className="text-gray-700 hover:text-black"
                                       onClick={() => {
-                                        this.setState({ formStage: 'ROOM' })
-                                        this.roomId = "";
-                                      }
-                                      }
+                                        this.setState({ formStage: 'ROOM' });
+                                        this.roomId = '';
+                                      }}
                                     />
-
                                     VC Demo
-                                    
                                     <span
                                       className="text-xs rounded-md text-white font-medium ml-1"
                                       style={{
@@ -886,20 +883,18 @@ class LoginForm extends React.Component {
                         className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
                         style={{ backgroundColor: '#1a1619' }}
                       >
-                        <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 sm:p-6 bg-gray-100">
+                        <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
                           <div>
-                            {/* <img className="mx-auto h-12 w-auto" src={logo} /> */}
-                            
-                            <h2 className="text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
+                            <h2 className="text-center justify-center items-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
                               {initialValues && (
                                 <>
                                   <ArrowLeftIcon
-                              className="text-gray-700 hover:text-black"
-                              onClick={() => {
-                                this.setState({ formStage: 'ROOM' });
-                                this.roomId = "";
-                              }}
-                            />
+                                    className="text-gray-700 hover:text-black"
+                                    onClick={() => {
+                                      this.setState({ formStage: 'ROOM' });
+                                      this.roomId = '';
+                                    }}
+                                  />
                                   VC Demo
                                   <span
                                     className="text-xs rounded-md text-white font-medium ml-1"

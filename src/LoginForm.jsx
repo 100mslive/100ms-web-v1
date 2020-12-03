@@ -683,25 +683,6 @@ class LoginForm extends React.Component {
                       </h2>
                     </div>
 
-<<<<<<< HEAD
-                    <div className="mt-6 space-y-2">
-                      <button
-                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        onClick={() =>
-                          this.setState({ formStage: 'CREATE_ROOM' })
-                        }
-                      >
-                        Create Meeting
-                      </button>
-                      <button
-                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-700 hover:border-indigo-700 focus:outline-none border-indigo-600 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
-                        onClick={() =>
-                          this.setState({ formStage: 'JOIN_ROOM' })
-                        }
-                      >
-                        Join Meeting
-                      </button>
-=======
                       <div className="mt-6 space-y-2">
                         <button
                           className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -721,10 +702,8 @@ class LoginForm extends React.Component {
                           Join Room
                         </button>
                       </div>
->>>>>>> fd914bc4625d0353e870ee2651db3d66a70ba310
                     </div>
                   </div>
-                </div>
               </>
             )}
 

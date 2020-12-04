@@ -27,11 +27,11 @@ import {
   HMSClientConfig,
 } from '@100mslive/hmsvideo-web';
 
-async function getToken(env, roomId) {
+async function getToken(env, roomId, role) {
   const endpoint = process.env.TOKEN_ENDPOINT;
   const { token } = await fetch(endpoint, {
     method: 'POST',
-    body: JSON.stringify({ room_id: roomId, peer_id: 'demo', env }),
+    body: JSON.stringify({ room_id: roomId, peer_id: 'demo', env, role }),
   })
     .then(response => response.json())
     .catch(err => console.log('Error client token: ', err));
@@ -90,9 +90,9 @@ class App extends React.Component {
     });
   };
 
-  _createClient = async ({ userName, env = 'staging', roomId }) => {
+  _createClient = async ({ userName, env = 'staging', roomId, role}) => {
     let url = `wss://${env}.brytecam.com`;
-    let authToken = await getToken(env, roomId);
+    let authToken = await getToken(env, roomId, role);
 
     console.log(`%cTOKEN IS: ${authToken}`, 'color: orange');
 
@@ -133,6 +133,7 @@ class App extends React.Component {
       userName: values.displayName,
       env: values.env ? values.env : 'staging',
       roomId: values.roomId,
+      role: values.role,
     });
     client.connect().catch(error => {
       alert(error.message);

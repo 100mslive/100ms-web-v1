@@ -103,6 +103,14 @@ class LoginForm extends React.Component {
 
   testUpdateLoop = null;
   localStorage = reactLocalStorage.getObject('loginInfo');
+  role =
+    this.getRequest() && this.getRequest().hasOwnProperty('role')
+      ? this.getRequest().role
+      : this.localStorage
+      ? this.localStorage.role
+        ? this.localStorage.role
+        : ''
+      : '';
   roomId =
     this.getRequest() && this.getRequest().hasOwnProperty('room')
       ? this.getRequest().room
@@ -188,6 +196,7 @@ class LoginForm extends React.Component {
           const handleLogin = this.props.handleLogin;
           handleLogin({
             displayName: this.displayName,
+            role: values.role ? values.role : this.role,
             roomId: this.roomId,
             roomName: this.roomName,
             env: this.env,
@@ -429,7 +438,7 @@ class LoginForm extends React.Component {
     const endpoint = process.env.CREATE_ROOM_ENDPOINT;
 
     console.log('endpoint', endpoint);
-
+    console.log('Create Room values: ', values);
     const response = await fetch(endpoint, {
       method: 'POST',
       body: JSON.stringify({
@@ -464,6 +473,7 @@ class LoginForm extends React.Component {
   };
 
   handleNameSubmit = values => {
+    this.roomId = values.roomId;
     console.log(this.state.permissionGranted);
     if (this.state.permissionGranted) {
       if (
@@ -485,6 +495,7 @@ class LoginForm extends React.Component {
           displayName: values.displayName
             ? values.displayName
             : this.displayName,
+          role: values.role ? values.role : this.role,
           roomId: values.roomId ? values.roomId : this.roomId,
           roomName: values.roomName ? values.roomName : this.roomName,
           env: values.env ? values.env : this.env,
@@ -498,6 +509,7 @@ class LoginForm extends React.Component {
         });
       }
     } else {
+      console.log('In else part');
       this.setState({
         ...this.state,
         formValues: values,
@@ -520,10 +532,14 @@ class LoginForm extends React.Component {
   handleSubmit = values => {
     const handleLogin = this.props.handleLogin;
     closeMediaStream();
+    console.log('Values in handleSubmit: ', values);
+    console.log('this.roomId in handleSubmit: ', this.roomId);
     handleLogin({
       displayName: this.state.formValues
         ? this.state.formValues.displayName
         : this.displayName,
+      role: values.role ? values.role : this.role,
+      roomId: this.roomId,
       roomName: this.state.formValues
         ? this.state.formValues.roomName
         : this.roomName,
@@ -685,17 +701,25 @@ class LoginForm extends React.Component {
                     <div className="mt-6 space-y-2">
                       <button
                         className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        onClick={() =>
-                          this.setState({ formStage: 'CREATE_ROOM' })
-                        }
+                        onClick={() => {
+                          this.role = 'host';
+                          this.setState({
+                            ...this.state,
+                            formStage: 'CREATE_ROOM',
+                          });
+                        }}
                       >
                         Create Room
                       </button>
                       <button
                         className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-700 hover:border-indigo-700 focus:outline-none border-indigo-600 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
-                        onClick={() =>
-                          this.setState({ formStage: 'JOIN_ROOM' })
-                        }
+                        onClick={() => {
+                          this.role = 'guest';
+                          this.setState({
+                            ...this.state,
+                            formStage: 'JOIN_ROOM',
+                          });
+                        }}
                       >
                         Join Room
                       </button>
@@ -722,6 +746,12 @@ class LoginForm extends React.Component {
                         : this.state.formValues
                         ? this.state.formValues.env
                         : '',
+                      role: this.role
+                        ? this.role
+                        : this.state.formValues
+                        ? this.state.formValues.role
+                        : '',
+                      isRecording: false,
                     }}
                     validate={values => {
                       const errors = {};
@@ -754,7 +784,10 @@ class LoginForm extends React.Component {
                                     <ArrowLeftIcon
                                       className="text-gray-700 hover:text-black"
                                       onClick={() => {
-                                        this.setState({ formStage: 'ROOM' });
+                                        this.setState({
+                                          ...this.state,
+                                          formStage: 'ROOM',
+                                        });
                                         this.roomId = '';
                                       }}
                                     />
@@ -792,14 +825,28 @@ class LoginForm extends React.Component {
                                   <Field
                                     label="Username"
                                     name="displayName"
-                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 ${
-                                      process.env.INTERNAL ? '' : 'rounded-b-md'
-                                    } ${
-                                      initialValues.roomName
-                                        ? 'rounded-t-md'
-                                        : ''
-                                    }`}
+                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 
+                                  ${
+                                    initialValues && !initialValues.roomId
+                                      ? ''
+                                      : 'rounded-t-md'
+                                  }
+                                  `}
                                     placeholder="Username"
+                                  />
+                                )}
+                              </div>
+                              <div>
+                                {initialValues && (
+                                  <Field
+                                    label="Role"
+                                    name="role"
+                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 
+                                    ${
+                                      process.env.INTERNAL ? '' : 'rounded-b-md'
+                                    }
+                                    `}
+                                    placeholder="Role"
                                   />
                                 )}
                               </div>
@@ -815,13 +862,12 @@ class LoginForm extends React.Component {
                                   )}
                                 </div>
                               )}
-
-                              <div className="mt-6">
-                                <label>
-                                  <Field type="checkbox" name="isRecording" />
-                                  {'  '} Record Room?
-                                </label>
-                              </div>
+                            </div>
+                            <div className="mt-6">
+                              <label>
+                                <Field type="checkbox" name="isRecording" />
+                                {'  '} Record Room?
+                              </label>
                             </div>
 
                             <div className="mt-6">
@@ -854,6 +900,11 @@ class LoginForm extends React.Component {
                       ? this.env
                       : this.state.formValues
                       ? this.state.formValues.env
+                      : '',
+                    role: this.role
+                      ? this.role
+                      : this.state.formValues
+                      ? this.state.formValues.role
                       : '',
                   }}
                   validate={values => {
@@ -889,7 +940,10 @@ class LoginForm extends React.Component {
                                   <ArrowLeftIcon
                                     className="text-gray-700 hover:text-black"
                                     onClick={() => {
-                                      this.setState({ formStage: 'ROOM' });
+                                      this.setState({
+                                        ...this.state,
+                                        formStage: 'ROOM',
+                                      });
                                       this.roomId = '';
                                     }}
                                   />
@@ -935,12 +989,28 @@ class LoginForm extends React.Component {
                                 <Field
                                   label="Username"
                                   name="displayName"
-                                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 ${
-                                    process.env.INTERNAL ? '' : 'rounded-b-md'
-                                  } ${
-                                    initialValues.roomId ? 'rounded-t-md' : ''
-                                  }`}
+                                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 
+                                  ${
+                                    initialValues && !initialValues.roomId
+                                      ? ''
+                                      : 'rounded-t-md'
+                                  }
+                                  `}
                                   placeholder="Username"
+                                />
+                              )}
+                            </div>
+                            <div className="-mt-px">
+                              {initialValues && (
+                                <Field
+                                  label="Role"
+                                  name="role"
+                                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 
+                                    ${
+                                      process.env.INTERNAL ? '' : 'rounded-b-md'
+                                    }
+                                    `}
+                                  placeholder="Role"
                                 />
                               )}
                             </div>

@@ -103,14 +103,7 @@ class LoginForm extends React.Component {
 
   testUpdateLoop = null;
   localStorage = reactLocalStorage.getObject('loginInfo');
-  role =
-    this.getRequest() && this.getRequest().hasOwnProperty('role')
-      ? this.getRequest().role
-      : this.localStorage
-      ? this.localStorage.role
-        ? this.localStorage.role
-        : ''
-      : '';
+  role = this.localStorage && this.localStorage.role ? this.localStorage.role : '';
   roomId =
     this.getRequest() && this.getRequest().hasOwnProperty('room')
       ? this.getRequest().room
@@ -196,7 +189,7 @@ class LoginForm extends React.Component {
           const handleLogin = this.props.handleLogin;
           handleLogin({
             displayName: this.displayName,
-            role: values.role ? values.role : this.role,
+            role: this.role,
             roomId: this.roomId,
             roomName: this.roomName,
             env: this.env,
@@ -702,7 +695,7 @@ class LoginForm extends React.Component {
                       <button
                         className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         onClick={() => {
-                          this.role = 'host';
+                          
                           this.setState({
                             ...this.state,
                             formStage: 'CREATE_ROOM',
@@ -714,7 +707,7 @@ class LoginForm extends React.Component {
                       <button
                         className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-700 hover:border-indigo-700 focus:outline-none border-indigo-600 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
                         onClick={() => {
-                          this.role = 'guest';
+        
                           this.setState({
                             ...this.state,
                             formStage: 'JOIN_ROOM',
@@ -750,7 +743,7 @@ class LoginForm extends React.Component {
                         ? this.role
                         : this.state.formValues
                         ? this.state.formValues.role
-                        : '',
+                        : 'Host',
                       isRecording: false,
                     }}
                     validate={values => {
@@ -905,7 +898,7 @@ class LoginForm extends React.Component {
                       ? this.role
                       : this.state.formValues
                       ? this.state.formValues.role
-                      : '',
+                      : 'Guest',
                   }}
                   validate={values => {
                     const errors = {};

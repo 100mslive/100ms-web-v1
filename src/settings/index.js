@@ -334,20 +334,22 @@ export default class MediaSettings extends React.Component {
               </Select>
             </div>
           </div>
-          {!this.props.isLoggedIn && <div className="settings-item">
-            <span className="settings-item-left">Codec</span>
-            <div className="settings-item-right">
-              <Select
-                style={{ width: 350 }}
-                value={this.state.codec}
-                onChange={this.handleVideoCodeChange}
-              >
-                <Option value="h264">H264</Option>
-                <Option value="vp8">VP8</Option>
-                <Option value="vp9">VP9</Option>
-              </Select>
+          {!this.props.isLoggedIn && (
+            <div className="settings-item">
+              <span className="settings-item-left">Codec</span>
+              <div className="settings-item-right">
+                <Select
+                  style={{ width: 350 }}
+                  value={this.state.codec}
+                  onChange={this.handleVideoCodeChange}
+                >
+                  <Option value="h264">H264</Option>
+                  <Option value="vp8">VP8</Option>
+                  <Option value="vp9">VP9</Option>
+                </Select>
+              </div>
             </div>
-          </div>}
+          )}
           <div className="settings-item">
             <span className="settings-item-left">Bitrate</span>
             <div className="settings-item-right">

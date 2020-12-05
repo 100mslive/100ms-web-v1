@@ -181,6 +181,7 @@ export default class MediaSettings extends React.Component {
   };
 
   handleOk = e => {
+    console.log('E: ', e);
     this.setState({
       visible: false,
     });
@@ -200,9 +201,18 @@ export default class MediaSettings extends React.Component {
   };
 
   handleCancel = e => {
-    this.setState({
+    let settings = this.props.settings;
+    this.setState ({
       visible: false,
+      resolution: settings.resolution,
+      bandwidth: settings.bandwidth,
+      selectedAudioDevice: settings.selectedAudioDevice,
+      selectedVideoDevice: settings.selectedVideoDevice,
+      codec: settings.codec,
+      isDevMode: settings.isDevMode,
+      frameRate: settings.frameRate,
     });
+    
     this.stopPreview();
   };
 

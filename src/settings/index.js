@@ -200,9 +200,8 @@ export default class MediaSettings extends React.Component {
   };
 
   handleCancel = e => {
-    this.setState({
-      visible: false,
-    });
+    let settings = this.props.settings;
+    this.setState({ ...settings, visible: false });
     this.stopPreview();
   };
 

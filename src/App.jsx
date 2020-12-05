@@ -31,7 +31,7 @@ async function getToken(env, roomId, userName) {
   const endpoint = process.env.TOKEN_ENDPOINT;
   const { token } = await fetch(endpoint, {
     method: 'POST',
-    body: JSON.stringify({ room_id: roomId, peer_id: userName, env }),
+    body: JSON.stringify({ room_id: roomId, user_name: userName, env }),
   })
     .then(response => response.json())
     .catch(err => console.log('Error client token: ', err));

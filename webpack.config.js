@@ -99,7 +99,9 @@ module.exports = env => {
         'process.env.INTERNAL': process.env.INTERNAL,
         'process.env.CREATE_ROOM_ENDPOINT': JSON.stringify(
           process.env.CREATE_ROOM_ENDPOINT
-        )
+        ),
+        'process.env.SFU_ENV': JSON.stringify(process.env.SFU_ENV),
+        'process.env.SFU_HOST': JSON.stringify(process.env.SFU_HOST),
       }),
     ],
     devServer: {

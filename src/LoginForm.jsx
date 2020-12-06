@@ -103,7 +103,8 @@ class LoginForm extends React.Component {
 
   testUpdateLoop = null;
   localStorage = reactLocalStorage.getObject('loginInfo');
-  role = this.localStorage && this.localStorage.role ? this.localStorage.role : '';
+  role =
+    this.localStorage && this.localStorage.role ? this.localStorage.role : '';
   roomId =
     this.getRequest() && this.getRequest().hasOwnProperty('room')
       ? this.getRequest().room
@@ -429,7 +430,6 @@ class LoginForm extends React.Component {
 
   handleCreateSubmit = async values => {
     const endpoint = process.env.CREATE_ROOM_ENDPOINT;
-
     console.log('endpoint', endpoint);
     console.log('Create Room values: ', values);
     const response = await fetch(endpoint, {
@@ -439,7 +439,7 @@ class LoginForm extends React.Component {
         recording_info: {
           enabled: values.isRecording,
         },
-        env: values.env,
+        env: values.env || process.env.SFU_ENV,
       }),
     }).catch(err => {
       console.log('Error', err);
@@ -695,7 +695,6 @@ class LoginForm extends React.Component {
                       <button
                         className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         onClick={() => {
-                          
                           this.setState({
                             ...this.state,
                             formStage: 'CREATE_ROOM',
@@ -707,7 +706,6 @@ class LoginForm extends React.Component {
                       <button
                         className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-700 hover:border-indigo-700 focus:outline-none border-indigo-600 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
                         onClick={() => {
-        
                           this.setState({
                             ...this.state,
                             formStage: 'JOIN_ROOM',

@@ -90,8 +90,8 @@ class App extends React.Component {
     });
   };
 
-  _createClient = async ({ userName, env = 'staging', roomId, role }) => {
-    let url = `wss://${env}.brytecam.com`;
+  _createClient = async ({ userName, env, roomId, role }) => {
+    let url = `wss://${env}.${process.env.SFU_HOST || window.location.host}`;
     let authToken = await getToken({
       env,
       room_id: roomId,
@@ -136,7 +136,7 @@ class App extends React.Component {
 
     let client = await this._createClient({
       userName: values.displayName,
-      env: values.env ? values.env : 'staging',
+      env: values.env || process.env.SFU_ENV,
       roomId: values.roomId,
       role: values.role,
     });

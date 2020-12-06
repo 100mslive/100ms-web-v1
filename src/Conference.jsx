@@ -233,7 +233,7 @@ class Conference extends React.Component {
         bitrate: 300,
         codec: settings.codec.toUpperCase(),
         resolution: 'hd',
-        frameRate: 10
+        frameRate: 10,
       });
       localScreen.getVideoTracks().forEach(track => {
         if ('contentHint' in track) {

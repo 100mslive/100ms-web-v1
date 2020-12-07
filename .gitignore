@@ -3,6 +3,6 @@ dist
 .vscode
 .env
 debug.log
-
+extra_file.js
 *.pid
 nohup.out

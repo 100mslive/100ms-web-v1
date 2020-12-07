@@ -206,6 +206,7 @@ class Conference extends React.Component {
           shouldPublishAudio: localAudioEnabled,
           shouldPublishVideo: localVideoEnabled,
         });
+
         console.log({ settings });
         await client.publish(localStream, client.rid);
       } else {
@@ -215,14 +216,14 @@ class Conference extends React.Component {
         }
       }
       console.log('local stream', localStream.getTracks());
-      this.setState({ localStream });
+      this.setState({ localStream, audioMuted: !shouldPublishAudio, videoMuted: !shouldPublishVideo });
     } catch (e) {
       console.log('handleLocalStream error => ' + e);
       // this._notification("publish/unpublish failed!", e);
     }
 
-    //Check audio only conference
-    this.muteMediaTrack('video', this.props.localVideoEnabled);
+    // //Check audio only conference
+    // this.muteMediaTrack('video', this.props.localVideoEnabled);
   };
 
   handleScreenSharing = async enabled => {

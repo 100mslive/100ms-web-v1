@@ -430,6 +430,7 @@ class LoginForm extends React.Component {
   };
 
   handleCreateSubmit = async values => {
+    
     const endpoint = process.env.CREATE_ROOM_ENDPOINT;
 
     console.log('endpoint', endpoint);
@@ -457,6 +458,10 @@ class LoginForm extends React.Component {
       this._notification(
         'Room Created',
         `Room Id: ${values.roomId} Room Name: ${values.roomName}`
+      );
+      window.parent.postMessage(
+        ['room-create', `Room created with id: ${values.roomId}`],
+        'http://localhost:5000/',
       );
       this.handleNameSubmit(values);
     }

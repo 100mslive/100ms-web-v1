@@ -239,7 +239,7 @@ class App extends React.Component {
       // Post message to parent window about transport open
 
       window.parent.postMessage(
-        ['NOTIFICATION', 'Connection successful'],
+        ['connect', 'Connection successful'],
         'http://localhost:5000/'
       );
 

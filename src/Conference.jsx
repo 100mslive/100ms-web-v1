@@ -177,7 +177,7 @@ class Conference extends React.Component {
 
   handleLocalStream = async enabled => {
     let { localStream } = this.state;
-    const { client, settings } = this.props;
+    const { client, settings, localVideoEnabled, localAudioEnabled } = this.props;
     console.log('Settings===========');
     console.log(settings);
 
@@ -203,8 +203,8 @@ class Conference extends React.Component {
           resolution: settings.resolution,
           bitrate: settings.bandwidth,
           frameRate: settings.frameRate,
-          shouldPublishAudio: true,
-          shouldPublishVideo: true,
+          shouldPublishAudio: localAudioEnabled,
+          shouldPublishVideo: localVideoEnabled,
         });
         console.log({ settings });
         await client.publish(localStream, client.rid);

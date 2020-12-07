@@ -6,3 +6,5 @@ debug.log
 
 *.pid
 nohup.out
+
+.vercel

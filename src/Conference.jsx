@@ -17,6 +17,7 @@ class Conference extends React.Component {
     super();
     this.state = {
       streams: [],
+      streamInfo: [],
       localStream: null,
       localScreen: null,
       audioMuted: false,
@@ -37,7 +38,7 @@ class Conference extends React.Component {
         const streamsMap = peers.reduce((a, c) => {
           return { ...a, ...c.streams };
         }, {});
-
+        this.setState({ streamInfo: streamsMap });
         const newStreams = this.state.streams.map(stream => {
           return { ...stream, ...streamsMap[stream.mid] };
         });
@@ -120,23 +121,7 @@ class Conference extends React.Component {
 
   // @TODO: Move this to utils or core lib
   tuneLocalStream = participantCount => {
-    if (!this.state.localStream) return;
-
-    const MAX_INCOMING_BITRATE = 1600;
-    const outgoing_bitrate = MAX_INCOMING_BITRATE / participantCount;
-    console.log(this.state.localStream.getVideoTracks()[0].getConstraints());
-    if (outgoing_bitrate < MAX_INCOMING_BITRATE) {
-      this.state.localStream.getVideoTracks()[0].applyConstraints({
-        ...this.state.localStream.getVideoTracks()[0].getConstraints(),
-        frameRate: 10, // Min framerate
-        // Do something more to get the bandwidth to `outgoing_bitrate`
-      });
-    } else {
-      this.state.localStream.getVideoTracks()[0].applyConstraints({
-        ...this.state.localStream.getVideoTracks()[0].getConstraints(),
-        frameRate: 20, // Reset to default
-      });
-    }
+    console.warn('autoTune is not supported yet');
   };
 
   _notification = (message, description) => {
@@ -277,7 +262,17 @@ class Conference extends React.Component {
     let streams = this.state.streams;
     let stream = await client.subscribe(streamInfo.mid, room);
     stream.info = { name: peer.name }; // @NOTE: Just because stream is expected to have info in this format at the moment by the UI
-    streams.push({ mid: stream.mid, stream, sid: streamInfo.mid });
+    if ((this.state.streamInfo, stream.mid)) {
+      streams.push({
+        mid: stream.mid,
+        stream,
+        sid: streamInfo.mid,
+        ...this.state.streamInfo[stream.mid],
+      });
+    } else {
+      streams.push({ mid: stream.mid, stream, sid: streamInfo.mid });
+    }
+
     this.setState({ streams });
     this.tuneLocalStream(streams.length);
   };

@@ -20,12 +20,11 @@ import '../styles/css/app.scss';
 
 import LoginForm from './LoginForm';
 import Conference from './Conference';
-import {
-  Client,
-  HMSClient,
-  HMSPeer,
-  HMSClientConfig,
-} from '@100mslive/hmsvideo-web';
+import { HMSClient, HMSPeer, HMSClientConfig } from '@100mslive/hmsvideo-web';
+import { dependencies } from '../package.json';
+
+const sdkVersion = dependencies['@100mslive/hmsvideo-web'].substring(1);
+console.info(`Using hmsvideo-web SDK version ${sdkVersion}`);
 
 async function getToken({ room_id, user_name, role = 'guest', env }) {
   const endpoint = process.env.TOKEN_ENDPOINT;
@@ -42,6 +41,7 @@ class App extends React.Component {
   constructor() {
     super();
     this.client = null;
+    this.isConnected = false;
     this.state = {
       login: false,
       loading: false,
@@ -157,6 +157,8 @@ class App extends React.Component {
     });
 
     client.on('connect', () => {
+      console.log('on connect called');
+      if (this.isConnected) return;
       console.log('connected!');
       this._handleTransportOpen(values);
     });
@@ -185,6 +187,7 @@ class App extends React.Component {
   };
 
   _handleTransportOpen = async values => {
+    this.isConnected = true;
     reactLocalStorage.remove('loginInfo');
     reactLocalStorage.setObject('loginInfo', values);
     try {

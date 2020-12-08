@@ -34,7 +34,7 @@
     "webpack-dev-server": "3.11.0"
   },
   "dependencies": {
-    "@100mslive/hmsvideo-web": "^0.9.1-0",
+    "@100mslive/hmsvideo-web": "^0.9.1-1",
     "@material-ui/core": "^4.11.0",
     "antd": "^3.26.16",
     "bowser": "^2.11.0",

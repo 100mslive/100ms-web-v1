@@ -447,7 +447,8 @@ class LoginForm extends React.Component {
 
     console.log('Response: ', response);
     if (response.status != 200) {
-      this._notification('Error', response.message, 'error');
+      const data = await response.json();
+      this._notification('Error', data.message, 'error');
     } else {
       const roomEntry = await response.json();
       console.log('response:', roomEntry);

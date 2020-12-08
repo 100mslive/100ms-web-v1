@@ -20,12 +20,11 @@ import '../styles/css/app.scss';
 
 import LoginForm from './LoginForm';
 import Conference from './Conference';
-import {
-  Client,
-  HMSClient,
-  HMSPeer,
-  HMSClientConfig,
-} from '@100mslive/hmsvideo-web';
+import { HMSClient, HMSPeer, HMSClientConfig } from '@100mslive/hmsvideo-web';
+import { dependencies } from '../package.json';
+
+const sdkVersion = dependencies['@100mslive/hmsvideo-web'].substring(1);
+console.info(`Using hmsvideo-web SDK version ${sdkVersion}`);
 
 async function getToken({ room_id, user_name, role = 'guest', env }) {
   const endpoint = process.env.TOKEN_ENDPOINT;

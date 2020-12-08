@@ -183,6 +183,12 @@ class App extends React.Component {
       this._onMessageReceived(peer.name, message);
     });
 
+    client.on('disconnected', () => {
+      console.log(`%c[APP] TEARING DOWN`, 'color:#fc0');
+      // @TODO: Do a better tear down
+      location.reload();
+    });
+
     this.client = client;
   };
 

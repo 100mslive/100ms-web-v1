@@ -714,7 +714,7 @@ class LoginForm extends React.Component {
                         }}
                       >
                         Join Room
-                      </button>   
+                      </button>
                     </div>
                   </div>
                 </div>

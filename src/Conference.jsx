@@ -177,7 +177,12 @@ class Conference extends React.Component {
 
   handleLocalStream = async enabled => {
     let { localStream } = this.state;
-    const { client, settings, localVideoEnabled, localAudioEnabled } = this.props;
+    const {
+      client,
+      settings,
+      localVideoEnabled,
+      localAudioEnabled,
+    } = this.props;
     console.log('Settings===========');
     console.log(settings);
 

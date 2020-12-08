@@ -152,6 +152,12 @@ const isSupported = () => {
       firefox: '>52',
       opera: '>44',
     },
+    'Chrome OS': {
+      safari: '>9999',
+      chrome: '>57',
+      firefox: '>52',
+      opera: '>44',
+    },
   });
   return isValidBrowser;
 };

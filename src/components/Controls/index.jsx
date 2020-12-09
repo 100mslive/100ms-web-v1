@@ -21,13 +21,14 @@ const Controls = ({
   onLeave,
   onChatToggle,
   loginInfo,
+  audioOnlyCall = false
 }) => {
   return (
     <div
       className="h-16 absolute w-full justify-center bottom-0 flex items-center py-1"
       style={{ backgroundColor: '#1a1619' }}
     >
-      <div className="mr-1">
+      {!audioOnlyCall && <div className="mr-1">
         <ControlButton
           icon={<VideoIcon className="text-indigo-100" />}
           activeIcon={<VideocamOffIcon className="text-red-100" />}
@@ -35,7 +36,7 @@ const Controls = ({
           isActive={!isCameraOn}
           onClick={onCamToggle}
         />
-      </div>
+      </div>}
       <div className="mx-1">
         <ControlButton
           icon={<MicrophoneIcon className="text-indigo-100" />}

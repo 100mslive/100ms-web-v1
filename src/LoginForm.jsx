@@ -133,6 +133,7 @@ class LoginForm extends React.Component {
       ? this.localStorage.permissionGranted
       : false
     : false;
+  audioOnlyCall = false
 
   componentDidMount = () => {
     this.setState({
@@ -196,6 +197,7 @@ class LoginForm extends React.Component {
             env: this.env,
             audioOnly: this.state.audioOnly,
             videoOnly: this.state.videoOnly,
+            audioOnlyCall: this.state.audioOnlyCall,
             permissionGranted: this.state.permissionGranted,
             selectedAudioDevice: this.state.settings.selectedAudioDevice,
             selectedVideoDevice: this.state.settings.selectedVideoDevice,
@@ -298,7 +300,6 @@ class LoginForm extends React.Component {
     };
 
     client.on('transport-open', async () => {
-      console.log('{{{{{{');
       this._testStep('biz', 'connected', client.url);
       this._testStep('lobby', 'pending');
       const rid = 'lobby-' + Math.floor(1000000 * Math.random());
@@ -496,6 +497,7 @@ class LoginForm extends React.Component {
           //TODO this is repeated from componentdidmount
           audioOnly: this.state.audioOnly,
           videoOnly: this.state.videoOnly,
+          audioOnlyCall: this.state.audioOnlyCall,
           permissionGranted: this.state.permissionGranted,
           selectedAudioDevice: this.state.settings.selectedAudioDevice,
           selectedVideoDevice: this.state.settings.selectedVideoDevice,
@@ -539,6 +541,7 @@ class LoginForm extends React.Component {
       env: this.state.formValues ? this.state.formValues.env : this.env,
       audioOnly: values.audioOnly,
       videoOnly: values.videoOnly,
+      audioOnlyCall: this.state.audioOnlyCall,
       permissionGranted: this.state.permissionGranted,
       selectedAudioDevice: values.selectedAudioDevice,
       selectedVideoDevice: values.selectedVideoDevice,
@@ -714,6 +717,7 @@ class LoginForm extends React.Component {
                       >
                         Join Room
                       </button>
+                      <Checkbox onChange={e => this.setState({ audioOnlyCall : e.target.checked })}>Audio Only Call</Checkbox>
                     </div>
                   </div>
                 </div>

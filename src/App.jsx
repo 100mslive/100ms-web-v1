@@ -47,6 +47,7 @@ class App extends React.Component {
       loading: false,
       localAudioEnabled: true,
       localVideoEnabled: true,
+      audioOnlyCall: false,
       screenSharingEnabled: false,
       collapsed: true,
       isFullScreen: false,
@@ -200,6 +201,7 @@ class App extends React.Component {
         loginInfo: values,
         localVideoEnabled: !values.audioOnly,
         localAudioEnabled: !values.videoOnly,
+        audioOnlyCall: values.audioOnlyCall
       });
 
       this._notification(
@@ -207,7 +209,7 @@ class App extends React.Component {
         'Welcome to the brytecam room => ' + values.roomId
       );
       await this.conference.handleLocalStream(true);
-      // this.client.local.transport.pc.getStats().then(console.log)
+      this.client.local.transport.pc.getStats().then(statsReport => statsReport.forEach(report => report.type !== 'codec' && console.log(report)));
     } catch (error) {
       console.error('HANDLE THIS ERROR: ', error);
     }
@@ -368,6 +370,7 @@ class App extends React.Component {
       loading,
       localAudioEnabled,
       localVideoEnabled,
+      audioOnlyCall,
       screenSharingEnabled,
       collapsed,
       vidFit,
@@ -427,6 +430,7 @@ class App extends React.Component {
                       settings={this._settings}
                       localAudioEnabled={localAudioEnabled}
                       localVideoEnabled={localVideoEnabled}
+                      audioOnlyCall={audioOnlyCall}
                       vidFit={vidFit}
                       loginInfo={this.state.loginInfo}
                       ref={ref => {

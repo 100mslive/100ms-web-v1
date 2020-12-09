@@ -124,14 +124,16 @@ class Conference extends React.Component {
 
     const MAX_INCOMING_BITRATE = 1600;
     const outgoing_bitrate = MAX_INCOMING_BITRATE / participantCount;
-    console.log(this.state.localStream.getVideoTracks()[0].getConstraints());
+    // console.log(this.state.localStream.getVideoTracks()[0].getConstraints());
     if (outgoing_bitrate < MAX_INCOMING_BITRATE) {
+      console.log(`More peers: ${participantCount}`);
       this.state.localStream.getVideoTracks()[0].applyConstraints({
         ...this.state.localStream.getVideoTracks()[0].getConstraints(),
         frameRate: 10, // Min framerate
         // Do something more to get the bandwidth to `outgoing_bitrate`
       });
     } else {
+      console.log(`Zero peers: ${participantCount}`);
       this.state.localStream.getVideoTracks()[0].applyConstraints({
         ...this.state.localStream.getVideoTracks()[0].getConstraints(),
         frameRate: 20, // Reset to default
@@ -156,16 +158,28 @@ class Conference extends React.Component {
   };
 
   muteMediaTrack = (type, enabled) => {
-    let { localStream } = this.state;
+    let { localStream, streams } = this.state;
     if (!localStream) {
       return;
     }
     if (enabled) {
+      // let { settings } = this.props;
+      // const constraints = {
+      //   codec: settings.codec.toUpperCase(),
+      //   resolution: settings.resolution,
+      //   bitrate: settings.bandwidth,
+      //   frameRate: settings.frameRate,
+      //   kind: type,
+      // };
       localStream.unmute(type);
     } else {
       localStream.mute(type);
+      // this.props.client.local.transport.pc.getStats().then(console.dir);
     }
 
+    console.log('Streams: ', streams);
+    // if(streams.length == 1)
+    //   console.log('Tracks: ', streams[0].stream.getVideoTracks());
     if (type === 'audio') {
       this.setState({ audioMuted: !enabled });
       this.peerState && this.peerState.update({ audioEnabled: enabled });
@@ -177,7 +191,7 @@ class Conference extends React.Component {
 
   handleLocalStream = async enabled => {
     let { localStream } = this.state;
-    const { client, settings, localVideoEnabled, localAudioEnabled } = this.props;
+    const { client, settings, localVideoEnabled, localAudioEnabled, audioOnlyCall } = this.props;
     console.log('Settings===========');
     console.log(settings);
 
@@ -203,8 +217,8 @@ class Conference extends React.Component {
           resolution: settings.resolution,
           bitrate: settings.bandwidth,
           frameRate: settings.frameRate,
-          shouldPublishAudio: localAudioEnabled,
-          shouldPublishVideo: localVideoEnabled,
+          shouldPublishAudio: true,
+          shouldPublishVideo: !audioOnlyCall,
         });
 
         console.log({ settings });
@@ -216,7 +230,7 @@ class Conference extends React.Component {
         }
       }
       console.log('local stream', localStream.getTracks());
-      this.setState({ localStream, audioMuted: !shouldPublishAudio, videoMuted: !shouldPublishVideo });
+      this.setState({ localStream, audioMuted: !localAudioEnabled, videoMuted: !localVideoEnabled });
     } catch (e) {
       console.log('handleLocalStream error => ' + e);
       // this._notification("publish/unpublish failed!", e);
@@ -280,7 +294,10 @@ class Conference extends React.Component {
     stream.info = { name: peer.name }; // @NOTE: Just because stream is expected to have info in this format at the moment by the UI
     streams.push({ mid: stream.mid, stream, sid: streamInfo.mid });
     this.setState({ streams });
-    this.tuneLocalStream(streams.length);
+    console.log('_handleAddStream: ', streams.length, stream.info);
+    client.streams[stream.mid].transport.pc.getStats().then(statsReport => statsReport.forEach(report => report.type !== 'codec' && console.log(report)));
+
+    // this.tuneLocalStream(streams.length);
   };
 
   _handleRemoveStream = async (room, streamInfo) => {
@@ -288,7 +305,7 @@ class Conference extends React.Component {
     let streams = this.state.streams;
     streams = streams.filter(item => item.sid !== streamInfo.mid);
     this.setState({ streams });
-    this.tuneLocalStream(streams.length);
+    // this.tuneLocalStream(streams.length);
     if (
       this.state.mode === modes.PINNED &&
       this.state.pinned === streamInfo.mid
@@ -400,6 +417,7 @@ class Conference extends React.Component {
           onChatToggle={this.props.onChatToggle}
           isChatOpen={this.props.isChatOpen}
           loginInfo={this.props.loginInfo}
+          audioOnlyCall={this.props.audioOnlyCall}
         />
       </>
     );

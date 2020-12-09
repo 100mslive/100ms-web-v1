@@ -571,7 +571,7 @@ class LoginForm extends React.Component {
       audio: this.state.videoOnly
         ? false
         : { deviceId: audioSource ? { exact: audioSource } : undefined },
-      video: this.state.audioOnly
+      video: this.state.audioOnlyCall
         ? false
         : { deviceId: videoSource ? { exact: videoSource } : undefined },
     };
@@ -1172,7 +1172,7 @@ class LoginForm extends React.Component {
                               </button>
                             </p>
                           </div>
-                          <div className="relative h-64 bg-black rounded-md mb-3">
+                          {!this.state.audioOnlyCall && (<div className="relative h-64 bg-black rounded-md mb-3">
                             <video
                               id="previewVideo"
                               autoPlay
@@ -1320,7 +1320,7 @@ class LoginForm extends React.Component {
                                 }}
                               ></div>
                             </div>
-                          </div>
+                          </div> )}
                           <div className="rounded-md shadow-sm">
                             <div>
                               {initialValues && (
@@ -1336,7 +1336,7 @@ class LoginForm extends React.Component {
                               )}
                             </div>
                             <div className="-mt-px">
-                              {initialValues && (
+                              {initialValues && !this.state.audioOnlyCall && (
                                 <Field
                                   label="Video Input"
                                   name="selectedVideoDevice"

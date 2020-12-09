@@ -8,6 +8,7 @@ import {
   Card,
   Spin,
   Tooltip,
+  message,
 } from 'antd';
 const { confirm } = Modal;
 const { Header, Content, Sider } = Layout;
@@ -120,6 +121,7 @@ class App extends React.Component {
     let settings = this._settings;
     this.roomName = values.roomName;
     this.roomId = values.roomId;
+    this.hideMessage = () => {};
     settings.selectedVideoDevice = values.selectedVideoDevice;
     settings.selectedAudioDevice = values.selectedAudioDevice;
     //TODO this should reflect in initialization as well
@@ -183,10 +185,17 @@ class App extends React.Component {
       this._onMessageReceived(peer.name, message);
     });
 
-    client.on('disconnected', () => {
+    client.on('disconnected', async () => {
       console.log(`%c[APP] TEARING DOWN`, 'color:#fc0');
       // @TODO: Do a better tear down
-      location.reload();
+      // location.reload();
+      this.hideMessage = message.loading('Reconnecting', 0);
+      await this.conference.cleanUp();
+      await this.client.disconnect();
+      this.isConnected = false;
+      client.connect().then(() => {
+        this.hideMessage();
+      });
     });
 
     this.client = client;

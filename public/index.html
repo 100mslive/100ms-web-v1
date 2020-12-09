@@ -10,23 +10,6 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-    <script
-  src="https://browser.sentry-cdn.com/5.29.0/bundle.min.js"
-  integrity="sha384-/dYT/04VSU9ItKRPTkWeVZ0kqRsVh/T/5rNCjzBwpx7sYeeueKgJzGMNXSal3xoo"
-  crossorigin="anonymous"
-></script>
-<script>
-    Sentry.init({
-      dsn: "https://examplePublicKey@o0.ingest.sentry.io/0",
-      beforeSend(event, hint) {
-        // Check if it is an exception, and if so, show the report dialog
-        if (event.exception) {
-          Sentry.showReportDialog({ eventId: event.event_id });
-        }
-        return event;
-      },
-    });
-  </script>
 </head>
 
 <body>

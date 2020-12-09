@@ -92,7 +92,7 @@ class App extends React.Component {
   };
 
   _createClient = async ({ userName, env, roomId, role }) => {
-    let url = `wss://${env}.${process.env.SFU_HOST || window.location.host}`;
+    let url = `wss://staging-in.100ms.live`;
     let authToken = await getToken({
       env,
       room_id: roomId,
@@ -138,7 +138,7 @@ class App extends React.Component {
 
     let client = await this._createClient({
       userName: values.displayName,
-      env: values.env || process.env.SFU_ENV,
+      env: process.env.SFU_ENV,
       roomId: values.roomId,
       role: values.role,
     });
@@ -200,9 +200,7 @@ class App extends React.Component {
     try {
       await this.client.join(values.roomId);
       //TODO ugly hack
-      let redirectURL = process.env.INTERNAL
-        ? `${window.location.protocol}//${window.location.host}/?room=${values.roomId}&env=${values.env}`
-        : `${window.location.protocol}//${window.location.host}/?room=${values.roomId}`;
+      let redirectURL = `/?room=${values.roomId}`;
       window.history.pushState({}, '100ms', redirectURL);
       this.setState({
         login: true,
@@ -217,7 +215,6 @@ class App extends React.Component {
         'Welcome to the brytecam room => ' + values.roomId
       );
       await this.conference.handleLocalStream(true);
-      // this.client.local.transport.pc.getStats().then(console.log)
     } catch (error) {
       console.error('HANDLE THIS ERROR: ', error);
     }

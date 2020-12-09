@@ -96,13 +96,10 @@ module.exports = env => {
         'process.env.TOKEN_ENDPOINT': JSON.stringify(
           process.env.TOKEN_ENDPOINT
         ),
-        'process.env.INTERNAL': process.env.INTERNAL,
         'process.env.CREATE_ROOM_ENDPOINT': JSON.stringify(
           process.env.CREATE_ROOM_ENDPOINT
         ),
         'process.env.SFU_ENV': JSON.stringify(process.env.SFU_ENV),
-        'process.env.SFU_HOST': JSON.stringify(process.env.SFU_HOST),
-        'process.env.SENTRY_DSN': JSON.stringify(process.env.SENTRY_DSN),
       }),
     ],
     devServer: {

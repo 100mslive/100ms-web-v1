@@ -138,7 +138,6 @@ class App extends React.Component {
 
     let client = await this._createClient({
       userName: values.displayName,
-      env: process.env.SFU_ENV,
       roomId: values.roomId,
       role: values.role,
     });

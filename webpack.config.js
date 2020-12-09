@@ -99,7 +99,7 @@ module.exports = env => {
         'process.env.CREATE_ROOM_ENDPOINT': JSON.stringify(
           process.env.CREATE_ROOM_ENDPOINT
         ),
-        'process.env.SFU_ENV': JSON.stringify(process.env.SFU_ENV),
+        'process.env.HMS_ENDPOINT': JSON.stringify(process.env.HMS_ENDPOINT),
       }),
     ],
     devServer: {

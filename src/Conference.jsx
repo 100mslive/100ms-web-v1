@@ -220,9 +220,8 @@ class Conference extends React.Component {
     const { client, settings } = this.props;
     if (enabled) {
       localScreen = await client.getLocalScreen({
-        bitrate: 4096,
+        bitrate: 0,
         codec: settings.codec.toUpperCase(),
-        resolution: 'fhd',
         frameRate: 10,
       });
       localScreen.getVideoTracks().forEach(track => {

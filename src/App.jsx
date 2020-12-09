@@ -187,15 +187,7 @@ class App extends React.Component {
 
     client.on('disconnected', async () => {
       console.log(`%c[APP] TEARING DOWN`, 'color:#fc0');
-      // @TODO: Do a better tear down
-      // location.reload();
-      this.hideMessage = message.loading('Reconnecting', 0);
-      await this.conference.cleanUp();
-      await this.client.disconnect();
-      this.isConnected = false;
-      client.connect().then(() => {
-        this.hideMessage();
-      });
+      location.reload();
     });
 
     this.client = client;

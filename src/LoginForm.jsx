@@ -669,14 +669,10 @@ class LoginForm extends React.Component {
                   className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
                   style={{ backgroundColor: '#1a1619' }}
                 >
-                  <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
-                    <div className="">
-                      {/* <img className="mx-auto h-12 w-auto" src={logo} /> */}
-                      <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
-                        <>
-                          VC Demo
-                          <span
-                            className="text-xs rounded-md text-white font-medium ml-1"
+                  <div className="overflow-hidden justify-right items-right shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
+                    <div className=" 	">
+                    <span
+                            className="text-xs rounded-md text-white font-medium ml-1 float-right"
                             style={{
                               verticalAlign: 'text-top',
                               padding: '4px 4px',
@@ -688,6 +684,10 @@ class LoginForm extends React.Component {
                           >
                             Powered by 100ms
                           </span>
+                      {/* <img className="mx-auto h-12 w-auto" src={logo} /> */}
+                      <h2 className="mt-6 text-left text-3xl leading-9 font-extrabold text-gray-900 mb-2">
+                        <>
+                          100ms Conference 
                         </>
                       </h2>
                     </div>
@@ -783,7 +783,7 @@ class LoginForm extends React.Component {
                                         this.roomId = '';
                                       }}
                                     />
-                                    VC Demo
+                                    100ms Conference
                                     <span
                                       className="text-xs rounded-md text-white font-medium ml-1"
                                       style={{
@@ -939,7 +939,7 @@ class LoginForm extends React.Component {
                                       this.roomId = '';
                                     }}
                                   />
-                                  VC Demo
+                                  100ms Conference
                                   <span
                                     className="text-xs rounded-md text-white font-medium ml-1"
                                     style={{
@@ -1048,7 +1048,7 @@ class LoginForm extends React.Component {
                     <div className="">
                       <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
                         <>
-                          VC Demo
+                          100ms Conference
                           <span
                             className="text-xs rounded-md text-white font-medium ml-1"
                             style={{
@@ -1127,7 +1127,7 @@ class LoginForm extends React.Component {
                           <div className="">
                             <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
                               <>
-                                VC Demo
+                                100ms Conference
                                 <span
                                   className="text-xs rounded-md text-white font-medium ml-1"
                                   style={{
@@ -1406,7 +1406,7 @@ class LoginForm extends React.Component {
                 <div className="">
                   <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
                     <>
-                      VC Demo
+                      100ms Conference
                       <span
                         className="text-xs rounded-md text-white font-medium ml-1"
                         style={{

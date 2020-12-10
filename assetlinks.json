@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "live.hms.video",
+    "sha256_cert_fingerprints":
+    ["18:F6:7B:3D:5E:9E:10:95:13:34:7E:F5:69:39:1C:89:53:CA:7B:75:A7:04:83:ED:A2:36:76:CB:8C:48:6A:DB"]
+  }
+}]

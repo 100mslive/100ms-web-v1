@@ -21,4 +21,5 @@ ENV ENABLE_TELEMETRY="false"
 WORKDIR /app
 COPY configs/certs/ /app/certs/
 COPY apple-app-site-association /app/dist/.well-known/apple-app-site-association
+COPY assetlinks.json /app/dist/.well-known/assetlinks.json
 COPY --from=0 /app/dist /app/dist

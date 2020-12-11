@@ -25,10 +25,10 @@ import { HMSClient, HMSPeer, HMSClientConfig } from '@100mslive/hmsvideo-web';
 import { dependencies } from '../package.json';
 
 const sdkVersion = dependencies['@100mslive/hmsvideo-web'].substring(1);
-console.info(`Using hmsvideo-web SDK version ${sdkVersion}`);
+console.info(`%cUsing hmsvideo-web SDK version ${sdkVersion}`, 'color:#268bd2');
 
 async function getToken({ room_id, user_name, role = 'guest', env }) {
-  const endpoint = process.env.TOKEN_ENDPOINT;
+  const endpoint = `${process.env.TOKEN_ENDPOINT}?api=token`;
   const { token } = await fetch(endpoint, {
     method: 'POST',
     body: JSON.stringify({ room_id, user_name, env, role }),
@@ -92,7 +92,7 @@ class App extends React.Component {
   };
 
   _createClient = async ({ userName, env, roomId, role }) => {
-    let url = `wss://staging-in.100ms.live`;
+    let url = process.env.HMS_ENDPOINT;
     let authToken = await getToken({
       env,
       room_id: roomId,

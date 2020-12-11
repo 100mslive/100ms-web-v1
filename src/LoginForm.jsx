@@ -429,8 +429,8 @@ class LoginForm extends React.Component {
   };
 
   handleCreateSubmit = async values => {
-    const endpoint = process.env.CREATE_ROOM_ENDPOINT;
-    console.log('endpoint', endpoint);
+    const endpoint = `${process.env.TOKEN_ENDPOINT}?api=room`;
+    console.log('Create Room endpoint', endpoint);
     console.log('Create Room values: ', values);
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -439,7 +439,6 @@ class LoginForm extends React.Component {
         recording_info: {
           enabled: values.isRecording,
         },
-        env: process.env.SFU_ENV,
       }),
     }).catch(err => {
       console.log('Error', err);
@@ -671,24 +670,8 @@ class LoginForm extends React.Component {
                 >
                   <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
                     <div className="">
-                      {/* <img className="mx-auto h-12 w-auto" src={logo} /> */}
-                      <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
-                        <>
-                          VC Demo
-                          <span
-                            className="text-xs rounded-md text-white font-medium ml-1"
-                            style={{
-                              verticalAlign: 'text-top',
-                              padding: '4px 4px',
-                              background: '#312A30',
-                              //                                color:"#EE6A5F",
-                              fontFamily: 'monospace',
-                              // background:"#1a1619"
-                            }}
-                          >
-                            Powered by 100ms
-                          </span>
-                        </>
+                      <h2 className="mt-6 mb-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
+                        100ms Conference
                       </h2>
                     </div>
 
@@ -780,20 +763,7 @@ class LoginForm extends React.Component {
                                         this.roomId = '';
                                       }}
                                     />
-                                    VC Demo
-                                    <span
-                                      className="text-xs rounded-md text-white font-medium ml-1"
-                                      style={{
-                                        verticalAlign: 'text-top',
-                                        padding: '4px 4px',
-                                        background: '#312A30',
-                                        //                                color:"#EE6A5F",
-                                        fontFamily: 'monospace',
-                                        // background:"#1a1619"
-                                      }}
-                                    >
-                                      Powered by 100ms
-                                    </span>
+                                    100ms Conference
                                   </>
                                 )}
                               </h2>
@@ -917,20 +887,9 @@ class LoginForm extends React.Component {
                                       this.roomId = '';
                                     }}
                                   />
-                                  VC Demo
-                                  <span
-                                    className="text-xs rounded-md text-white font-medium ml-1"
-                                    style={{
-                                      verticalAlign: 'text-top',
-                                      padding: '4px 4px',
-                                      background: '#312A30',
-                                      //                                color:"#EE6A5F",
-                                      fontFamily: 'monospace',
-                                      // background:"#1a1619"
-                                    }}
-                                  >
-                                    Powered by 100ms
-                                  </span>
+                                  <h2 className="mt-6 mb-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
+                                    100ms Conference
+                                  </h2>
                                 </>
                               )}
                             </h2>
@@ -1008,23 +967,8 @@ class LoginForm extends React.Component {
                 >
                   <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
                     <div className="">
-                      <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
-                        <>
-                          VC Demo
-                          <span
-                            className="text-xs rounded-md text-white font-medium ml-1"
-                            style={{
-                              verticalAlign: 'text-top',
-                              padding: '4px 4px',
-                              background: '#312A30',
-                              //                      color:"#EE6A5F",
-                              fontFamily: 'monospace',
-                              // background:"#1a1619"
-                            }}
-                          >
-                            Powered by 100ms
-                          </span>
-                        </>
+                      <h2 className="mt-6 mb-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
+                        100ms Conference
                       </h2>
 
                       <p className="mt-2 text-center text-sm leading-5 text-gray-600 mb-2">
@@ -1087,23 +1031,8 @@ class LoginForm extends React.Component {
                       >
                         <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
                           <div className="">
-                            <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
-                              <>
-                                VC Demo
-                                <span
-                                  className="text-xs rounded-md text-white font-medium ml-1"
-                                  style={{
-                                    verticalAlign: 'text-top',
-                                    padding: '4px 4px',
-                                    background: '#312A30',
-                                    color: '#EE6A5F',
-                                    fontFamily: 'monospace',
-                                    // background:"#1a1619"
-                                  }}
-                                >
-                                  Powered by 100ms
-                                </span>
-                              </>
+                            <h2 className="mt-6 mb-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
+                              100ms Conference
                             </h2>
                             <p className="mt-2 text-center text-sm leading-5 text-gray-600 mb-2">
                               You are about to join{' '}
@@ -1366,23 +1295,8 @@ class LoginForm extends React.Component {
             >
               <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
                 <div className="">
-                  <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
-                    <>
-                      VC Demo
-                      <span
-                        className="text-xs rounded-md text-white font-medium ml-1"
-                        style={{
-                          verticalAlign: 'text-top',
-                          padding: '4px 4px',
-                          background: '#312A30',
-                          //                      color:"#EE6A5F",
-                          fontFamily: 'monospace',
-                          // background:"#1a1619"
-                        }}
-                      >
-                        Powered by 100ms
-                      </span>
-                    </>
+                  <h2 className="mt-6 mb-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
+                    100ms Conference
                   </h2>
 
                   <p className="mt-2 text-center text-sm leading-5 text-gray-600 mb-2">

@@ -102,6 +102,8 @@ class App extends React.Component {
 
     console.log(`%cTOKEN IS: ${authToken}`, 'color: orange');
 
+    console.log('Websocket URL', url);
+
     try {
       let peer = new HMSPeer(userName, authToken);
 

@@ -1,15 +1,6 @@
-import React, { useState } from 'react';
-import {
-  Icon,
-  Input,
-  Button,
-  Checkbox,
-  notification,
-  Avatar,
-  Badge,
-  Tooltip,
-} from 'antd';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import React from 'react';
+import { notification, Avatar, Badge, Tooltip } from 'antd';
+import { Formik, Form, Field } from 'formik';
 import { LocalStream } from '@100mslive/hmsvideo-web';
 import { reactLocalStorage } from 'reactjs-localstorage';
 import {
@@ -20,21 +11,16 @@ import {
   isSupported,
 } from '../src/utils';
 import SoundMeter from './settings/soundmeter';
-import logo from '../public/brytecam-logo.png';
 
 import '../styles/css/login.scss';
 
 import CheckIcon from 'mdi-react/CheckIcon';
-import ShuffleIcon from 'mdi-react/ShuffleIcon';
-import NetworkIcon from 'mdi-react/NetworkIcon';
 import ServerNetworkIcon from 'mdi-react/ServerNetworkIcon';
 import GoogleClassroomIcon from 'mdi-react/GoogleClassroomIcon';
 import ProgressClockIcon from 'mdi-react/ProgressClockIcon';
 import ProgressAlertIcon from 'mdi-react/ProgressAlertIcon';
 import ProgressCloseIcon from 'mdi-react/ProgressCloseIcon';
-import VideoCheckIcon from 'mdi-react/VideoCheckIcon';
 import UploadLockIcon from 'mdi-react/UploadLockIcon';
-import SwapVerticalIcon from 'mdi-react/SwapVerticalIcon';
 import DownloadLockIcon from 'mdi-react/DownloadLockIcon';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 let testUpdateLoop;
@@ -669,28 +655,10 @@ class LoginForm extends React.Component {
                   className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
                   style={{ backgroundColor: '#1a1619' }}
                 >
-                  <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
-                    <div className="">
-                      {/* <img className="mx-auto h-12 w-auto" src={logo} /> */}
-                      <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
-                        <>
-                          VC Demo
-                          <span
-                            className="text-xs rounded-md text-white font-medium ml-1"
-                            style={{
-                              verticalAlign: 'text-top',
-                              padding: '4px 4px',
-                              background: '#312A30',
-                              //                                color:"#EE6A5F",
-                              fontFamily: 'monospace',
-                              // background:"#1a1619"
-                            }}
-                          >
-                            Powered by 100ms
-                          </span>
-                        </>
-                      </h2>
-                    </div>
+                  <div className="overflow-hidden justify-right items-right shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
+                    <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
+                      100ms Conference
+                    </h2>
 
                     <div className="mt-6 space-y-2">
                       <button
@@ -783,20 +751,7 @@ class LoginForm extends React.Component {
                                         this.roomId = '';
                                       }}
                                     />
-                                    VC Demo
-                                    <span
-                                      className="text-xs rounded-md text-white font-medium ml-1"
-                                      style={{
-                                        verticalAlign: 'text-top',
-                                        padding: '4px 4px',
-                                        background: '#312A30',
-                                        //                                color:"#EE6A5F",
-                                        fontFamily: 'monospace',
-                                        // background:"#1a1619"
-                                      }}
-                                    >
-                                      Powered by 100ms
-                                    </span>
+                                    100ms Conference
                                   </>
                                 )}
                               </h2>
@@ -939,20 +894,7 @@ class LoginForm extends React.Component {
                                       this.roomId = '';
                                     }}
                                   />
-                                  VC Demo
-                                  <span
-                                    className="text-xs rounded-md text-white font-medium ml-1"
-                                    style={{
-                                      verticalAlign: 'text-top',
-                                      padding: '4px 4px',
-                                      background: '#312A30',
-                                      //                                color:"#EE6A5F",
-                                      fontFamily: 'monospace',
-                                      // background:"#1a1619"
-                                    }}
-                                  >
-                                    Powered by 100ms
-                                  </span>
+                                  100ms Conference
                                 </>
                               )}
                             </h2>
@@ -1047,22 +989,7 @@ class LoginForm extends React.Component {
                   <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
                     <div className="">
                       <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
-                        <>
-                          VC Demo
-                          <span
-                            className="text-xs rounded-md text-white font-medium ml-1"
-                            style={{
-                              verticalAlign: 'text-top',
-                              padding: '4px 4px',
-                              background: '#312A30',
-                              //                      color:"#EE6A5F",
-                              fontFamily: 'monospace',
-                              // background:"#1a1619"
-                            }}
-                          >
-                            Powered by 100ms
-                          </span>
-                        </>
+                        100ms Conference
                       </h2>
 
                       <p className="mt-2 text-center text-sm leading-5 text-gray-600 mb-2">
@@ -1126,22 +1053,7 @@ class LoginForm extends React.Component {
                         <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
                           <div className="">
                             <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
-                              <>
-                                VC Demo
-                                <span
-                                  className="text-xs rounded-md text-white font-medium ml-1"
-                                  style={{
-                                    verticalAlign: 'text-top',
-                                    padding: '4px 4px',
-                                    background: '#312A30',
-                                    color: '#EE6A5F',
-                                    fontFamily: 'monospace',
-                                    // background:"#1a1619"
-                                  }}
-                                >
-                                  Powered by 100ms
-                                </span>
-                              </>
+                              <>100ms Conference</>
                             </h2>
                             <p className="mt-2 text-center text-sm leading-5 text-gray-600 mb-2">
                               You are about to join{' '}
@@ -1405,22 +1317,7 @@ class LoginForm extends React.Component {
               <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
                 <div className="">
                   <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
-                    <>
-                      VC Demo
-                      <span
-                        className="text-xs rounded-md text-white font-medium ml-1"
-                        style={{
-                          verticalAlign: 'text-top',
-                          padding: '4px 4px',
-                          background: '#312A30',
-                          //                      color:"#EE6A5F",
-                          fontFamily: 'monospace',
-                          // background:"#1a1619"
-                        }}
-                      >
-                        Powered by 100ms
-                      </span>
-                    </>
+                    100ms Conference
                   </h2>
 
                   <p className="mt-2 text-center text-sm leading-5 text-gray-600 mb-2">

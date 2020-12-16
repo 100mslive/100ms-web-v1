@@ -180,7 +180,7 @@ class Conference extends React.Component {
           frameRate: settings.frameRate,
           shouldPublishAudio: localAudioEnabled,
           shouldPublishVideo: localVideoEnabled,
-          advanced: {
+          advancedMediaConstraints: {
             video: {
               deviceId: settings.selectedVideoDevice,
             },

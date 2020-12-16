@@ -341,9 +341,18 @@ class App extends React.Component {
       frameRate: frameRate,
       bitrate: bandwidth,
       resolution: resolution,
+      advancedMediaConstraints: {
+        audio: {
+          deviceId: selectedAudioDevice,
+        },
+        video: {
+          deviceId: selectedVideoDevice,
+        },
+      },
     };
     if (reloadPage) {
-      this.client && this.client.applyConstraints(constraints);
+      this.client &&
+        this.client.applyConstraints(constraints, this.client.local);
     }
   };
 

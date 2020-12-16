@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-  Layout,
-  Button,
-  Modal,
-  Icon,
-  notification,
-  Card,
-  Spin,
-  Tooltip,
-  message,
-} from 'antd';
+import { Layout, Modal, notification, Spin } from 'antd';
 const { confirm } = Modal;
 const { Header, Content, Sider } = Layout;
 import { reactLocalStorage } from 'reactjs-localstorage';
@@ -25,7 +15,10 @@ import { HMSClient, HMSPeer, HMSClientConfig } from '@100mslive/hmsvideo-web';
 import { dependencies } from '../package.json';
 
 const sdkVersion = dependencies['@100mslive/hmsvideo-web'].substring(1);
-console.info(`%cUsing hmsvideo-web SDK version ${sdkVersion}`, 'color:#268bd2');
+console.info(
+  `%c[APP] Using hmsvideo-web SDK version ${sdkVersion}`,
+  'color:#268bd2'
+);
 
 async function getToken({ room_id, user_name, role = 'guest', env }) {
   const endpoint = `${process.env.TOKEN_ENDPOINT}?api=token`;
@@ -100,7 +93,7 @@ class App extends React.Component {
       role,
     });
 
-    console.log(`%cTOKEN IS: ${authToken}`, 'color: orange');
+    console.log(`%c[APP] TOKEN IS: ${authToken}`, 'color: orange');
 
     try {
       let peer = new HMSPeer(userName, authToken);

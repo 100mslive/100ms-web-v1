@@ -1,7 +1,6 @@
 import React from 'react';
-import { Spin, notification } from 'antd';
+import { notification } from 'antd';
 import { Controls } from './components/Controls';
-import { Client, LocalStream, RemoteStream } from '@100mslive/hmsvideo-web';
 import '../styles/css/conference.scss';
 import { Gallery } from './components/Conference/gallery';
 import { Pinned } from './components/Conference/pinned';

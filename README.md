@@ -44,12 +44,12 @@ Please reach out to [Aniket Behera](mailto:aniket@100ms.live) to get your -
 
 1. Clone [this document on runkit](https://runkit.com/apnerve/100ms-services)
 2. Add the following environment variables in runkit [settings/environment](https://runkit.com/settings/environment)  - 
-`HMS_ACCESS_KEY` =  `app_access_key`
-`HMS_SECRET` =  `app_secret`
-`HMS_CUSTOMER_ID` = `customer_id`
-`HMS_APP_ID` =  `app_id`
-`HMS_MANAGEMENT_KEY` = `management_key`
-`HMS_MANAGEMENT_SECRET` = `management_secret`
+- `HMS_ACCESS_KEY` =  `app_access_key`
+- `HMS_SECRET` =  `app_secret`
+- `HMS_CUSTOMER_ID` = `customer_id`
+- `HMS_APP_ID` =  `app_id`
+- `HMS_MANAGEMENT_KEY` = `management_key`
+- `HMS_MANAGEMENT_SECRET` = `management_secret`
 (Screenshot for reference:)
 ![runkit screenshot](./.github/screenshots/runkit-screenshot.png?raw=true)
 3. Publish your runkit and copy the endpoint URL (click on it and copy the URL that opens)

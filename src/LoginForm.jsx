@@ -425,7 +425,7 @@ class LoginForm extends React.Component {
         recording_info: {
           enabled: values.isRecording,
         },
-        env: values.env || process.env.SFU_ENV,
+        env: values.env,
       }),
     }).catch(err => {
       console.log('Error', err);

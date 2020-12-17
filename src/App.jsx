@@ -140,7 +140,7 @@ class App extends React.Component {
 
     let client = await this._createClient({
       userName: values.displayName,
-      env: values.env || process.env.SFU_ENV,
+      env: values.env,
       roomId: values.roomId,
       role: values.role,
     });
@@ -347,7 +347,7 @@ class App extends React.Component {
       frameRate: frameRate,
       bitrate: bandwidth,
       resolution: resolution,
-      advanced: {
+      advancedMediaConstraints: {
         audio: {
           deviceId: selectedAudioDevice,
         },

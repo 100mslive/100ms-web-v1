@@ -51,7 +51,7 @@ Please reach out to [Aniket Behera](mailto:aniket@100ms.live) to get your -
 - `HMS_MANAGEMENT_KEY` = `management_key`
 - `HMS_MANAGEMENT_SECRET` = `management_secret`
 (Screenshot for reference:)
-![runkit screenshot](./.github/screenshots/runkit-screenshot.png?raw=true)
+![runkit screenshot](./.github/screenshots/runkit.png?raw=true)
 3. Publish your runkit and copy the endpoint URL (click on it and copy the URL that opens)
 
 Update `HMS_ENDPOINT` key in `.env` to 'wss://prod-in.100ms.live'

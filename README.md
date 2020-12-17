@@ -61,7 +61,6 @@ FIREBASE_PROJECT_ID=<firebaseConfig.projectId>
 FIREBASE_STORAGE_BUCKET=<firebaseConfig.storageBucket>
 FIREBASE_MESSAGING_ID=<firebaseConfig.messagingSenderId>
 FIREBASE_APP_ID=<firebaseConfig.appId>
-FIREBASE_MEASUREMENT_ID=<firebaseConfig.measurementId>
 ```
 
 Then start the app with:

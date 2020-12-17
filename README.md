@@ -50,7 +50,7 @@ Update the `TOKEN_ENDPOINT` in `.env` file with your runkit endpoint (eg. `https
 
 ### Firebase config
 
-Update the following values from your firebase project settings:
+Update the following values in `.env` file from your firebase project settings:
 
 ```
 # Firebase config

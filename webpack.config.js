@@ -96,7 +96,6 @@ module.exports = env => {
         'process.env.TOKEN_ENDPOINT': JSON.stringify(
           process.env.TOKEN_ENDPOINT
         ),
-        'process.env.INTERNAL': process.env.INTERNAL,
         'process.env.CREATE_ROOM_ENDPOINT': JSON.stringify(
           process.env.CREATE_ROOM_ENDPOINT
         ),

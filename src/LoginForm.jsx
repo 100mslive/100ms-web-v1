@@ -721,7 +721,7 @@ class LoginForm extends React.Component {
                       if (!values.roomName) {
                         errors.roomName = 'Required';
                       }
-                      if (process.env.INTERNAL && !values.env) {
+                      if (!values.env) {
                         errors.env = 'Required';
                       }
                       return errors;
@@ -788,27 +788,22 @@ class LoginForm extends React.Component {
                                   <Field
                                     label="Role"
                                     name="role"
-                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 
-                                    ${
-                                      process.env.INTERNAL ? '' : 'rounded-b-md'
-                                    }
-                                    `}
+                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 rounded-b-md`}
                                     placeholder="Role"
                                   />
                                 )}
                               </div>
-                              {process.env.INTERNAL && (
-                                <div className="-mt-px">
-                                  {initialValues && (
-                                    <Field
-                                      label="Environment"
-                                      name="env"
-                                      className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5`}
-                                      placeholder="Environment (conf/staging/...)"
-                                    />
-                                  )}
-                                </div>
-                              )}
+
+                              <div className="-mt-px">
+                                {initialValues && (
+                                  <Field
+                                    label="Environment"
+                                    name="env"
+                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5`}
+                                    placeholder="Environment (conf/staging/...)"
+                                  />
+                                )}
+                              </div>
                             </div>
                             <div className="mt-6">
                               <label>
@@ -862,7 +857,7 @@ class LoginForm extends React.Component {
                     if (!values.roomId) {
                       errors.roomId = 'Required';
                     }
-                    if (process.env.INTERNAL && !values.env) {
+                    if (!values.env) {
                       errors.env = 'Required';
                     }
                     return errors;
@@ -939,27 +934,21 @@ class LoginForm extends React.Component {
                                 <Field
                                   label="Role"
                                   name="role"
-                                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 
-                                    ${
-                                      process.env.INTERNAL ? '' : 'rounded-b-md'
-                                    }
-                                    `}
+                                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 rounded-b-md`}
                                   placeholder="Role"
                                 />
                               )}
                             </div>
-                            {process.env.INTERNAL && (
-                              <div className="-mt-px">
-                                {initialValues && (
-                                  <Field
-                                    label="Environment"
-                                    name="env"
-                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5`}
-                                    placeholder="Environment (conf/staging/...)"
-                                  />
-                                )}
-                              </div>
-                            )}
+                            <div className="-mt-px">
+                              {initialValues && (
+                                <Field
+                                  label="Environment"
+                                  name="env"
+                                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5`}
+                                  placeholder="Environment (conf/staging/...)"
+                                />
+                              )}
+                            </div>
                           </div>
 
                           <div className="mt-6"></div>

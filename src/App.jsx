@@ -81,6 +81,7 @@ class App extends React.Component {
     await this.conference.cleanUp();
     await this.client.disconnect();
     this.client = null;
+    this.isConnected = false;
   };
 
   _notification = (message, description) => {
@@ -200,11 +201,10 @@ class App extends React.Component {
     reactLocalStorage.remove('loginInfo');
     reactLocalStorage.setObject('loginInfo', values);
     try {
-      await this.client.join(values.roomId);
-      //TODO ugly hack
-      let redirectURL = process.env.INTERNAL
-        ? `${window.location.protocol}//${window.location.host}/?room=${values.roomId}&env=${values.env}`
-        : `${window.location.protocol}//${window.location.host}/?room=${values.roomId}`;
+      await this.client.join(values.roomId).catch(error => {
+        console.log('JOIN ERROR:', error);
+      });
+      let redirectURL = `${window.location.protocol}//${window.location.host}/?room=${values.roomId}&env=${values.env}`;
       window.history.pushState({}, '100ms', redirectURL);
       this.setState({
         login: true,
@@ -214,19 +214,19 @@ class App extends React.Component {
         localAudioEnabled: !values.videoOnly,
       });
 
+      console.log('VALUES:', values);
+
       this._notification(
         'Connected!',
-        'Welcome to the brytecam room => ' + values.roomId
+        `Welcome to the ${values.roomName || '100ms'} room => ${values.roomId}`
       );
       await this.conference.handleLocalStream(true);
-      // this.client.local.transport.pc.getStats().then(console.log)
     } catch (error) {
       console.error('HANDLE THIS ERROR: ', error);
     }
   };
 
   _handleLeave = async () => {
-    let client = this.client;
     let this2 = this;
     confirm({
       title: 'Leave Now?',

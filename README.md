@@ -41,7 +41,7 @@ Please reach out to [Aniket Behera](mailto:aniket@100ms.live) to get your -
 #### Host a token generation endpoint
 
 1. Clone [this document on runkit](https://runkit.com/apnerve/100ms-services)
-2. Add the following environment variables in runkit - `HMS_APP_ID`, `HMS_SECRET`, `HMS_ACCESS_KEY`, `HMS_CUSTOMER_ID`, `HMS_MANAGEMENT_KEY`, `HMS_MANAGEMENT_SECRET` (Screenshot for reference:)
+2. Add the following environment variables in runkit [settings/environment](https://runkit.com/settings/environment)  - `HMS_APP_ID`, `HMS_SECRET`, `HMS_ACCESS_KEY`, `HMS_CUSTOMER_ID`, `HMS_MANAGEMENT_KEY`, `HMS_MANAGEMENT_SECRET` (Screenshot for reference:)
 ![runkit screenshot](./.github/screenshots/runkit-screenshot.png?raw=true)
 3. Publish your runkit and copy the endpoint URL (click on it and copy the URL that opens)
 

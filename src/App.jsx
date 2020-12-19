@@ -179,6 +179,7 @@ class App extends React.Component {
 
     client.on('disconnected', async () => {
       console.log(`%c[APP] TEARING DOWN`, 'color:#fc0');
+      // @NOTE: Implement a cleaner tear down logic for graceful UI transition instead of a page reload
       location.reload();
     });
 

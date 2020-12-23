@@ -1,7 +1,6 @@
 import React from 'react';
-import { Spin, notification } from 'antd';
+import { notification } from 'antd';
 import { Controls } from './components/Controls';
-import { Client, LocalStream, RemoteStream } from '@100mslive/hmsvideo-web';
 import '../styles/css/conference.scss';
 import { Gallery } from './components/Conference/gallery';
 import { Pinned } from './components/Conference/pinned';
@@ -116,7 +115,7 @@ class Conference extends React.Component {
 
     await this._unpublish(localStream);
     // this.peerStateUnsubscribe();
-    this.peerState.delete();
+    this.peerState && this.peerState.delete();
   };
 
   // @TODO: Move this to utils or core lib
@@ -160,7 +159,7 @@ class Conference extends React.Component {
     }
   };
 
-  handleLocalStream = async enabled => {
+  handleLocalStream = async () => {
     let { localStream } = this.state;
     const {
       client,
@@ -168,43 +167,37 @@ class Conference extends React.Component {
       localVideoEnabled,
       localAudioEnabled,
     } = this.props;
-    console.log('Settings===========');
-    console.log(settings);
 
-    try {
-      if (enabled) {
-        localStream = await client.getLocalStream({
-          codec: settings.codec.toUpperCase(),
-          resolution: settings.resolution,
-          bitrate: settings.bandwidth,
-          frameRate: settings.frameRate,
-          shouldPublishAudio: localAudioEnabled,
-          shouldPublishVideo: localVideoEnabled,
-          advancedMediaConstraints: {
-            video: {
-              deviceId: settings.selectedVideoDevice,
-            },
-            audio: {
-              deviceId: settings.selectedAudioDevice,
-            },
+    console.log('🤘 SETTINGS:', settings);
+
+    client
+      .getLocalStream({
+        codec: settings.codec.toUpperCase(),
+        resolution: settings.resolution,
+        bitrate: settings.bandwidth,
+        frameRate: settings.frameRate,
+        shouldPublishAudio: localAudioEnabled,
+        shouldPublishVideo: localVideoEnabled,
+        advancedMediaConstraints: {
+          video: {
+            deviceId: settings.selectedVideoDevice,
           },
-        });
-        await client.publish(localStream, client.rid);
-      } else {
-        if (localStream) {
-          this._unpublish(localStream);
-          localStream = null;
-        }
-      }
-      console.log('local stream', localStream.getTracks());
-      this.setState({ localStream });
-    } catch (e) {
-      console.log('handleLocalStream error => ' + e);
-      // this._notification("publish/unpublish failed!", e);
-    }
-
-    //Check audio only conference
-    this.muteMediaTrack('video', this.props.localVideoEnabled);
+          audio: {
+            deviceId: settings.selectedAudioDevice,
+          },
+        },
+      })
+      .then(localStream => {
+        return client.publish(localStream, client.rid);
+      })
+      .then(localStream => {
+        this.setState({ localStream });
+      })
+      .catch(error => {
+        console.log('❌ ERROR', error.name, error.message);
+        this._notification(`ERROR: ${error.name}`, error.message);
+        this.props.cleanUp();
+      });
   };
 
   handleScreenSharing = async enabled => {

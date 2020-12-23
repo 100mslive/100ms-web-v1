@@ -82,6 +82,9 @@ class App extends React.Component {
     await this.client.disconnect();
     this.client = null;
     this.isConnected = false;
+    this.setState({
+      login: false,
+    });
   };
 
   _notification = (message, description) => {
@@ -220,7 +223,7 @@ class App extends React.Component {
         'Connected!',
         `Welcome to the ${values.roomName || '100ms'} room => ${values.roomId}`
       );
-      await this.conference.handleLocalStream(true);
+      await this.conference.handleLocalStream();
     } catch (error) {
       console.error('HANDLE THIS ERROR: ', error);
     }
@@ -462,6 +465,7 @@ class App extends React.Component {
                         this._openOrCloseLeftContainer(!collapsed)
                       }
                       isChatOpen={!this.state.collapsed}
+                      cleanUp={this._cleanUp}
                     />
                   </div>
                 </Content>

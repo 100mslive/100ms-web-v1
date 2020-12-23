@@ -220,7 +220,7 @@ class App extends React.Component {
         'Connected!',
         `Welcome to the ${values.roomName || '100ms'} room => ${values.roomId}`
       );
-      await this.conference.handleLocalStream(true);
+      await this.conference.handleLocalStream();
     } catch (error) {
       console.error('HANDLE THIS ERROR: ', error);
     }

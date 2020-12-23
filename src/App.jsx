@@ -82,6 +82,9 @@ class App extends React.Component {
     await this.client.disconnect();
     this.client = null;
     this.isConnected = false;
+    this.setState({
+      login: false,
+    });
   };
 
   _notification = (message, description) => {
@@ -462,6 +465,7 @@ class App extends React.Component {
                         this._openOrCloseLeftContainer(!collapsed)
                       }
                       isChatOpen={!this.state.collapsed}
+                      cleanUp={this._cleanUp}
                     />
                   </div>
                 </Content>

@@ -115,7 +115,7 @@ class Conference extends React.Component {
 
     await this._unpublish(localStream);
     // this.peerStateUnsubscribe();
-    this.peerState.delete();
+    this.peerState && this.peerState.delete();
   };
 
   // @TODO: Move this to utils or core lib
@@ -170,8 +170,8 @@ class Conference extends React.Component {
 
     console.log('🤘 SETTINGS:', settings);
 
-    try {
-      localStream = await client.getLocalStream({
+    client
+      .getLocalStream({
         codec: settings.codec.toUpperCase(),
         resolution: settings.resolution,
         bitrate: settings.bandwidth,
@@ -186,15 +186,18 @@ class Conference extends React.Component {
             deviceId: settings.selectedAudioDevice,
           },
         },
+      })
+      .then(localStream => {
+        return client.publish(localStream, client.rid);
+      })
+      .then(localStream => {
+        this.setState({ localStream });
+      })
+      .catch(error => {
+        console.log('❌ ERROR', error.name, error.message);
+        this._notification(`ERROR: ${error.name}`, error.message);
+        this.props.cleanUp();
       });
-      await client.publish(localStream, client.rid);
-
-      console.log('local stream', localStream.getTracks());
-      this.setState({ localStream });
-    } catch (e) {
-      console.log('🐞 PUBLISH ERROR: ', e.message);
-      this._notification('publish failed!', e.message);
-    }
   };
 
   handleScreenSharing = async enabled => {

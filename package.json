@@ -34,7 +34,7 @@
     "webpack-dev-server": "3.11.0"
   },
   "dependencies": {
-    "@100mslive/hmsvideo-web": "^0.9.7",
+    "@100mslive/hmsvideo-web": "^0.9.8",
     "@material-ui/core": "^4.11.0",
     "@sentry/react": "^5.29.0",
     "@sentry/tracing": "^5.29.0",

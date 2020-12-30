@@ -99,6 +99,10 @@ class LoginForm extends React.Component {
     this.getRequest() && this.getRequest().hasOwnProperty('env')
       ? this.getRequest().env
       : '';
+  mode =
+    this.getRequest() && this.getRequest().hasOwnProperty('mode')
+      ? this.getRequest().mode
+      : '';
   displayName = this.localStorage
     ? this.localStorage.displayName
       ? this.localStorage.displayName
@@ -151,6 +155,27 @@ class LoginForm extends React.Component {
             isDevMode: true,
           };
 
+    if (this.mode == 'live-record' && this.roomId !== '') {
+      console.log(
+        `%c[APP] Skipping audio & video permission promt for the live-record bot`,
+        'color: blue'
+      );
+      const handleLogin = this.props.handleLogin;
+      handleLogin({
+        displayName: this.displayName,
+        role: this.role,
+        roomId: this.roomId,
+        roomName: this.roomName,
+        env: this.env,
+        audioOnly: false,
+        videoOnly: false,
+        permissionGranted: false,
+        selectedAudioDevice: null,
+        selectedVideoDevice: null,
+        mode: this.mode,
+      });
+    }
+
     this.state.audioOnly = this.audioOnly;
     this.state.videoOnly = this.videoOnly;
     this.state.permissionGranted = this.permissionGranted;
@@ -185,6 +210,7 @@ class LoginForm extends React.Component {
             permissionGranted: this.state.permissionGranted,
             selectedAudioDevice: this.state.settings.selectedAudioDevice,
             selectedVideoDevice: this.state.settings.selectedVideoDevice,
+            mode: this.mode,
           });
         }
         //TODO is this dead code
@@ -487,6 +513,7 @@ class LoginForm extends React.Component {
           permissionGranted: this.state.permissionGranted,
           selectedAudioDevice: this.state.settings.selectedAudioDevice,
           selectedVideoDevice: this.state.settings.selectedVideoDevice,
+          mode: this.mode,
         });
       }
     } else {
@@ -530,6 +557,7 @@ class LoginForm extends React.Component {
       permissionGranted: this.state.permissionGranted,
       selectedAudioDevice: values.selectedAudioDevice,
       selectedVideoDevice: values.selectedVideoDevice,
+      mode: this.mode,
     });
   };
 

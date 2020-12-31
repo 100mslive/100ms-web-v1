@@ -22,6 +22,7 @@ import '../styles/css/app.scss';
 import LoginForm from './LoginForm';
 import Conference from './Conference';
 import { HMSClient, HMSPeer, HMSClientConfig } from '@100mslive/hmsvideo-web';
+import { ROLES } from './constants';
 import { dependencies } from '../package.json';
 
 const sdkVersion = dependencies['@100mslive/hmsvideo-web'].substring(1);
@@ -133,7 +134,7 @@ class App extends React.Component {
     settings.selectedAudioDevice = values.selectedAudioDevice;
     //TODO this should reflect in initialization as well
 
-    values.mode !== 'live-record' &&
+    ![ROLES.LIVE_RECORD, ROLES.VIEWER].includes(values.role) &&
       this._onMediaSettingsChanged(
         settings.selectedAudioDevice,
         settings.selectedVideoDevice,
@@ -209,8 +210,7 @@ class App extends React.Component {
       await this.client.join(values.roomId).catch(error => {
         console.log('JOIN ERROR:', error);
       });
-      let redirectURL = `${window.location.protocol}//${window.location.host}/?room=${values.roomId}&env=${values.env}`;
-      if (values.mode !== '') redirectURL += `&mode=${values.mode}`;
+      let redirectURL = `${window.location.protocol}//${window.location.host}/?room=${values.roomId}&env=${values.env}&role=${values.role}`;
 
       window.history.pushState({}, '100ms', redirectURL);
 
@@ -229,9 +229,9 @@ class App extends React.Component {
         `Welcome to the ${values.roomName || '100ms'} room => ${values.roomId}`
       );
 
-      // Do not publish anything to the peers
-      // Local video & audio are disabled for the 'live-record' mode
-      if (values.mode !== 'live-record') {
+      // Local video & audio are disabled for the 'live-record'
+      // and 'viewer' roles
+      if (![ROLES.LIVE_RECORD, ROLES.VIEWER].includes(values.role)) {
         await this.conference.handleLocalStream();
       }
     } catch (error) {

@@ -23,6 +23,9 @@ import ProgressCloseIcon from 'mdi-react/ProgressCloseIcon';
 import UploadLockIcon from 'mdi-react/UploadLockIcon';
 import DownloadLockIcon from 'mdi-react/DownloadLockIcon';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
+
+import { ROLES } from './constants';
+
 let testUpdateLoop;
 
 const TEST_STEPS = {
@@ -90,7 +93,11 @@ class LoginForm extends React.Component {
   testUpdateLoop = null;
   localStorage = reactLocalStorage.getObject('loginInfo');
   role =
-    this.localStorage && this.localStorage.role ? this.localStorage.role : '';
+    this.getRequest() && this.getRequest().hasOwnProperty('role')
+      ? this.getRequest().role
+      : this.localStorage && this.localStorage.role
+      ? this.localStorage.role
+      : '';
   roomId =
     this.getRequest() && this.getRequest().hasOwnProperty('room')
       ? this.getRequest().room
@@ -98,10 +105,6 @@ class LoginForm extends React.Component {
   env =
     this.getRequest() && this.getRequest().hasOwnProperty('env')
       ? this.getRequest().env
-      : '';
-  mode =
-    this.getRequest() && this.getRequest().hasOwnProperty('mode')
-      ? this.getRequest().mode
       : '';
   displayName = this.localStorage
     ? this.localStorage.displayName
@@ -125,6 +128,7 @@ class LoginForm extends React.Component {
     : false;
 
   componentDidMount = () => {
+    console.log(`%c[APP] Role=${this.role}`);
     this.setState({
       ...this.state,
       isSupported: isSupported(),
@@ -155,7 +159,7 @@ class LoginForm extends React.Component {
             isDevMode: true,
           };
 
-    if (this.mode == 'live-record' && this.roomId !== '') {
+    if (this.role === ROLES.LIVE_RECORD && this.roomId !== '') {
       console.log(
         `%c[APP] Skipping audio & video permission promt for the live-record bot`,
         'color: blue'
@@ -172,9 +176,10 @@ class LoginForm extends React.Component {
         permissionGranted: false,
         selectedAudioDevice: null,
         selectedVideoDevice: null,
-        mode: this.mode,
       });
     }
+
+    // ToDo: Show a confirmation dialog for ROLES.VIEWER
 
     this.state.audioOnly = this.audioOnly;
     this.state.videoOnly = this.videoOnly;
@@ -210,7 +215,6 @@ class LoginForm extends React.Component {
             permissionGranted: this.state.permissionGranted,
             selectedAudioDevice: this.state.settings.selectedAudioDevice,
             selectedVideoDevice: this.state.settings.selectedVideoDevice,
-            mode: this.mode,
           });
         }
         //TODO is this dead code
@@ -513,7 +517,6 @@ class LoginForm extends React.Component {
           permissionGranted: this.state.permissionGranted,
           selectedAudioDevice: this.state.settings.selectedAudioDevice,
           selectedVideoDevice: this.state.settings.selectedVideoDevice,
-          mode: this.mode,
         });
       }
     } else {
@@ -557,7 +560,6 @@ class LoginForm extends React.Component {
       permissionGranted: this.state.permissionGranted,
       selectedAudioDevice: values.selectedAudioDevice,
       selectedVideoDevice: values.selectedVideoDevice,
-      mode: this.mode,
     });
   };
 

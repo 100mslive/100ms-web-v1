@@ -133,15 +133,16 @@ class App extends React.Component {
     settings.selectedAudioDevice = values.selectedAudioDevice;
     //TODO this should reflect in initialization as well
 
-    this._onMediaSettingsChanged(
-      settings.selectedAudioDevice,
-      settings.selectedVideoDevice,
-      settings.resolution,
-      settings.bandwidth,
-      settings.codec,
-      settings.frameRate,
-      settings.isDevMode
-    );
+    values.mode !== 'live-record' &&
+      this._onMediaSettingsChanged(
+        settings.selectedAudioDevice,
+        settings.selectedVideoDevice,
+        settings.resolution,
+        settings.bandwidth,
+        settings.codec,
+        settings.frameRate,
+        settings.isDevMode
+      );
 
     let client = await this._createClient({
       userName: values.displayName,
@@ -209,7 +210,10 @@ class App extends React.Component {
         console.log('JOIN ERROR:', error);
       });
       let redirectURL = `${window.location.protocol}//${window.location.host}/?room=${values.roomId}&env=${values.env}`;
+      if (values.mode !== '') redirectURL += `&mode=${values.mode}`;
+
       window.history.pushState({}, '100ms', redirectURL);
+
       this.setState({
         login: true,
         loading: false,
@@ -224,7 +228,12 @@ class App extends React.Component {
         'Connected!',
         `Welcome to the ${values.roomName || '100ms'} room => ${values.roomId}`
       );
-      await this.conference.handleLocalStream();
+
+      // Do not publish anything to the peers
+      // Local video & audio are disabled for the 'live-record' mode
+      if (values.mode !== 'live-record') {
+        await this.conference.handleLocalStream();
+      }
     } catch (error) {
       console.error('HANDLE THIS ERROR: ', error);
     }

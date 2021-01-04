@@ -39,7 +39,7 @@ module.exports = env => {
     output: {
       path: __dirname + '/dist',
       publicPath: '/',
-      filename: 'brytecam-conference.[hash].js',
+      filename: '100ms-conference.[hash].js',
     },
     plugins: [
       new CleanWebpackPlugin(),

@@ -205,7 +205,7 @@ class App extends React.Component {
 
       this._notification(
         'Connected!',
-        'Welcome to the brytecam room => ' + values.roomId
+        'Welcome to the 100ms room => ' + values.roomId
       );
       await this.conference.handleLocalStream(true);
     } catch (error) {

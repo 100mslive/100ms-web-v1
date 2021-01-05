@@ -6,8 +6,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 require('dotenv').config();
 
 module.exports = env => {
-  const isEnvProduction = !!env && env.production;
-  console.log('Production: ', isEnvProduction);
   return {
     devtool: 'cheap-module-eval-source-map',
     entry: './src/index.jsx',
@@ -39,7 +37,7 @@ module.exports = env => {
     output: {
       path: __dirname + '/dist',
       publicPath: '/',
-      filename: 'brytecam-conference.[hash].js',
+      filename: '100ms-conference.[hash].js',
     },
     plugins: [
       new CleanWebpackPlugin(),
@@ -50,22 +48,20 @@ module.exports = env => {
             inject: true,
             template: path.resolve(__dirname, 'public/index.html'),
           },
-          isEnvProduction
-            ? {
-                minify: {
-                  removeComments: true,
-                  collapseWhitespace: true,
-                  removeRedundantAttributes: true,
-                  useShortDoctype: true,
-                  removeEmptyAttributes: true,
-                  removeStyleLinkTypeAttributes: true,
-                  keepClosingSlash: true,
-                  minifyJS: true,
-                  minifyCSS: true,
-                  minifyURLs: true,
-                },
-              }
-            : undefined
+          {
+            minify: {
+              removeComments: true,
+              collapseWhitespace: true,
+              removeRedundantAttributes: true,
+              useShortDoctype: true,
+              removeEmptyAttributes: true,
+              removeStyleLinkTypeAttributes: true,
+              keepClosingSlash: true,
+              minifyJS: true,
+              minifyCSS: true,
+              minifyURLs: true,
+            },
+          }
         )
       ),
       new webpack.DefinePlugin({

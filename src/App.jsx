@@ -129,12 +129,13 @@ class App extends React.Component {
     let settings = this._settings;
     this.roomName = values.roomName;
     this.roomId = values.roomId;
+    this.role = values.role;
     this.hideMessage = () => {};
     settings.selectedVideoDevice = values.selectedVideoDevice;
     settings.selectedAudioDevice = values.selectedAudioDevice;
     //TODO this should reflect in initialization as well
 
-    ![ROLES.LIVE_RECORD, ROLES.VIEWER].includes(values.role) &&
+    ![ROLES.LIVE_RECORD, ROLES.VIEWER].includes(this.role) &&
       this._onMediaSettingsChanged(
         settings.selectedAudioDevice,
         settings.selectedVideoDevice,
@@ -476,6 +477,7 @@ class App extends React.Component {
                       }
                       isChatOpen={!this.state.collapsed}
                       cleanUp={this._cleanUp}
+                      role={this.role}
                     />
                   </div>
                 </Content>

@@ -66,11 +66,7 @@ class App extends React.Component {
   }
 
   _cleanUp = async () => {
-    window.history.pushState(
-      {},
-      '100ms',
-      `${window.location.protocol}//${window.location.host}`
-    );
+    window.history.pushState({}, '100ms', `${window.location.href}`);
     await this.conference.cleanUp();
     await this.client.disconnect();
     this.client = null;

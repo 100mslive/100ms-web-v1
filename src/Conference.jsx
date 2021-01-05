@@ -243,21 +243,26 @@ class Conference extends React.Component {
   _handleAddStream = async (room, peer, streamInfo) => {
     const { client } = this.props;
     let streams = this.state.streams;
-    let stream = await client.subscribe(streamInfo.mid, room);
-    stream.info = { name: peer.name }; // @NOTE: Just because stream is expected to have info in this format at the moment by the UI
-    if ((this.state.streamInfo, stream.mid)) {
-      streams.push({
-        mid: stream.mid,
-        stream,
-        sid: streamInfo.mid,
-        ...this.state.streamInfo[stream.mid],
-      });
-    } else {
-      streams.push({ mid: stream.mid, stream, sid: streamInfo.mid });
-    }
+    try {
+      let stream = await client.subscribe(streamInfo.mid, room);
+      stream.info = { name: peer.name }; // @NOTE: Just because stream is expected to have info in this format at the moment by the UI
+      if ((this.state.streamInfo, stream.mid)) {
+        streams.push({
+          mid: stream.mid,
+          stream,
+          sid: streamInfo.mid,
+          ...this.state.streamInfo[stream.mid],
+        });
+      } else {
+        streams.push({ mid: stream.mid, stream, sid: streamInfo.mid });
+      }
 
-    this.setState({ streams });
-    this.tuneLocalStream(streams.length);
+      this.setState({ streams });
+      this.tuneLocalStream(streams.length);
+    } catch (error) {
+      this._notification(`ERROR: Error in subscribing`, error.message);
+      this.props.cleanUp();
+    }
   };
 
   _handleRemoveStream = async (room, streamInfo) => {

@@ -162,10 +162,38 @@ const isSupported = () => {
   return isValidBrowser;
 };
 
+const getLocalStreamException = error => {
+  let title, message;
+  if (error.name == 'NotFoundError') {
+    //required track is missing
+    title = 'Camera/Microphone not detected!';
+    message =
+      'We were unable to detect any camera/microphone devices. Please connect and try again.';
+  } else if (error.name == 'NotReadableError') {
+    //webcam or mic are already in use
+    title = 'Camera/Microphone not accessible!';
+    message =
+      'Another application might be using camera/microphone. Please close the app and try again.';
+  } else if (error.name == 'OverconstrainedError') {
+    //constraints can not be satisfied by avb. devices
+  } else if (error.name == 'NotAllowedError') {
+    //permission denied in browser
+    title = 'Permission Denied!';
+    message =
+      'Please grant camera/microphone permissions in the address bar or site settings and try again.';
+  } else {
+    //other errors
+    title = 'Unable to access camera/microphone!';
+    message = 'Please switch your device and try again.';
+  }
+  return { title, message };
+};
+
 export {
   closeMediaStream,
   attachMediaStream,
   updateInputDevices,
   SingleSelect,
   isSupported,
+  getLocalStreamException,
 };

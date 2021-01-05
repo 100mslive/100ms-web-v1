@@ -66,11 +66,7 @@ class App extends React.Component {
   }
 
   _cleanUp = async () => {
-    window.history.pushState(
-      {},
-      '100ms',
-      `${window.location.protocol}//${window.location.host}`
-    );
+    window.history.pushState({}, '100ms', `${window.location.href}`);
     await this.conference.cleanUp();
     await this.client.disconnect();
     this.client = null;
@@ -184,7 +180,7 @@ class App extends React.Component {
     client.on('disconnected', async () => {
       console.log(`%c[APP] TEARING DOWN`, 'color:#fc0');
       // @NOTE: Implement a cleaner tear down logic for graceful UI transition instead of a page reload
-      location.reload();
+      // location.reload();
     });
 
     this.client = client;

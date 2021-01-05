@@ -1,10 +1,11 @@
 import React from 'react';
-import { notification } from 'antd';
+import { Button, Modal, notification } from 'antd';
 import { Controls } from './components/Controls';
 import '../styles/css/conference.scss';
 import { Gallery } from './components/Conference/gallery';
 import { Pinned } from './components/Conference/pinned';
 import PeerState, { onRoomStateChange } from './utils/state';
+import { getLocalStreamException } from './utils';
 
 const modes = {
   GALLERY: 'GALLERY',
@@ -23,6 +24,7 @@ class Conference extends React.Component {
       videoMuted: false,
       mode: modes.GALLERY,
       pinned: false,
+      localStreamError: null,
     };
   }
 
@@ -188,9 +190,9 @@ class Conference extends React.Component {
         this.setState({ localStream });
       })
       .catch(error => {
-        console.log('❌ ERROR', error.name, error.message);
-        this._notification(`ERROR: ${error.name}`, error.message);
-        this.props.cleanUp();
+        this.setState({
+          localStreamError: getLocalStreamException(error),
+        });
       });
   };
 
@@ -383,6 +385,23 @@ class Conference extends React.Component {
           isChatOpen={this.props.isChatOpen}
           loginInfo={this.props.loginInfo}
         />
+        {this.state.localStreamError && (
+          <Modal
+            visible={!!this.state.localStreamError}
+            title={this.state.localStreamError.title}
+            footer={[
+              <Button
+                key="submit"
+                type="primary"
+                onClick={() => this.props.cleanUp()}
+              >
+                Try Again
+              </Button>,
+            ]}
+          >
+            <p>{this.state.localStreamError.message}</p>
+          </Modal>
+        )}
       </>
     );
   };

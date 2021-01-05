@@ -117,7 +117,7 @@ const SingleSelect = ({ field, form, ...props }) => {
 };
 
 const isSupported = () => {
-  return true
+  return true;
   //TODO replace with firebase
   const browser = Bowser.getParser(window.navigator.userAgent);
   const isValidBrowser = browser.satisfies({

@@ -166,8 +166,8 @@ class LoginForm extends React.Component {
       );
       const handleLogin = this.props.handleLogin;
       handleLogin({
-        displayName: this.displayName,
-        role: this.role,
+        displayName: null,
+        role: ROLES.LIVE_RECORD,
         roomId: this.roomId,
         roomName: this.roomName,
         env: this.env,
@@ -486,7 +486,26 @@ class LoginForm extends React.Component {
   handleNameSubmit = values => {
     this.roomId = values.roomId;
     console.log(this.state.permissionGranted);
-    if (this.state.permissionGranted) {
+
+    const role = values.role ? values.role : this.role;
+    const displayName = values.displayName
+      ? values.displayName
+      : this.displayName;
+
+    if (role === ROLES.VIEWER) {
+      this.props.handleLogin({
+        displayName,
+        role: ROLES.VIEWER,
+        roomId: this.roomId,
+        roomName: values.roomName ? values.roomName : this.roomName,
+        env: values.env ? values.env : this.env,
+        audioOnly: false,
+        videoOnly: false,
+        permissionGranted: false,
+        selectedAudioDevice: null,
+        selectedVideoDevice: null,
+      });
+    } else if (this.state.permissionGranted) {
       if (
         this.state.settings.selectedAudioDevice === '' &&
         this.state.settings.selectedVideoDevice === ''
@@ -503,9 +522,7 @@ class LoginForm extends React.Component {
         console.log("Let's go to conference");
         const handleLogin = this.props.handleLogin;
         handleLogin({
-          displayName: values.displayName
-            ? values.displayName
-            : this.displayName,
+          displayName,
           role: values.role ? values.role : this.role,
           roomId: values.roomId ? values.roomId : this.roomId,
           roomName: values.roomName ? values.roomName : this.roomName,
@@ -967,6 +984,7 @@ class LoginForm extends React.Component {
                                   name="role"
                                   className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 rounded-b-md`}
                                   placeholder="Role"
+                                  disabled={this.role === ROLES.VIEWER}
                                 />
                               )}
                             </div>

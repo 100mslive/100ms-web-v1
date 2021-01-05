@@ -230,7 +230,7 @@ class App extends React.Component {
       );
 
       // Local video & audio are disabled for the 'live-record'
-      // and 'viewer' roles
+      // and 'viewer' roles. Their local stream is also not published.
       if (![ROLES.LIVE_RECORD, ROLES.VIEWER].includes(values.role)) {
         await this.conference.handleLocalStream();
       }

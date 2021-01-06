@@ -456,8 +456,8 @@ class LoginForm extends React.Component {
           enabled: values.isRecording,
         },
         env: values.env,
-        headers: { 'Content-Type': '' },
       }),
+      headers: { 'Content-Type': 'application/json' },
     }).catch(err => {
       console.log('Error', err);
     });

@@ -191,7 +191,6 @@ localStreamErrors.set('TypeError', null);
 
 const getLocalStreamException = error => {
   let errorMessage = null;
-  console.log(localStreamErrors);
   if (localStreamErrors.has(error.name)) {
     errorMessage = localStreamErrors.get(error.name);
   } else {

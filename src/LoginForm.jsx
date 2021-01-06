@@ -18,6 +18,7 @@ import {
   closeMediaStream,
   attachMediaStream,
   isSupported,
+  getUserMedia,
 } from '../src/utils';
 import SoundMeter from './settings/soundmeter';
 import logo from '../public/brytecam-logo.png';
@@ -572,8 +573,8 @@ class LoginForm extends React.Component {
         ? false
         : { deviceId: videoSource ? { exact: videoSource } : undefined },
     };
-    navigator.mediaDevices
-      .getUserMedia(constraints)
+
+    getUserMedia(constraints)
       .then(function (stream) {
         if (!permissionTestMode) {
           window.stream = stream; // make stream available to console

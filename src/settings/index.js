@@ -4,6 +4,7 @@ import SoundMeter from './soundmeter';
 import PropTypes from 'prop-types';
 import { reactLocalStorage } from 'reactjs-localstorage';
 import './style.scss';
+import { getUserMedia } from '../utils';
 
 const Option = Select.Option;
 
@@ -150,8 +151,8 @@ export default class MediaSettings extends React.Component {
       audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
       video: { deviceId: videoSource ? { exact: videoSource } : undefined },
     };
-    navigator.mediaDevices
-      .getUserMedia(constraints)
+
+    getUserMedia(constraints)
       .then(function (stream) {
         window.stream = stream; // make stream available to console
         //videoElement.srcObject = stream;

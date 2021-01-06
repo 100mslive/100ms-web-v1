@@ -173,7 +173,7 @@ const getLocalStreamException = error => {
     //webcam or mic are already in use
     title = 'Camera/Microphone not accessible!';
     message =
-      'Another application might be using camera/microphone. Please close the app and try again.';
+      'Please close any other application using camera/microphone and try again.';
   } else if (error.name == 'OverconstrainedError') {
     //constraints can not be satisfied by avb. devices
   } else if (error.name == 'NotAllowedError') {
@@ -181,11 +181,14 @@ const getLocalStreamException = error => {
     title = 'Permission Denied!';
     message =
       'Please grant camera/microphone permissions in the address bar or site settings and try again.';
+  } else if (error.name == 'TypeError') {
+    return null; // returning null continues the call without error modal.
   } else {
     //other errors
     title = 'Unable to access camera/microphone!';
     message = 'Please switch your device and try again.';
   }
+  console.log('LocalStream error: ', { error: error.name, title, message });
   return { title, message };
 };
 

@@ -33,7 +33,6 @@ async function getToken({ room_id, user_name, role = 'guest', env }) {
   const { token } = await fetch(endpoint, {
     method: 'POST',
     body: JSON.stringify({ room_id, user_name, env, role }),
-    headers: { 'Content-Type': 'application/json' },
   })
     .then(response => response.json())
     .catch(err => console.log('Error client token: ', err));

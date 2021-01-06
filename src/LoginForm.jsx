@@ -23,6 +23,9 @@ import ProgressCloseIcon from 'mdi-react/ProgressCloseIcon';
 import UploadLockIcon from 'mdi-react/UploadLockIcon';
 import DownloadLockIcon from 'mdi-react/DownloadLockIcon';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
+
+import { ROLES } from './constants';
+
 let testUpdateLoop;
 
 const TEST_STEPS = {
@@ -90,7 +93,11 @@ class LoginForm extends React.Component {
   testUpdateLoop = null;
   localStorage = reactLocalStorage.getObject('loginInfo');
   role =
-    this.localStorage && this.localStorage.role ? this.localStorage.role : '';
+    this.getRequest() && this.getRequest().hasOwnProperty('role')
+      ? this.getRequest().role
+      : this.localStorage && this.localStorage.role
+      ? this.localStorage.role
+      : '';
   roomId =
     this.getRequest() && this.getRequest().hasOwnProperty('room')
       ? this.getRequest().room
@@ -121,6 +128,7 @@ class LoginForm extends React.Component {
     : false;
 
   componentDidMount = () => {
+    console.log(`%c[APP] Role=${this.role}`);
     this.setState({
       ...this.state,
       isSupported: isSupported(),
@@ -150,6 +158,28 @@ class LoginForm extends React.Component {
             codec: 'vp8',
             isDevMode: true,
           };
+
+    if (this.role === ROLES.LIVE_RECORD && this.roomId !== '') {
+      console.log(
+        `%c[APP] Skipping audio & video permission promt for the live-record bot`,
+        'color: blue'
+      );
+      const handleLogin = this.props.handleLogin;
+      handleLogin({
+        displayName: null,
+        role: ROLES.LIVE_RECORD,
+        roomId: this.roomId,
+        roomName: this.roomName,
+        env: this.env,
+        audioOnly: false,
+        videoOnly: false,
+        permissionGranted: false,
+        selectedAudioDevice: null,
+        selectedVideoDevice: null,
+      });
+    }
+
+    // ToDo: Show a confirmation dialog for ROLES.VIEWER
 
     this.state.audioOnly = this.audioOnly;
     this.state.videoOnly = this.videoOnly;
@@ -427,6 +457,7 @@ class LoginForm extends React.Component {
         },
         env: values.env,
       }),
+      headers: { 'Content-Type': 'application/json' },
     }).catch(err => {
       console.log('Error', err);
     });
@@ -455,7 +486,26 @@ class LoginForm extends React.Component {
   handleNameSubmit = values => {
     this.roomId = values.roomId;
     console.log(this.state.permissionGranted);
-    if (this.state.permissionGranted) {
+
+    const role = values.role ? values.role : this.role;
+    const displayName = values.displayName
+      ? values.displayName
+      : this.displayName;
+
+    if (role === ROLES.VIEWER) {
+      this.props.handleLogin({
+        displayName,
+        role: ROLES.VIEWER,
+        roomId: this.roomId,
+        roomName: values.roomName ? values.roomName : this.roomName,
+        env: values.env ? values.env : this.env,
+        audioOnly: false,
+        videoOnly: false,
+        permissionGranted: false,
+        selectedAudioDevice: null,
+        selectedVideoDevice: null,
+      });
+    } else if (this.state.permissionGranted) {
       if (
         this.state.settings.selectedAudioDevice === '' &&
         this.state.settings.selectedVideoDevice === ''
@@ -472,9 +522,7 @@ class LoginForm extends React.Component {
         console.log("Let's go to conference");
         const handleLogin = this.props.handleLogin;
         handleLogin({
-          displayName: values.displayName
-            ? values.displayName
-            : this.displayName,
+          displayName,
           role: values.role ? values.role : this.role,
           roomId: values.roomId ? values.roomId : this.roomId,
           roomName: values.roomName ? values.roomName : this.roomName,
@@ -936,6 +984,7 @@ class LoginForm extends React.Component {
                                   name="role"
                                   className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 rounded-b-md`}
                                   placeholder="Role"
+                                  disabled={this.role === ROLES.VIEWER}
                                 />
                               )}
                             </div>

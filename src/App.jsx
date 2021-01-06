@@ -22,6 +22,7 @@ import '../styles/css/app.scss';
 import LoginForm from './LoginForm';
 import Conference from './Conference';
 import { HMSClient, HMSPeer, HMSClientConfig } from '@100mslive/hmsvideo-web';
+import { ROLES } from './constants';
 import { dependencies } from '../package.json';
 
 const sdkVersion = dependencies['@100mslive/hmsvideo-web'].substring(1);
@@ -32,6 +33,7 @@ async function getToken({ room_id, user_name, role = 'guest', env }) {
   const { token } = await fetch(endpoint, {
     method: 'POST',
     body: JSON.stringify({ room_id, user_name, env, role }),
+    headers: { 'Content-Type': 'application/json' },
   })
     .then(response => response.json())
     .catch(err => console.log('Error client token: ', err));
@@ -127,20 +129,22 @@ class App extends React.Component {
     let settings = this._settings;
     this.roomName = values.roomName;
     this.roomId = values.roomId;
+    this.role = values.role;
     this.hideMessage = () => {};
     settings.selectedVideoDevice = values.selectedVideoDevice;
     settings.selectedAudioDevice = values.selectedAudioDevice;
     //TODO this should reflect in initialization as well
 
-    this._onMediaSettingsChanged(
-      settings.selectedAudioDevice,
-      settings.selectedVideoDevice,
-      settings.resolution,
-      settings.bandwidth,
-      settings.codec,
-      settings.frameRate,
-      settings.isDevMode
-    );
+    ![ROLES.LIVE_RECORD, ROLES.VIEWER].includes(this.role) &&
+      this._onMediaSettingsChanged(
+        settings.selectedAudioDevice,
+        settings.selectedVideoDevice,
+        settings.resolution,
+        settings.bandwidth,
+        settings.codec,
+        settings.frameRate,
+        settings.isDevMode
+      );
 
     let client = await this._createClient({
       userName: values.displayName,
@@ -207,8 +211,10 @@ class App extends React.Component {
       await this.client.join(values.roomId).catch(error => {
         console.log('JOIN ERROR:', error);
       });
-      let redirectURL = `${window.location.protocol}//${window.location.host}/?room=${values.roomId}&env=${values.env}`;
+      let redirectURL = `${window.location.protocol}//${window.location.host}/?room=${values.roomId}&env=${values.env}&role=${values.role}`;
+
       window.history.pushState({}, '100ms', redirectURL);
+
       this.setState({
         login: true,
         loading: false,
@@ -223,7 +229,12 @@ class App extends React.Component {
         'Connected!',
         `Welcome to the ${values.roomName || '100ms'} room => ${values.roomId}`
       );
-      await this.conference.handleLocalStream();
+
+      // Local video & audio are disabled for the 'live-record'
+      // and 'viewer' roles. Their local stream is also not published.
+      if (![ROLES.LIVE_RECORD, ROLES.VIEWER].includes(values.role)) {
+        await this.conference.handleLocalStream();
+      }
     } catch (error) {
       console.error('HANDLE THIS ERROR: ', error);
     }
@@ -466,6 +477,7 @@ class App extends React.Component {
                       }
                       isChatOpen={!this.state.collapsed}
                       cleanUp={this._cleanUp}
+                      role={this.role}
                     />
                   </div>
                 </Content>

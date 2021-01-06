@@ -319,7 +319,7 @@ class Conference extends React.Component {
   };
 
   render = () => {
-    const { client } = this.props;
+    const { client, role } = this.props;
     const {
       streams,
       localStream,
@@ -374,6 +374,7 @@ class Conference extends React.Component {
           />
         )}
         <Controls
+          role={role}
           isMuted={this.state.audioMuted}
           isCameraOn={!this.state.videoMuted}
           isScreenSharing={this.props.isScreenSharing}

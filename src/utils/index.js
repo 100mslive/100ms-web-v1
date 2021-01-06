@@ -162,34 +162,47 @@ const isSupported = () => {
   return isValidBrowser;
 };
 
+let localStreamErrors = new Map();
+//required track is missing
+localStreamErrors.set('NotFoundError', {
+  title: 'Camera/Microphone not detected!',
+  message:
+    'We were unable to detect any camera/microphone devices. Please connect and try again.',
+});
+//webcam or mic are already in use
+localStreamErrors.set('NotReadableError', {
+  title: 'Camera/Microphone not accessible!',
+  message:
+    'Please close any other application using camera/microphone and try again.',
+});
+//constraints can not be satisfied by avb. devices
+localStreamErrors.set('OverconstrainedError', {
+  title: 'Invalid Audio/Video constraints',
+  message: 'The constraints provided for audio/video cannot be met.',
+});
+//permission denied in browser
+localStreamErrors.set('NotAllowedError', {
+  title: 'Permission Denied!',
+  message:
+    'Please grant camera/microphone permissions in the address bar or site settings and try again.',
+});
+// returning null continues the call without error modal.
+localStreamErrors.set('TypeError', null);
+
 const getLocalStreamException = error => {
-  let title, message;
-  if (error.name == 'NotFoundError') {
-    //required track is missing
-    title = 'Camera/Microphone not detected!';
-    message =
-      'We were unable to detect any camera/microphone devices. Please connect and try again.';
-  } else if (error.name == 'NotReadableError') {
-    //webcam or mic are already in use
-    title = 'Camera/Microphone not accessible!';
-    message =
-      'Please close any other application using camera/microphone and try again.';
-  } else if (error.name == 'OverconstrainedError') {
-    //constraints can not be satisfied by avb. devices
-  } else if (error.name == 'NotAllowedError') {
-    //permission denied in browser
-    title = 'Permission Denied!';
-    message =
-      'Please grant camera/microphone permissions in the address bar or site settings and try again.';
-  } else if (error.name == 'TypeError') {
-    return null; // returning null continues the call without error modal.
+  let errorMessage = null;
+  console.log(localStreamErrors);
+  if (localStreamErrors.has(error.name)) {
+    errorMessage = localStreamErrors.get(error.name);
   } else {
     //other errors
-    title = 'Unable to access camera/microphone!';
-    message = 'Please switch your device and try again.';
+    errorMessage = {
+      title: 'Unable to access camera/microphone!',
+      message: 'Please switch your device and try again.',
+    };
   }
-  console.log('LocalStream error: ', { error: error.name, title, message });
-  return { title, message };
+  console.log('LocalStream error: ', { error: error.name, ...errorMessage });
+  return errorMessage;
 };
 
 const getUserMedia = constraints => {

@@ -140,14 +140,9 @@ const Controls = ({
 
           {leaveButton}
 
-          {!isViewer && (
-            <>
-              {' '}
-              {screenShareButton}
-              {chatButton}
-            </>
-          )}
+          {!isViewer && screenShareButton}
 
+          {chatButton}
           {shareButton}
         </>
       )}

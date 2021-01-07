@@ -6,7 +6,9 @@ import '../styles/css/styles.scss';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 import LogRocket from 'logrocket';
-LogRocket.init('plwzmx/100ms');
+if (process.env.NODE_ENV == 'production') {
+  LogRocket.init('plwzmx/100ms');
+}
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,

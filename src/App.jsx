@@ -447,6 +447,7 @@ class App extends React.Component {
                   <ChatFeed
                     messages={this.state.messages}
                     onSendMessage={this._onSendMessage}
+                    onClose={() => this._openOrCloseLeftContainer(!collapsed)}
                   />
                 </div>
               </Sider>

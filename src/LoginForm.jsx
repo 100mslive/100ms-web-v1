@@ -102,10 +102,11 @@ class LoginForm extends React.Component {
     this.getRequest() && this.getRequest().hasOwnProperty('room')
       ? this.getRequest().room
       : '';
-  env =
-    this.getRequest() && this.getRequest().hasOwnProperty('env')
-      ? this.getRequest().env
-      : '';
+  env = process.env.SFU_ENV
+    ? process.env.SFU_ENV
+    : this.getRequest() && this.getRequest().hasOwnProperty('env')
+    ? this.getRequest().env
+    : '';
   displayName = this.localStorage
     ? this.localStorage.displayName
       ? this.localStorage.displayName
@@ -692,6 +693,8 @@ class LoginForm extends React.Component {
   render() {
     const steps = this.state.steps;
     console.log(this.state.formStage);
+    const showEnv = !Boolean(process.env.SFU_ENV);
+
     return (
       <>
         {this.state.isSupported && (
@@ -702,7 +705,7 @@ class LoginForm extends React.Component {
                   className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
                   style={{ backgroundColor: '#1a1619' }}
                 >
-                  <div className="overflow-hidden justify-right items-right shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
+                  <div className="overflow-hidden justify-right items-right shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100">
                     <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
                       100ms Conference
                     </h2>
@@ -768,7 +771,7 @@ class LoginForm extends React.Component {
                       if (!values.roomName) {
                         errors.roomName = 'Required';
                       }
-                      if (!values.env) {
+                      if (showEnv && !values.env) {
                         errors.env = 'Required';
                       }
                       return errors;
@@ -783,7 +786,7 @@ class LoginForm extends React.Component {
                           className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
                           style={{ backgroundColor: '#1a1619' }}
                         >
-                          <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 sm:p-6 bg-gray-100">
+                          <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 p-6 bg-gray-100">
                             <div>
                               <h2 className="text-center justify-center items-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
                                 {initialValues && (
@@ -830,27 +833,31 @@ class LoginForm extends React.Component {
                                   />
                                 )}
                               </div>
-                              <div>
+                              <div className="-mt-px">
                                 {initialValues && (
                                   <Field
                                     label="Role"
                                     name="role"
-                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 rounded-b-md`}
+                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 ${
+                                      showEnv ? '' : 'rounded-b-md'
+                                    }`}
                                     placeholder="Role"
                                   />
                                 )}
                               </div>
 
-                              <div className="-mt-px">
-                                {initialValues && (
-                                  <Field
-                                    label="Environment"
-                                    name="env"
-                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5`}
-                                    placeholder="Environment (conf/staging/...)"
-                                  />
-                                )}
-                              </div>
+                              {showEnv && (
+                                <div className="-mt-px">
+                                  {initialValues && (
+                                    <Field
+                                      label="Environment"
+                                      name="env"
+                                      className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5`}
+                                      placeholder="Environment (qa-in/staging-in/prod-in)"
+                                    />
+                                  )}
+                                </div>
+                              )}
                             </div>
                             <div className="mt-6">
                               <label>
@@ -904,7 +911,7 @@ class LoginForm extends React.Component {
                     if (!values.roomId) {
                       errors.roomId = 'Required';
                     }
-                    if (!values.env) {
+                    if (showEnv && !values.env) {
                       errors.env = 'Required';
                     }
                     return errors;
@@ -919,7 +926,7 @@ class LoginForm extends React.Component {
                         className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
                         style={{ backgroundColor: '#1a1619' }}
                       >
-                        <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 sm:p-6 bg-gray-100">
+                        <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 p-6 bg-gray-100">
                           <div>
                             {/* <img className="mx-auto h-12 w-auto" src={logo} /> */}
 
@@ -981,22 +988,26 @@ class LoginForm extends React.Component {
                                 <Field
                                   label="Role"
                                   name="role"
-                                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 rounded-b-md`}
+                                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5  ${
+                                    showEnv ? '' : 'rounded-b-md'
+                                  }`}
                                   placeholder="Role"
                                   disabled={this.role === ROLES.VIEWER}
                                 />
                               )}
                             </div>
-                            <div className="-mt-px">
-                              {initialValues && (
-                                <Field
-                                  label="Environment"
-                                  name="env"
-                                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5`}
-                                  placeholder="Environment (conf/staging/...)"
-                                />
-                              )}
-                            </div>
+                            {showEnv && (
+                              <div className="-mt-px">
+                                {initialValues && (
+                                  <Field
+                                    label="Environment"
+                                    name="env"
+                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5`}
+                                    placeholder="Environment (qa-in/staging-in/prod-in)"
+                                  />
+                                )}
+                              </div>
+                            )}
                           </div>
 
                           <div className="mt-6"></div>
@@ -1023,7 +1034,7 @@ class LoginForm extends React.Component {
                   className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
                   style={{ backgroundColor: '#1a1619' }}
                 >
-                  <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
+                  <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100">
                     <div className="">
                       <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
                         100ms Conference
@@ -1087,7 +1098,7 @@ class LoginForm extends React.Component {
                         className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
                         style={{ backgroundColor: '#1a1619' }}
                       >
-                        <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
+                        <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100">
                           <div className="">
                             <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
                               <>100ms Conference</>
@@ -1351,7 +1362,7 @@ class LoginForm extends React.Component {
               className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
               style={{ backgroundColor: '#1a1619' }}
             >
-              <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 sm:p-6 bg-gray-100">
+              <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100">
                 <div className="">
                   <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
                     100ms Conference

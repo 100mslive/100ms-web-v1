@@ -380,7 +380,11 @@ class App extends React.Component {
     let messages = this.state.messages;
     let uid = 1;
     messages.push(new Message({ id: uid, message: message, senderName: from }));
-    this.setState({ messages });
+    let hasUnreadMessages = false;
+    if (this.state.collapsed) {
+      hasUnreadMessages = true;
+    }
+    this.setState({ messages, hasUnreadMessages });
   };
 
   _onSendMessage = data => {
@@ -472,12 +476,18 @@ class App extends React.Component {
                         this._handleScreenSharing(!screenSharingEnabled)
                       }
                       onLeave={this._handleLeave}
-                      onChatToggle={() =>
-                        this._openOrCloseLeftContainer(!collapsed)
-                      }
+                      onChatToggle={() => {
+                        if (collapsed) {
+                          this.setState({
+                            hasUnreadMessages: false,
+                          });
+                        }
+                        this._openOrCloseLeftContainer(!collapsed);
+                      }}
                       isChatOpen={!this.state.collapsed}
                       cleanUp={this._cleanUp}
                       role={this.role}
+                      hasUnreadMessages={this.state.hasUnreadMessages}
                     />
                   </div>
                 </Content>

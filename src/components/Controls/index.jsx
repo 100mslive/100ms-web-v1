@@ -24,6 +24,7 @@ const Controls = ({
   onLeave,
   onChatToggle,
   loginInfo,
+  hasUnreadMessages,
 }) => {
   const isViewer = role === ROLES.VIEWER;
   const isLiveRecordingOn = role === ROLES.LIVE_RECORD;
@@ -77,7 +78,10 @@ const Controls = ({
   );
 
   const chatButton = (
-    <div className="mx-1">
+    <div className="mx-1 relative">
+      {hasUnreadMessages && (
+        <div className="animate-pulse absolute top-0 right-0 mt-2 mr-3 w-2 h-2 bg-red-500 rounded-full" />
+      )}
       <ControlButton
         icon={
           <svg

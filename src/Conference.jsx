@@ -114,6 +114,7 @@ class Conference extends React.Component {
     // });
 
     await this._unpublish(localStream);
+    await this._unpublish(localScreen);
     // this.peerStateUnsubscribe();
     this.peerState && this.peerState.delete();
   };

@@ -69,11 +69,14 @@ export default class ChatFeed extends Component {
     return (
       <div
         id="chat-panel"
-        className="flex flex-1 flex-col"
+        className="flex flex-1 flex-col max-h-full"
         style={{ backgroundColor: '#000000' }}
       >
-        <div className="title-panel">
+        <div className="border-b border-gray-800 h-10 flex items-center justify-between pr-3">
           <span className="title-chat">Chat</span>
+          <button className="text-white text-xl" onClick={this.props.onClose}>
+            &times;
+          </button>
         </div>
 
         <div ref="chat" className="chat-history">

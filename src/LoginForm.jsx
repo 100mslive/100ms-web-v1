@@ -1129,7 +1129,7 @@ class LoginForm extends React.Component {
                               </button>
                             </p>
                           </div>
-                          <div className="relative h-64 bg-black rounded-md mb-3">
+                          <div className="relative h-48 bg-black rounded-md mb-3">
                             <video
                               id="previewVideo"
                               autoPlay
@@ -1329,24 +1329,6 @@ class LoginForm extends React.Component {
                               Join
                             </button>
                           </div>
-                          <div className="text-sm leading-5 w-full text-center mt-2">
-                            <a
-                              onClick={() => this._testConnection()}
-                              className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
-                            >
-                              Test your connection
-                            </a>
-                          </div>
-                          {this.state.test ? (
-                            <div className="mx-auto flex justify-center">
-                              <ConnectionStep step={steps.biz} />
-                              <ConnectionStep step={steps.lobby} />
-                              <ConnectionStep step={steps.publish} />
-                              <ConnectionStep step={steps.subscribe} />
-                            </div>
-                          ) : (
-                            <></>
-                          )}
                         </div>
                       </div>
                     </Form>

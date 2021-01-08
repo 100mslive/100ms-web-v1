@@ -390,6 +390,7 @@ class Conference extends React.Component {
           onChatToggle={this.props.onChatToggle}
           isChatOpen={this.props.isChatOpen}
           loginInfo={this.props.loginInfo}
+          hasUnreadMessages={this.props.hasUnreadMessages}
         />
       </>
     );

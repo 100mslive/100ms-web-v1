@@ -786,111 +786,109 @@ class LoginForm extends React.Component {
                       this.handleCreateSubmit(values);
                     }}
                   >
-                    {({ errors, touched, initialValues }) => {
-                      return (
-                        <Form>
-                          <div
-                            className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
-                            style={{ backgroundColor: '#1a1619' }}
-                          >
-                            <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 p-6 bg-gray-100">
+                    {({ errors, touched, initialValues }) => (
+                      <Form>
+                        <div
+                          className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
+                          style={{ backgroundColor: '#1a1619' }}
+                        >
+                          <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 p-6 bg-gray-100">
+                            <div>
+                              <h2 className="text-center justify-center items-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
+                                {initialValues && (
+                                  <>
+                                    <ArrowLeftIcon
+                                      className="text-gray-700 hover:text-black"
+                                      onClick={() => {
+                                        this.setState({
+                                          ...this.state,
+                                          formStage: 'ROOM',
+                                        });
+                                        this.roomId = '';
+                                      }}
+                                    />
+                                    100ms Conference
+                                  </>
+                                )}
+                              </h2>
+                            </div>
+                            <div className="rounded-m">
                               <div>
-                                <h2 className="text-center justify-center items-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
-                                  {initialValues && (
-                                    <>
-                                      <ArrowLeftIcon
-                                        className="text-gray-700 hover:text-black"
-                                        onClick={() => {
-                                          this.setState({
-                                            ...this.state,
-                                            formStage: 'ROOM',
-                                          });
-                                          this.roomId = '';
-                                        }}
-                                      />
-                                      100ms Conference
-                                    </>
-                                  )}
-                                </h2>
-                              </div>
-                              <div className="rounded-m">
-                                <div>
-                                  {initialValues && !initialValues.roomName && (
-                                    <LoginTextField
-                                      label="Room Name"
-                                      name="roomName"
-                                      className="rounded-t-md"
-                                      placeholder="Room Name"
-                                      errors={errors.roomName}
-                                      touched={touched.roomName}
-                                    />
-                                  )}
-                                </div>
-                                <div className="-mt-px">
-                                  {initialValues && (
-                                    <LoginTextField
-                                      label="Username"
-                                      name="displayName"
-                                      className={
-                                        !(
-                                          initialValues && !initialValues.roomId
-                                        ) && 'rounded-t-md'
-                                      }
-                                      placeholder="Username"
-                                      errors={errors.displayName}
-                                      touched={touched.displayName}
-                                    />
-                                  )}
-                                </div>
-                                <div className="-mt-px">
-                                  {initialValues && (
-                                    <LoginTextField
-                                      label="Role"
-                                      name="role"
-                                      className={!showEnv && 'rounded-b-md'}
-                                      placeholder="Role"
-                                      errors={errors.role}
-                                      touched={touched.role}
-                                    />
-                                  )}
-                                </div>
-
-                                {showEnv && (
-                                  <div className="-mt-px">
-                                    {initialValues && (
-                                      <LoginTextField
-                                        label="Environment"
-                                        name="env"
-                                        className="rounded-b-md"
-                                        placeholder="Environment (qa-in/staging-in/prod-in)"
-                                        errors={errors.env}
-                                        touched={touched.env}
-                                      />
-                                    )}
-                                  </div>
+                                {initialValues && !initialValues.roomName && (
+                                  <LoginTextField
+                                    label="Room Name"
+                                    name="roomName"
+                                    className="rounded-t-md"
+                                    placeholder="Room Name"
+                                    errors={errors.roomName}
+                                    touched={touched.roomName}
+                                  />
                                 )}
                               </div>
-                              <div className="mt-6">
-                                <label>
-                                  <Field type="checkbox" name="isRecording" />
-                                  {'  '} Record Room?
-                                </label>
+                              <div className="-mt-px">
+                                {initialValues && (
+                                  <LoginTextField
+                                    label="Username"
+                                    name="displayName"
+                                    className={
+                                      !(
+                                        initialValues && !initialValues.roomId
+                                      ) && 'rounded-t-md'
+                                    }
+                                    placeholder="Username"
+                                    errors={errors.displayName}
+                                    touched={touched.displayName}
+                                  />
+                                )}
+                              </div>
+                              <div className="-mt-px">
+                                {initialValues && (
+                                  <LoginTextField
+                                    label="Role"
+                                    name="role"
+                                    className={!showEnv && 'rounded-b-md'}
+                                    placeholder="Role"
+                                    errors={errors.role}
+                                    touched={touched.role}
+                                  />
+                                )}
                               </div>
 
-                              <div className="mt-6">
-                                <button
-                                  type="submit"
-                                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
-                                >
-                                  <span className="absolute left-0 inset-y-0 flex items-center pl-3"></span>
-                                  Create Room
-                                </button>
-                              </div>
+                              {showEnv && (
+                                <div className="-mt-px">
+                                  {initialValues && (
+                                    <LoginTextField
+                                      label="Environment"
+                                      name="env"
+                                      className="rounded-b-md"
+                                      placeholder="Environment (qa-in/staging-in/prod-in)"
+                                      errors={errors.env}
+                                      touched={touched.env}
+                                    />
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                            <div className="mt-6">
+                              <label>
+                                <Field type="checkbox" name="isRecording" />
+                                {'  '} Record Room?
+                              </label>
+                            </div>
+
+                            <div className="mt-6">
+                              <button
+                                type="submit"
+                                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
+                              >
+                                <span className="absolute left-0 inset-y-0 flex items-center pl-3"></span>
+                                Create Room
+                              </button>
                             </div>
                           </div>
-                        </Form>
-                      );
-                    }}
+                        </div>
+                      </Form>
+                    )}
                   </Formik>
                 </>
               )}

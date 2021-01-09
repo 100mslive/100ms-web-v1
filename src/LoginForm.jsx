@@ -25,6 +25,7 @@ import DownloadLockIcon from 'mdi-react/DownloadLockIcon';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
 import { ROLES } from './constants';
+import LoginTextField from './components/LoginTextField';
 
 let testUpdateLoop;
 
@@ -771,6 +772,11 @@ class LoginForm extends React.Component {
                       if (!values.roomName) {
                         errors.roomName = 'Required';
                       }
+                      const validRoomPattern = /^[a-zA-Z0-9-.:_]*$/g;
+                      if (!validRoomPattern.test(values.roomName)) {
+                        errors.roomName =
+                          'Invalid room name. Accepted characters are a-z, A-Z, 0-9, . - : _';
+                      }
                       if (showEnv && !values.env) {
                         errors.env = 'Required';
                       }
@@ -780,105 +786,111 @@ class LoginForm extends React.Component {
                       this.handleCreateSubmit(values);
                     }}
                   >
-                    {({ values, initialValues }) => (
-                      <Form>
-                        <div
-                          className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
-                          style={{ backgroundColor: '#1a1619' }}
-                        >
-                          <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 p-6 bg-gray-100">
-                            <div>
-                              <h2 className="text-center justify-center items-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
-                                {initialValues && (
-                                  <>
-                                    <ArrowLeftIcon
-                                      className="text-gray-700 hover:text-black"
-                                      onClick={() => {
-                                        this.setState({
-                                          ...this.state,
-                                          formStage: 'ROOM',
-                                        });
-                                        this.roomId = '';
-                                      }}
-                                    />
-                                    100ms Conference
-                                  </>
-                                )}
-                              </h2>
-                            </div>
-                            <div className="rounded-md shadow-sm">
+                    {({ errors, touched, initialValues }) => {
+                      return (
+                        <Form>
+                          <div
+                            className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
+                            style={{ backgroundColor: '#1a1619' }}
+                          >
+                            <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 p-6 bg-gray-100">
                               <div>
-                                {initialValues && !initialValues.roomName && (
-                                  <Field
-                                    label="Room Name"
-                                    name="roomName"
-                                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
-                                    placeholder="Room Name"
-                                  />
-                                )}
-                              </div>
-                              <div className="-mt-px">
-                                {initialValues && (
-                                  <Field
-                                    label="Username"
-                                    name="displayName"
-                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 
-                                  ${
-                                    initialValues && !initialValues.roomId
-                                      ? ''
-                                      : 'rounded-t-md'
-                                  }
-                                  `}
-                                    placeholder="Username"
-                                  />
-                                )}
-                              </div>
-                              <div className="-mt-px">
-                                {initialValues && (
-                                  <Field
-                                    label="Role"
-                                    name="role"
-                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 ${
-                                      showEnv ? '' : 'rounded-b-md'
-                                    }`}
-                                    placeholder="Role"
-                                  />
-                                )}
-                              </div>
-
-                              {showEnv && (
-                                <div className="-mt-px">
+                                <h2 className="text-center justify-center items-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
                                   {initialValues && (
-                                    <Field
-                                      label="Environment"
-                                      name="env"
-                                      className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5`}
-                                      placeholder="Environment (qa-in/staging-in/prod-in)"
+                                    <>
+                                      <ArrowLeftIcon
+                                        className="text-gray-700 hover:text-black"
+                                        onClick={() => {
+                                          this.setState({
+                                            ...this.state,
+                                            formStage: 'ROOM',
+                                          });
+                                          this.roomId = '';
+                                        }}
+                                      />
+                                      100ms Conference
+                                    </>
+                                  )}
+                                </h2>
+                              </div>
+                              <div className="rounded-m">
+                                <div>
+                                  {initialValues && !initialValues.roomName && (
+                                    <LoginTextField
+                                      label="Room Name"
+                                      name="roomName"
+                                      className="rounded-t-md"
+                                      placeholder="Room Name"
+                                      errors={errors.roomName}
+                                      touched={touched.roomName}
                                     />
                                   )}
                                 </div>
-                              )}
-                            </div>
-                            <div className="mt-6">
-                              <label>
-                                <Field type="checkbox" name="isRecording" />
-                                {'  '} Record Room?
-                              </label>
-                            </div>
+                                <div className="-mt-px">
+                                  {initialValues && (
+                                    <LoginTextField
+                                      label="Username"
+                                      name="displayName"
+                                      className={
+                                        !(
+                                          initialValues && !initialValues.roomId
+                                        ) && 'rounded-t-md'
+                                      }
+                                      placeholder="Username"
+                                      errors={errors.displayName}
+                                      touched={touched.displayName}
+                                    />
+                                  )}
+                                </div>
+                                <div className="-mt-px">
+                                  {initialValues && (
+                                    <LoginTextField
+                                      label="Role"
+                                      name="role"
+                                      className={!showEnv && 'rounded-b-md'}
+                                      placeholder="Role"
+                                      errors={errors.role}
+                                      touched={touched.role}
+                                    />
+                                  )}
+                                </div>
 
-                            <div className="mt-6">
-                              <button
-                                type="submit"
-                                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
-                              >
-                                <span className="absolute left-0 inset-y-0 flex items-center pl-3"></span>
-                                Create Room
-                              </button>
+                                {showEnv && (
+                                  <div className="-mt-px">
+                                    {initialValues && (
+                                      <LoginTextField
+                                        label="Environment"
+                                        name="env"
+                                        className="rounded-b-md"
+                                        placeholder="Environment (qa-in/staging-in/prod-in)"
+                                        errors={errors.env}
+                                        touched={touched.env}
+                                      />
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                              <div className="mt-6">
+                                <label>
+                                  <Field type="checkbox" name="isRecording" />
+                                  {'  '} Record Room?
+                                </label>
+                              </div>
+
+                              <div className="mt-6">
+                                <button
+                                  type="submit"
+                                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
+                                >
+                                  <span className="absolute left-0 inset-y-0 flex items-center pl-3"></span>
+                                  Create Room
+                                </button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </Form>
-                    )}
+                        </Form>
+                      );
+                    }}
                   </Formik>
                 </>
               )}
@@ -956,7 +968,7 @@ class LoginForm extends React.Component {
                               </p>
                             )}
                           </div>
-                          <div className="rounded-md shadow-sm">
+                          <div className="rounded-md">
                             <div>
                               {initialValues && !initialValues.roomId && (
                                 <Field

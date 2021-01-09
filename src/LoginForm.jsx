@@ -775,7 +775,7 @@ class LoginForm extends React.Component {
                       const validRoomPattern = /^[a-zA-Z0-9-.:_]*$/g;
                       if (!validRoomPattern.test(values.roomName)) {
                         errors.roomName =
-                          'Invalid room name. Accepted characters are a-z, A-Z, 0-9, . - : _';
+                          'Accepted characters are a-z, A-Z, 0-9, . - : _';
                       }
                       if (showEnv && !values.env) {
                         errors.env = 'Required';

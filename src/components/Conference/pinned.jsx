@@ -71,7 +71,11 @@ const Pinned = ({
           />
         )}
       </div>
-      <div className="w-1/5 h-full overflow-scroll py-1 flex flex-col justify-center items-center">
+      <div
+        className={`w-1/5 h-full overflow-y-auto py-1 flex flex-col items-center ${
+          newStreams.length < 4 && 'justify-center'
+        }`}
+      >
         {newStreams.map((item, index) => (
           <div key={`stream-${index}`} className="w-full flex flex-col">
             <SmallVideoView key={item.mid} id={item.mid} stream={item.stream} />

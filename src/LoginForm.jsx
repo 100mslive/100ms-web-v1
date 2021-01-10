@@ -25,6 +25,7 @@ import DownloadLockIcon from 'mdi-react/DownloadLockIcon';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
 import { ROLES } from './constants';
+import LoginTextField from './components/LoginTextField';
 
 let testUpdateLoop;
 
@@ -771,6 +772,11 @@ class LoginForm extends React.Component {
                       if (!values.roomName) {
                         errors.roomName = 'Required';
                       }
+                      const validRoomPattern = /^[a-zA-Z0-9-.:_]*$/g;
+                      if (!validRoomPattern.test(values.roomName)) {
+                        errors.roomName =
+                          'Accepted characters are a-z, A-Z, 0-9, . - : _';
+                      }
                       if (showEnv && !values.env) {
                         errors.env = 'Required';
                       }
@@ -780,7 +786,7 @@ class LoginForm extends React.Component {
                       this.handleCreateSubmit(values);
                     }}
                   >
-                    {({ values, initialValues }) => (
+                    {({ errors, touched, initialValues }) => (
                       <Form>
                         <div
                           className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
@@ -806,42 +812,44 @@ class LoginForm extends React.Component {
                                 )}
                               </h2>
                             </div>
-                            <div className="rounded-md shadow-sm">
+                            <div className="rounded-m">
                               <div>
                                 {initialValues && !initialValues.roomName && (
-                                  <Field
+                                  <LoginTextField
                                     label="Room Name"
                                     name="roomName"
-                                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+                                    className="rounded-t-md"
                                     placeholder="Room Name"
+                                    errors={errors.roomName}
+                                    touched={touched.roomName}
                                   />
                                 )}
                               </div>
                               <div className="-mt-px">
                                 {initialValues && (
-                                  <Field
+                                  <LoginTextField
                                     label="Username"
                                     name="displayName"
-                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 
-                                  ${
-                                    initialValues && !initialValues.roomId
-                                      ? ''
-                                      : 'rounded-t-md'
-                                  }
-                                  `}
+                                    className={
+                                      !(
+                                        initialValues && !initialValues.roomId
+                                      ) && 'rounded-t-md'
+                                    }
                                     placeholder="Username"
+                                    errors={errors.displayName}
+                                    touched={touched.displayName}
                                   />
                                 )}
                               </div>
                               <div className="-mt-px">
                                 {initialValues && (
-                                  <Field
+                                  <LoginTextField
                                     label="Role"
                                     name="role"
-                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 ${
-                                      showEnv ? '' : 'rounded-b-md'
-                                    }`}
+                                    className={!showEnv && 'rounded-b-md'}
                                     placeholder="Role"
+                                    errors={errors.role}
+                                    touched={touched.role}
                                   />
                                 )}
                               </div>
@@ -849,11 +857,13 @@ class LoginForm extends React.Component {
                               {showEnv && (
                                 <div className="-mt-px">
                                   {initialValues && (
-                                    <Field
+                                    <LoginTextField
                                       label="Environment"
                                       name="env"
-                                      className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5`}
+                                      className="rounded-b-md"
                                       placeholder="Environment (qa-in/staging-in/prod-in)"
+                                      errors={errors.env}
+                                      touched={touched.env}
                                     />
                                   )}
                                 </div>
@@ -920,7 +930,7 @@ class LoginForm extends React.Component {
                     this.handleJoinSubmit(values);
                   }}
                 >
-                  {({ values, initialValues }) => (
+                  {({ errors, touched, initialValues }) => (
                     <Form>
                       <div
                         className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
@@ -956,61 +966,62 @@ class LoginForm extends React.Component {
                               </p>
                             )}
                           </div>
-                          <div className="rounded-md shadow-sm">
+                          <div className="rounded-md">
                             <div>
                               {initialValues && !initialValues.roomId && (
-                                <Field
+                                <LoginTextField
                                   label="Room ID"
                                   name="roomId"
-                                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+                                  className="rounded-t-md"
                                   placeholder="Room ID"
+                                  errors={errors.roomId}
+                                  touched={touched.roomId}
                                 />
                               )}
                             </div>
                             <div className="-mt-px">
                               {initialValues && (
-                                <Field
+                                <LoginTextField
                                   label="Username"
                                   name="displayName"
-                                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5 
-                                  ${
-                                    initialValues && !initialValues.roomId
-                                      ? ''
-                                      : 'rounded-t-md'
+                                  className={
+                                    !(initialValues && !initialValues.roomId) &&
+                                    'rounded-t-md'
                                   }
-                                  `}
                                   placeholder="Username"
+                                  errors={errors.displayName}
+                                  touched={touched.displayName}
                                 />
                               )}
                             </div>
                             <div className="-mt-px">
                               {initialValues && (
-                                <Field
+                                <LoginTextField
                                   label="Role"
                                   name="role"
-                                  className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5  ${
-                                    showEnv ? '' : 'rounded-b-md'
-                                  }`}
+                                  className={!showEnv && 'rounded-b-md'}
                                   placeholder="Role"
                                   disabled={this.role === ROLES.VIEWER}
+                                  errors={errors.role}
+                                  touched={touched.role}
                                 />
                               )}
                             </div>
                             {showEnv && (
                               <div className="-mt-px">
                                 {initialValues && (
-                                  <Field
+                                  <LoginTextField
                                     label="Environment"
                                     name="env"
-                                    className={`appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5`}
+                                    className="rounded-b-md"
                                     placeholder="Environment (qa-in/staging-in/prod-in)"
+                                    errors={errors.env}
+                                    touched={touched.env}
                                   />
                                 )}
                               </div>
                             )}
                           </div>
-
-                          <div className="mt-6"></div>
 
                           <div className="mt-6">
                             <button

@@ -8,7 +8,7 @@ import {
   SingleSelect,
   closeMediaStream,
   attachMediaStream,
-  isSupported,
+  deviceSupport,
 } from '../src/utils';
 import SoundMeter from './settings/soundmeter';
 
@@ -133,7 +133,7 @@ class LoginForm extends React.Component {
     console.log(`%c[APP] Role=${this.role}`);
     this.setState({
       ...this.state,
-      isSupported: isSupported(),
+      isSupported: deviceSupport().supported,
     });
     //const { form } = this.props;
     console.log('window.location:' + window.location);
@@ -1362,16 +1362,36 @@ class LoginForm extends React.Component {
                   </h2>
 
                   <p className="mt-2 text-center text-sm leading-5 text-gray-600 mb-2">
-                    Your browser/OS is not supported by 100ms
+                    {deviceSupport().failureCause == 'iOS' ? (
+                      <span>
+                        100ms users might face issues on iOS devices. Please
+                        open the link on another device for the best experience.
+                        If you wish to continue on iOS, click continue.
+                      </span>
+                    ) : (
+                      <span>
+                        We recommend using Google Chrome for the best
+                        experience. Please download Chrome or click continue if
+                        you wish to continue in the same browser.
+                      </span>
+                    )}
                   </p>
                   <div className="mt-6">
-                    <a
-                      className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
-                      href="https://www.google.com/chrome"
+                    {deviceSupport().failureCause == 'browser' && (
+                      <a
+                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
+                        href="https://www.google.com/chrome/"
+                        target="_blank"
+                      >
+                        Download latest chrome
+                      </a>
+                    )}
+                    <button
+                      className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out mt-3"
+                      onClick={() => this.setState({ isSupported: true })}
                     >
-                      <span className="absolute left-0 inset-y-0 flex items-center pl-3"></span>
-                      Download latest chrome
-                    </a>
+                      Continue
+                    </button>
                   </div>
                 </div>
               </div>

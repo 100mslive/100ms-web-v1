@@ -407,7 +407,6 @@ class App extends React.Component {
     const validEnvs = Object.values(ENVS);
     try {
       const params = getRequest();
-      console.log(params);
 
       if (params.role && !validRoles.includes(params.role.toLowerCase())) {
         return [false, 'Role'];
@@ -437,7 +436,6 @@ class App extends React.Component {
     } = this.state;
 
     const isValidParams = this.isValidParams()[0];
-    console.log({ isValidParams });
 
     return (
       <Layout className="app-layout">

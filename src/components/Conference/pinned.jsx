@@ -96,6 +96,7 @@ const Pinned = ({
             <SmallVideoView
               id={id + '-video'}
               stream={localStream}
+              isLocal={true}
               label={`${loginInfo.displayName} (You)`}
               isMuted={true}
             />

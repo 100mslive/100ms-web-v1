@@ -24,10 +24,13 @@ class SmallVideoView extends React.Component {
   };
 
   render = () => {
-    const { id, stream, label, isMuted } = this.props;
+    const { id, stream, label, isMuted, isLocal } = this.props;
 
     return (
-      <div onClick={this._handleClick} className="p-1 relative">
+      <div
+        onClick={this._handleClick}
+        className={`p-1 relative ${isLocal && 'local-video-container'}`}
+      >
         <video
           ref={ref => {
             this.video = ref;

@@ -696,7 +696,6 @@ class LoginForm extends React.Component {
     console.log(this.state.formStage);
     const showEnv = !Boolean(process.env.SFU_ENV);
     const showRoleSelect = Boolean(process.env.SFU_ENV);
-    console.log({ showRoleSelect, showEnv, SFU_ENV: process.env.SFU_ENV });
 
     return (
       <>

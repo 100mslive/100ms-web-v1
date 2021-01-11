@@ -116,6 +116,19 @@ const SingleSelect = ({ field, form, ...props }) => {
   );
 };
 
+const getRequest = () => {
+  let url = location.search;
+  let theRequest = new Object();
+  if (url.indexOf('?') != -1) {
+    let str = url.substr(1);
+    let strs = str.split('&');
+    for (let i = 0; i < strs.length; i++) {
+      theRequest[strs[i].split('=')[0]] = decodeURI(strs[i].split('=')[1]);
+    }
+  }
+  return theRequest;
+};
+
 const isSupported = () => {
   return true;
   //TODO replace with firebase
@@ -169,4 +182,5 @@ export {
   updateInputDevices,
   SingleSelect,
   isSupported,
+  getRequest,
 };

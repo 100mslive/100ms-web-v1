@@ -9,6 +9,7 @@ import {
   closeMediaStream,
   attachMediaStream,
   deviceSupport,
+  getUserMedia,
 } from '../src/utils';
 import SoundMeter from './settings/soundmeter';
 
@@ -608,8 +609,7 @@ class LoginForm extends React.Component {
         ? false
         : { deviceId: videoSource ? { exact: videoSource } : undefined },
     };
-    navigator.mediaDevices
-      .getUserMedia(constraints)
+    getUserMedia(constraints)
       .then(function (stream) {
         if (!permissionTestMode) {
           window.stream = stream; // make stream available to console

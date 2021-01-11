@@ -695,6 +695,8 @@ class LoginForm extends React.Component {
     const steps = this.state.steps;
     console.log(this.state.formStage);
     const showEnv = !Boolean(process.env.SFU_ENV);
+    const showRoleSelect = Boolean(process.env.SFU_ENV);
+    console.log({ showRoleSelect, showEnv, SFU_ENV: process.env.SFU_ENV });
 
     return (
       <>
@@ -842,16 +844,43 @@ class LoginForm extends React.Component {
                                 )}
                               </div>
                               <div className="-mt-px">
-                                {initialValues && (
-                                  <LoginTextField
-                                    label="Role"
-                                    name="role"
-                                    className={!showEnv && 'rounded-b-md'}
-                                    placeholder="Role"
-                                    errors={errors.role}
-                                    touched={touched.role}
-                                  />
-                                )}
+                                {initialValues ? (
+                                  showRoleSelect ? (
+                                    <LoginTextField
+                                      label="Role"
+                                      name="role"
+                                      as={showRoleSelect ? 'select' : null}
+                                      className={!showEnv && 'rounded-b-md'}
+                                      placeholder="Role"
+                                      disabled={this.role === ROLES.VIEWER}
+                                      errors={errors.role}
+                                      touched={touched.rol}
+                                    >
+                                      <option value="">Select Role</option>
+                                      {Object.values(ROLES).map(
+                                        (role, index) => (
+                                          <option
+                                            key={index}
+                                            value={role}
+                                            className="capitalize"
+                                          >
+                                            {role}
+                                          </option>
+                                        )
+                                      )}
+                                    </LoginTextField>
+                                  ) : (
+                                    <LoginTextField
+                                      label="Role"
+                                      name="role"
+                                      className={!showEnv && 'rounded-b-md'}
+                                      placeholder="Role"
+                                      disabled={this.role === ROLES.VIEWER}
+                                      errors={errors.role}
+                                      touched={touched.rol}
+                                    />
+                                  )
+                                ) : null}
                               </div>
 
                               {showEnv && (
@@ -995,17 +1024,41 @@ class LoginForm extends React.Component {
                               )}
                             </div>
                             <div className="-mt-px">
-                              {initialValues && (
-                                <LoginTextField
-                                  label="Role"
-                                  name="role"
-                                  className={!showEnv && 'rounded-b-md'}
-                                  placeholder="Role"
-                                  disabled={this.role === ROLES.VIEWER}
-                                  errors={errors.role}
-                                  touched={touched.role}
-                                />
-                              )}
+                              {initialValues ? (
+                                showRoleSelect ? (
+                                  <LoginTextField
+                                    label="Role"
+                                    name="role"
+                                    as={showRoleSelect ? 'select' : null}
+                                    className={!showEnv && 'rounded-b-md'}
+                                    placeholder="Role"
+                                    disabled={this.role === ROLES.VIEWER}
+                                    errors={errors.role}
+                                    touched={touched.rol}
+                                  >
+                                    <option value="">Select Role</option>
+                                    {Object.values(ROLES).map((role, index) => (
+                                      <option
+                                        key={index}
+                                        value={role}
+                                        className="capitalize"
+                                      >
+                                        {role}
+                                      </option>
+                                    ))}
+                                  </LoginTextField>
+                                ) : (
+                                  <LoginTextField
+                                    label="Role"
+                                    name="role"
+                                    className={!showEnv && 'rounded-b-md'}
+                                    placeholder="Role"
+                                    disabled={this.role === ROLES.VIEWER}
+                                    errors={errors.role}
+                                    touched={touched.rol}
+                                  />
+                                )
+                              ) : null}
                             </div>
                             {showEnv && (
                               <div className="-mt-px">

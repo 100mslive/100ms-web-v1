@@ -129,10 +129,25 @@ const getRequest = () => {
   return theRequest;
 };
 
-const isSupported = () => {
-  return true;
-  //TODO replace with firebase
+const deviceSupport = () => {
   const browser = Bowser.getParser(window.navigator.userAgent);
+  if (browser.getOS().name == 'iOS') {
+    return {
+      supported: false,
+      failureCause: 'iOS',
+    };
+  } else if (browser.getBrowserName() != 'Chrome') {
+    return {
+      supported: false,
+      failureCause: 'browser',
+    };
+  }
+
+  return {
+    supported: true,
+    failureCause: null,
+  };
+  //TODO replace with firebase
   const isValidBrowser = browser.satisfies({
     //TODO add precise versions after checking with browserstack
     windows: {
@@ -181,6 +196,6 @@ export {
   attachMediaStream,
   updateInputDevices,
   SingleSelect,
-  isSupported,
   getRequest,
+  deviceSupport,
 };

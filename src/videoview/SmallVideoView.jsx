@@ -40,6 +40,7 @@ class SmallVideoView extends React.Component {
           playsInline
           muted={isMuted}
           className="w-full"
+          style={{ maxHeight: '170px' }}
         />
         <div className="absolute left-0 top-0 w-full">
           <a className="small-video-id-a">{label || stream.info.name}</a>

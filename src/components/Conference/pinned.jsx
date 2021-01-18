@@ -73,7 +73,7 @@ const Pinned = ({
       </div>
       <div
         className={`w-1/5 h-full overflow-y-auto py-1 flex flex-col items-center ${
-          newStreams.length < 4 && 'justify-center'
+          newStreams.length < 4 ? 'justify-center' : ''
         }`}
       >
         {newStreams.map((item, index) => (
@@ -96,6 +96,7 @@ const Pinned = ({
             <SmallVideoView
               id={id + '-video'}
               stream={localStream}
+              isLocal={true}
               label={`${loginInfo.displayName} (You)`}
               isMuted={true}
             />

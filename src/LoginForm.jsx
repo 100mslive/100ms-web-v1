@@ -8,7 +8,9 @@ import {
   SingleSelect,
   closeMediaStream,
   attachMediaStream,
+  getRequest,
   deviceSupport,
+  getUserMedia,
 } from '../src/utils';
 import SoundMeter from './settings/soundmeter';
 
@@ -94,19 +96,19 @@ class LoginForm extends React.Component {
   testUpdateLoop = null;
   localStorage = reactLocalStorage.getObject('loginInfo');
   role =
-    this.getRequest() && this.getRequest().hasOwnProperty('role')
-      ? this.getRequest().role
+    getRequest() && getRequest().hasOwnProperty('role')
+      ? getRequest().role
       : this.localStorage && this.localStorage.role
       ? this.localStorage.role
       : '';
   roomId =
-    this.getRequest() && this.getRequest().hasOwnProperty('room')
-      ? this.getRequest().room
+    getRequest() && getRequest().hasOwnProperty('room')
+      ? getRequest().room
       : '';
   env = process.env.SFU_ENV
     ? process.env.SFU_ENV
-    : this.getRequest() && this.getRequest().hasOwnProperty('env')
-    ? this.getRequest().env
+    : getRequest() && getRequest().hasOwnProperty('env')
+    ? getRequest().env
     : '';
   displayName = this.localStorage
     ? this.localStorage.displayName
@@ -608,8 +610,7 @@ class LoginForm extends React.Component {
         ? false
         : { deviceId: videoSource ? { exact: videoSource } : undefined },
     };
-    navigator.mediaDevices
-      .getUserMedia(constraints)
+    getUserMedia(constraints)
       .then(function (stream) {
         if (!permissionTestMode) {
           window.stream = stream; // make stream available to console
@@ -672,19 +673,6 @@ class LoginForm extends React.Component {
       });
   };
 
-  getRequest() {
-    let url = location.search;
-    let theRequest = new Object();
-    if (url.indexOf('?') != -1) {
-      let str = url.substr(1);
-      let strs = str.split('&');
-      for (let i = 0; i < strs.length; i++) {
-        theRequest[strs[i].split('=')[0]] = decodeURI(strs[i].split('=')[1]);
-      }
-    }
-    return theRequest;
-  }
-
   updateDevice = (name, value) => {
     this.state.settings[name] = value;
     //console.log("Inside updateDevice");
@@ -695,6 +683,7 @@ class LoginForm extends React.Component {
     const steps = this.state.steps;
     console.log(this.state.formStage);
     const showEnv = !Boolean(process.env.SFU_ENV);
+    const showRoleSelect = Boolean(process.env.SFU_ENV);
 
     return (
       <>
@@ -842,16 +831,43 @@ class LoginForm extends React.Component {
                                 )}
                               </div>
                               <div className="-mt-px">
-                                {initialValues && (
-                                  <LoginTextField
-                                    label="Role"
-                                    name="role"
-                                    className={!showEnv && 'rounded-b-md'}
-                                    placeholder="Role"
-                                    errors={errors.role}
-                                    touched={touched.role}
-                                  />
-                                )}
+                                {initialValues ? (
+                                  showRoleSelect ? (
+                                    <LoginTextField
+                                      label="Role"
+                                      name="role"
+                                      as={showRoleSelect ? 'select' : null}
+                                      className={!showEnv && 'rounded-b-md'}
+                                      placeholder="Role"
+                                      disabled={this.role === ROLES.VIEWER}
+                                      errors={errors.role}
+                                      touched={touched.rol}
+                                    >
+                                      <option value="">Select Role</option>
+                                      {Object.values(ROLES).map(
+                                        (role, index) => (
+                                          <option
+                                            key={index}
+                                            value={role}
+                                            className="capitalize"
+                                          >
+                                            {role}
+                                          </option>
+                                        )
+                                      )}
+                                    </LoginTextField>
+                                  ) : (
+                                    <LoginTextField
+                                      label="Role"
+                                      name="role"
+                                      className={!showEnv && 'rounded-b-md'}
+                                      placeholder="Role"
+                                      disabled={this.role === ROLES.VIEWER}
+                                      errors={errors.role}
+                                      touched={touched.rol}
+                                    />
+                                  )
+                                ) : null}
                               </div>
 
                               {showEnv && (
@@ -995,17 +1011,41 @@ class LoginForm extends React.Component {
                               )}
                             </div>
                             <div className="-mt-px">
-                              {initialValues && (
-                                <LoginTextField
-                                  label="Role"
-                                  name="role"
-                                  className={!showEnv && 'rounded-b-md'}
-                                  placeholder="Role"
-                                  disabled={this.role === ROLES.VIEWER}
-                                  errors={errors.role}
-                                  touched={touched.role}
-                                />
-                              )}
+                              {initialValues ? (
+                                showRoleSelect ? (
+                                  <LoginTextField
+                                    label="Role"
+                                    name="role"
+                                    as={showRoleSelect ? 'select' : null}
+                                    className={!showEnv && 'rounded-b-md'}
+                                    placeholder="Role"
+                                    disabled={this.role === ROLES.VIEWER}
+                                    errors={errors.role}
+                                    touched={touched.rol}
+                                  >
+                                    <option value="">Select Role</option>
+                                    {Object.values(ROLES).map((role, index) => (
+                                      <option
+                                        key={index}
+                                        value={role}
+                                        className="capitalize"
+                                      >
+                                        {role}
+                                      </option>
+                                    ))}
+                                  </LoginTextField>
+                                ) : (
+                                  <LoginTextField
+                                    label="Role"
+                                    name="role"
+                                    className={!showEnv && 'rounded-b-md'}
+                                    placeholder="Role"
+                                    disabled={this.role === ROLES.VIEWER}
+                                    errors={errors.role}
+                                    touched={touched.rol}
+                                  />
+                                )
+                              ) : null}
                             </div>
                             {showEnv && (
                               <div className="-mt-px">

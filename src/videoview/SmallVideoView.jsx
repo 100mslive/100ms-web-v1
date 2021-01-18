@@ -24,10 +24,13 @@ class SmallVideoView extends React.Component {
   };
 
   render = () => {
-    const { id, stream, label, isMuted } = this.props;
+    const { id, stream, label, isMuted, isLocal } = this.props;
 
     return (
-      <div onClick={this._handleClick} className="p-1 relative">
+      <div
+        onClick={this._handleClick}
+        className={`p-1 relative ${isLocal && 'local-video-container'}`}
+      >
         <video
           ref={ref => {
             this.video = ref;
@@ -37,6 +40,7 @@ class SmallVideoView extends React.Component {
           playsInline
           muted={isMuted}
           className="w-full"
+          style={{ maxHeight: '170px' }}
         />
         <div className="absolute left-0 top-0 w-full">
           <a className="small-video-id-a">{label || stream.info.name}</a>

@@ -124,7 +124,7 @@ const Controls = ({
 
   const shareButton = (
     <div className="ml-1">
-      <ToolShare loginInfo={loginInfo} />
+      <ToolShare url={location.href} />
     </div>
   );
 

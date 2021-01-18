@@ -10,25 +10,25 @@ export default class ToolShare extends React.Component {
     super(props);
     this.state = {
       visible: false,
-      application: 'SFU',
     };
+
+    const url = new URLSearchParams(props.url);
+    url.delete('role');
+    this.url = decodeURIComponent(url.toString());
   }
+
   showModal = () => {
     this.setState({
       visible: true,
     });
-
-    let loginInfo = this.props.loginInfo;
-    let host = window.location.host;
-    let url =
-      window.location.protocol + '//' + host + '/?room=' + loginInfo.roomId;
-    this.setState({ url });
   };
+
   handleOk = e => {
     this.setState({
       visible: false,
     });
   };
+
   handleCancel = e => {
     this.setState({
       visible: false,
@@ -60,11 +60,7 @@ export default class ToolShare extends React.Component {
           <div>
             <div>
               <span>Send link to your friends</span>
-              <Input
-                onFocus={this.onFocus}
-                readOnly={true}
-                value={this.state.url}
-              />
+              <Input onFocus={this.onFocus} readOnly={true} value={this.url} />
             </div>
           </div>
         </Modal>

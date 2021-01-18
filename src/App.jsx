@@ -22,8 +22,9 @@ import '../styles/css/app.scss';
 import LoginForm from './LoginForm';
 import Conference from './Conference';
 import { HMSClient, HMSPeer, HMSClientConfig } from '@100mslive/hmsvideo-web';
-import { ROLES } from './constants';
+import { ENVS, ROLES } from './constants';
 import { dependencies } from '../package.json';
+import { getRequest } from './utils';
 
 const sdkVersion = dependencies['@100mslive/hmsvideo-web'].substring(1);
 console.info(`Using hmsvideo-web SDK version ${sdkVersion}`);
@@ -396,6 +397,29 @@ class App extends React.Component {
     this.setState({ messages });
   };
 
+  isValidParams() {
+    const validRoomPattern = /^[a-zA-Z0-9-.:_]*$/g;
+    const validRoles = Object.values(ROLES);
+    const validEnvs = Object.values(ENVS);
+    try {
+      const params = getRequest();
+
+      if (params.role && !validRoles.includes(params.role.toLowerCase())) {
+        return [false, 'Role'];
+      } else if (params.env && !validEnvs.includes(params.env.toLowerCase())) {
+        return [false, 'environment'];
+      } else if (params.room && !validRoomPattern.test(params.room)) {
+        return [false, 'Room ID'];
+      } else {
+        return [true, null];
+      }
+    } catch (error) {
+      if (error instanceof URIError) {
+        return [false, 'URL'];
+      }
+    }
+  }
+
   render() {
     const {
       login,
@@ -406,6 +430,9 @@ class App extends React.Component {
       collapsed,
       vidFit,
     } = this.state;
+
+    const isValidParams = this.isValidParams()[0];
+
     return (
       <Layout className="app-layout">
         <Header
@@ -433,7 +460,25 @@ class App extends React.Component {
         </Header>
 
         <Content className="app-center-layout">
-          {login ? (
+          {!isValidParams ? (
+            <div
+              className="min-h-screen flex items-center justify-center w-full py-8 px-4 sm:px-6 lg:px-8"
+              style={{ backgroundColor: '#1a1619' }}
+            >
+              <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100">
+                <div className="">
+                  <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
+                    100ms Conference
+                  </h2>
+
+                  <p className="mt-2 text-center text-sm leading-5 text-gray-600 mb-2">
+                    The requested {this.isValidParams()[1]} is invalid. Please
+                    verify your credentials.
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : login ? (
             <Layout className="app-content-layout">
               <Sider
                 width={320}

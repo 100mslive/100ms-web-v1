@@ -8,6 +8,7 @@ import {
   SingleSelect,
   closeMediaStream,
   attachMediaStream,
+  getRequest,
   deviceSupport,
   getUserMedia,
 } from '../src/utils';
@@ -95,19 +96,19 @@ class LoginForm extends React.Component {
   testUpdateLoop = null;
   localStorage = reactLocalStorage.getObject('loginInfo');
   role =
-    this.getRequest() && this.getRequest().hasOwnProperty('role')
-      ? this.getRequest().role
+    getRequest() && getRequest().hasOwnProperty('role')
+      ? getRequest().role
       : this.localStorage && this.localStorage.role
       ? this.localStorage.role
       : '';
   roomId =
-    this.getRequest() && this.getRequest().hasOwnProperty('room')
-      ? this.getRequest().room
+    getRequest() && getRequest().hasOwnProperty('room')
+      ? getRequest().room
       : '';
   env = process.env.SFU_ENV
     ? process.env.SFU_ENV
-    : this.getRequest() && this.getRequest().hasOwnProperty('env')
-    ? this.getRequest().env
+    : getRequest() && getRequest().hasOwnProperty('env')
+    ? getRequest().env
     : '';
   displayName = this.localStorage
     ? this.localStorage.displayName
@@ -671,19 +672,6 @@ class LoginForm extends React.Component {
         });
       });
   };
-
-  getRequest() {
-    let url = location.search;
-    let theRequest = new Object();
-    if (url.indexOf('?') != -1) {
-      let str = url.substr(1);
-      let strs = str.split('&');
-      for (let i = 0; i < strs.length; i++) {
-        theRequest[strs[i].split('=')[0]] = decodeURI(strs[i].split('=')[1]);
-      }
-    }
-    return theRequest;
-  }
 
   updateDevice = (name, value) => {
     this.state.settings[name] = value;

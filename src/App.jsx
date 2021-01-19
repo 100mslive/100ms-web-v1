@@ -182,12 +182,18 @@ class App extends React.Component {
       });
     });
 
-    client.on('stream-add', (room, streamInfo) => {
-      console.log('stream-add %s,%s!', room, streamInfo.mid);
+    client.on('stream-add', (room, peer, streamInfo) => {
+      console.log(
+        'stream-add',
+        JSON.stringify({ room, peer, streamInfo }, null, 2)
+      );
     });
 
-    client.on('stream-remove', (room, streamInfo) => {
-      console.log(`stream-remove: ${room}, ${streamInfo.mid}`);
+    client.on('stream-remove', (room, peer, streamInfo) => {
+      console.log(
+        'stream-remove',
+        JSON.stringify({ room, peer, streamInfo }, null, 2)
+      );
     });
 
     client.on('broadcast', (room, peer, message) => {

@@ -1,53 +1,41 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
-class SmallVideoView extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      clientWidth: document.body.offsetWidth,
-      clientHeight: document.body.offsetHeight,
+export default function SmallVideoView({
+  id,
+  stream,
+  label,
+  isMuted,
+  isLocal,
+}) {
+  const videoEl = useRef(null);
+
+  useEffect(() => {
+    videoEl.current.srcObject = stream;
+
+    return function cleanUp() {
+      videoEl.current.srcObject = null;
     };
-  }
+  }, []);
 
-  componentDidMount = () => {
-    const { stream } = this.props;
-    this.video.srcObject = stream;
-  };
-
-  componentWillUnmount = () => {
-    this.video.srcObject = null;
-  };
-
-  _handleClick = () => {
-    let { id, index } = this.props;
-    this.props.onClick({ id, index, el: this.video });
-  };
-
-  render = () => {
-    const { id, stream, label, isMuted, isLocal } = this.props;
-
-    return (
-      <div
-        onClick={this._handleClick}
-        className={`p-1 relative ${isLocal && 'local-video-container'}`}
-      >
-        <video
-          ref={ref => {
-            this.video = ref;
-          }}
-          id={id}
-          autoPlay
-          playsInline
-          muted={isMuted}
-          className="w-full"
-          style={{ maxHeight: '170px' }}
-        />
-        <div className="absolute left-0 top-0 w-full">
-          <a className="small-video-id-a">{label || stream.info.name}</a>
-        </div>
+  return (
+    <div
+      className={`relative w-64 h-36 mb-2 mx-auto ${
+        isLocal ? 'local-video-container' : ''
+      }`}
+    >
+      <video
+        ref={videoEl}
+        id={id}
+        autoPlay
+        playsInline
+        muted={isMuted}
+        className="rounded max-h-full mx-auto shadow-lg"
+      />
+      <div className="absolute left-0 top-0 w-full text-center pt-0.5">
+        <a className="bg-indigo-900 bg-opacity-75 text-xs text-white inline-flex items-center px-1 rounded-sm">
+          {label || stream.info.name}
+        </a>
       </div>
-    );
-  };
+    </div>
+  );
 }
-
-export default SmallVideoView;

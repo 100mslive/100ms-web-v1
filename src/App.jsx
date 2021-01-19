@@ -12,11 +12,11 @@ import {
 } from 'antd';
 const { confirm } = Modal;
 const { Header, Content, Sider } = Layout;
-import { reactLocalStorage } from 'reactjs-localstorage';
 import MediaSettings from './settings';
 import ChatFeed from './chat/index';
 import Message from './chat/message';
 import bLogo from '../public/100ms-logo-on-black.png';
+import { AppContextProvider, AppContext } from "./stores/AppContext";
 import '../styles/css/app.scss';
 
 import LoginForm from './LoginForm';
@@ -40,9 +40,9 @@ async function getToken({ room_id, user_name, role = 'guest', env }) {
   return token;
 }
 
-class App extends React.Component {
-  constructor() {
-    super();
+class OldAppUI extends React.Component {
+  constructor(props) {
+    super(props);
     this.client = null;
     this.isConnected = false;
     this.state = {
@@ -68,7 +68,7 @@ class App extends React.Component {
       isDevMode: true,
     };
 
-    let settings = reactLocalStorage.getObject('settings');
+    let settings = props.appSettings;
     if (settings.codec !== undefined) {
       this._settings = { ...this._settings, ...settings };
     }
@@ -211,8 +211,7 @@ class App extends React.Component {
 
   _handleTransportOpen = async values => {
     this.isConnected = true;
-    reactLocalStorage.remove('loginInfo');
-    reactLocalStorage.setObject('loginInfo', values);
+    this.props.setLoginInfo(values);
     try {
       await this.client.join(values.roomId).catch(error => {
         console.log('JOIN ERROR:', error);
@@ -362,7 +361,7 @@ class App extends React.Component {
       frameRate,
       isDevMode,
     };
-    reactLocalStorage.setObject('settings', this._settings);
+    this.props.setAppSettings(this._settings);
     const constraints = {
       frameRate: frameRate,
       bitrate: bandwidth,
@@ -547,15 +546,43 @@ class App extends React.Component {
           ) : loading ? (
             <Spin size="large" tip="Connecting..." />
           ) : (
-            <div className="relative w-full mt-16">
-              <LoginForm
-                handleLogin={this._handleJoin}
-                createClient={this._createClient}
-              />
+                  <div className="relative w-full mt-16">
+                    <AppContext.Consumer>
+                      {context => (
+                        <LoginForm
+                          appSettings={context.settings} loginInfo={context.loginInfo} setAppSettings={context.setSettings} setLoginInfo={context.setLoginInfo}
+                          handleLogin={this._handleJoin}
+                          createClient={this._createClient}
+                        />
+                         )}
+                    </AppContext.Consumer>
+               
             </div>
           )}
         </Content>
       </Layout>
+    );
+  }
+}
+
+class OldApp extends React.Component {
+  render() {
+    return (
+      <AppContext.Consumer>
+        {context => (
+          <OldAppUI appSettings={context.settings} loginInfo={context.loginInfo} setAppSettings={context.setSettings} setLoginInfo={context.setLoginInfo} />
+        )}
+      </AppContext.Consumer>
+    );
+  }
+};
+
+class App extends React.Component {
+  render() {
+    return (
+      <AppContextProvider>
+        <OldApp />
+      </AppContextProvider>
     );
   }
 }

@@ -2,7 +2,6 @@ import React from 'react';
 import { Modal, Button, Select, Tooltip, Switch, InputNumber } from 'antd';
 import SoundMeter from './soundmeter';
 import PropTypes from 'prop-types';
-import { reactLocalStorage } from 'reactjs-localstorage';
 import './style.scss';
 
 const Option = Select.Option;

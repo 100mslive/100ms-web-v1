@@ -628,7 +628,7 @@ class LoginForm extends React.Component {
 
                     <div className="mt-6 space-y-2">
                       <button
-                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
                         onClick={() => {
                           this.setState({ formStage: 'CREATE_ROOM' });
                         }}
@@ -1324,26 +1324,25 @@ class LoginForm extends React.Component {
                     ) : (
                       <span>
                         We recommend using Google Chrome for the best
-                        experience. Please download Chrome or click continue if
-                        you wish to continue in the same browser.
+                        experience.
                       </span>
                     )}
                   </p>
                   <div className="mt-6">
                     {deviceSupport().failureCause == 'browser' && (
                       <a
-                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
+                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 hover:text-white focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
                         href="https://www.google.com/chrome/"
                         target="_blank"
                       >
-                        Download latest chrome
+                        Download Google Chrome
                       </a>
                     )}
                     <button
-                      className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out mt-3"
+                      className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-700 hover:border-indigo-700 focus:outline-none border-indigo-600 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out mt-3"
                       onClick={() => this.setState({ isSupported: true })}
                     >
-                      Continue
+                      Continue in current browser
                     </button>
                   </div>
                 </div>

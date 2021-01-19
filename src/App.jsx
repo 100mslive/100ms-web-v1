@@ -129,6 +129,7 @@ class App extends React.Component {
     let settings = this._settings;
     this.roomName = values.roomName;
     this.roomId = values.roomId;
+    this.env = values.env;
     this.role = values.role;
     this.hideMessage = () => {};
     settings.selectedVideoDevice = values.selectedVideoDevice;

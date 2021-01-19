@@ -266,6 +266,26 @@ const getUserMedia = constraints => {
   }
 };
 
+function getPermissionStatus() {
+  return new Promise((resolve, reject) => {
+    navigator.mediaDevices
+      .enumerateDevices()
+      .then(devices => {
+        const audio = devices.some(
+          val => val.kind === 'audioinput' && val.label !== ''
+        );
+        const video = devices.some(
+          val => val.kind === 'videoinput' && val.label !== ''
+        );
+        if (audio && video) {
+          resolve(true);
+        }
+        reject();
+      })
+      .catch(err => reject(error));
+  });
+}
+
 export {
   closeMediaStream,
   attachMediaStream,
@@ -275,4 +295,5 @@ export {
   deviceSupport,
   getLocalStreamException,
   getUserMedia,
+  getPermissionStatus,
 };

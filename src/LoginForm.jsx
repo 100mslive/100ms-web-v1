@@ -11,6 +11,7 @@ import {
   getRequest,
   deviceSupport,
   getUserMedia,
+  getPermissionStatus,
 } from '../src/utils';
 import SoundMeter from './settings/soundmeter';
 
@@ -89,8 +90,11 @@ const ConnectionStep = ({ step }) => {
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = DEFAULT_STATE;
-    this.state.formStage = 'ROOM';
+    this.state = {
+      ...DEFAULT_STATE,
+      formStage: 'ROOM',
+      permissionGranted: false,
+    };
   }
 
   testUpdateLoop = null;
@@ -125,18 +129,14 @@ class LoginForm extends React.Component {
       ? this.localStorage.videoOnly
       : false
     : false;
-  permissionGranted = this.localStorage
-    ? this.localStorage.permissionGranted
-      ? this.localStorage.permissionGranted
-      : false
-    : false;
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     console.log(`%c[APP] Role=${this.role}`);
     this.setState({
-      ...this.state,
       isSupported: deviceSupport().supported,
     });
+    await this.updatePermission();
+    console.log({ permissionGranted: this.state.permissionGranted });
     //const { form } = this.props;
     console.log('window.location:' + window.location);
     console.log(
@@ -148,7 +148,6 @@ class LoginForm extends React.Component {
         window.location.query
     );
     console.log('Making test client');
-    let formStage = 'ROOM';
 
     this.state.settings =
       reactLocalStorage.getObject('settings').codec !== undefined
@@ -185,66 +184,27 @@ class LoginForm extends React.Component {
 
     // ToDo: Show a confirmation dialog for ROLES.VIEWER
 
-    this.state.audioOnly = this.audioOnly;
-    this.state.videoOnly = this.videoOnly;
-    this.state.permissionGranted = this.permissionGranted;
-    this.state.permissionText =
-      'We will need your permission to use your webcam and microphone.';
+    this.setState({
+      audioOnly: this.audioOnly,
+      videoOnly: this.videoOnly,
+      permissionText:
+        'We will need your permission to use your webcam and microphone.',
+    });
 
     if (this.displayName !== '' && this.roomId !== '' && this.env !== '') {
       if (this.state.permissionGranted) {
-        if (
-          this.state.settings.selectedAudioDevice === '' &&
-          this.state.settings.selectedVideoDevice === ''
-        ) {
-          console.log('Showing preview');
-          this.updateDeviceList(() => {
-            this.setState({
-              ...this.state,
-              formValues: values,
-              formStage: 'PREVIEW',
-            });
-          });
-        } else {
-          console.log("Let's go to conference");
-          const handleLogin = this.props.handleLogin;
-          handleLogin({
-            displayName: this.displayName,
-            role: this.role,
-            roomId: this.roomId,
-            roomName: this.roomName,
-            env: this.env,
-            audioOnly: this.state.audioOnly,
-            videoOnly: this.state.videoOnly,
-            permissionGranted: this.state.permissionGranted,
-            selectedAudioDevice: this.state.settings.selectedAudioDevice,
-            selectedVideoDevice: this.state.settings.selectedVideoDevice,
-          });
-        }
-        //TODO is this dead code
-        this.updateDeviceList(() => {
-          formStage = 'PREVIEW';
-          this.setState({
-            ...this.state,
-            formStage: formStage,
-          });
-        });
+        console.log('Showing preview');
+        this.startPreview(true);
       } else {
-        formStage = 'PERMISSION';
-        this.setState({
-          ...this.state,
-          formStage: formStage,
-        });
+        this.setState({ formStage: 'PERMISSION' });
       }
     } else {
+      let formStage = 'ROOM';
       console.log(`[FormStage: ${formStage}]`);
       if (this.roomId != '') {
         formStage = 'JOIN_ROOM';
       }
-      this.setState({
-        ...this.state,
-        formStage: formStage,
-      });
+      this.setState({ formStage: formStage });
     }
   };
 
@@ -437,7 +397,6 @@ class LoginForm extends React.Component {
       // }
 
       this.setState({
-        ...this.state,
         videoDevices: data.videoDevices,
         audioDevices: data.audioDevices,
         audioOutputDevices: data.audioOutputDevices,
@@ -509,60 +468,15 @@ class LoginForm extends React.Component {
         selectedVideoDevice: null,
       });
     } else if (this.state.permissionGranted) {
-      if (
-        this.state.settings.selectedAudioDevice === '' &&
-        this.state.settings.selectedVideoDevice === ''
-      ) {
-        console.log('Showing preview');
-        this.updateDeviceList(() => {
-          this.setState({
-            ...this.state,
-            formValues: values,
-            formStage: 'PREVIEW',
-          });
-        });
-      } else {
-        console.log("Let's go to conference");
-        const handleLogin = this.props.handleLogin;
-        handleLogin({
-          displayName,
-          role: values.role ? values.role : this.role,
-          roomId: values.roomId ? values.roomId : this.roomId,
-          roomName: values.roomName ? values.roomName : this.roomName,
-          env: values.env ? values.env : this.env,
-          //TODO audioOnly should be moved into settings
-          //TODO this is repeated from componentdidmount
-          audioOnly: this.state.audioOnly,
-          videoOnly: this.state.videoOnly,
-          permissionGranted: this.state.permissionGranted,
-          selectedAudioDevice: this.state.settings.selectedAudioDevice,
-          selectedVideoDevice: this.state.settings.selectedVideoDevice,
-        });
-      }
+      console.log('Showing preview');
+      this.startPreview(true);
     } else {
-      console.log('In else part');
-      this.setState({
-        ...this.state,
-        formValues: values,
-        formStage: 'PERMISSION',
-      });
+      this.setState({ formValues: values, formStage: 'PERMISSION' });
     }
-
-    // this.state.audioDevices.map((device, index) => {
-    //     if (this.state.selectedAudioDevice == device.deviceId) {
-    //         console.log("Selected audioDevice::" + JSON.stringify(device));
-    //     }
-    // });
-    // this.state.videoDevices.map((device, index) => {
-    //     if (this.state.selectedVideoDevice == device.deviceId) {
-    //         console.log("Selected videoDevice::" + JSON.stringify(device));
-    //     }
-    // });
   };
 
   handleSubmit = values => {
     const handleLogin = this.props.handleLogin;
-    closeMediaStream();
     console.log('Values in handleSubmit: ', values);
     console.log('this.roomId in handleSubmit: ', this.roomId);
     handleLogin({
@@ -583,17 +497,30 @@ class LoginForm extends React.Component {
     });
   };
 
+  updatePermission = async () => {
+    await getPermissionStatus()
+      .then(permission => {
+        if (permission) {
+          this.setState({ permissionGranted: true });
+        } else {
+          this.setState({ permissionGranted: false });
+        }
+      })
+      .catch(error => {
+        console.log({ permissionError: error });
+        this.setState({ permissionGranted: false });
+      });
+  };
+
   soundMeterProcess = () => {
     var val = window.soundMeter.instant.toFixed(2) * 700 + 1;
-    this.setState({ ...this.state, audioLevel: val });
+    this.setState({ audioLevel: val });
     //      if (this.state.visible)
     setTimeout(this.soundMeterProcess, 100);
   };
 
   startPreview = (permissionTestMode = false) => {
-    if (window.stream) {
-      closeMediaStream(window.stream);
-    }
+    closeMediaStream(window.stream);
     let audioSource = this.state.settings.selectedAudioDevice;
     let videoSource = this.state.settings.selectedVideoDevice;
     let videoElement, soundMeterProcess;
@@ -655,7 +582,6 @@ class LoginForm extends React.Component {
             data.videoDevices[0].deviceId;
         }
         this.setState({
-          ...this.state,
           audioDevices: data.audioDevices,
           videoDevices: data.videoDevices,
           permissionGranted: true,
@@ -664,9 +590,9 @@ class LoginForm extends React.Component {
       })
       .catch(error => {
         //TODO - look for only permission error. Rest of the errors should be handled
-        console.log(error);
+        console.log('Preview Error', error.name, error);
         this.setState({
-          ...this.state,
+          permissionGranted: false,
           permissionText:
             "You won't be able to access the meeting unless you grant camera and mic permissions",
         });
@@ -704,10 +630,7 @@ class LoginForm extends React.Component {
                       <button
                         className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         onClick={() => {
-                          this.setState({
-                            ...this.state,
-                            formStage: 'CREATE_ROOM',
-                          });
+                          this.setState({ formStage: 'CREATE_ROOM' });
                         }}
                       >
                         Create Room
@@ -715,10 +638,7 @@ class LoginForm extends React.Component {
                       <button
                         className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-700 hover:border-indigo-700 focus:outline-none border-indigo-600 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
                         onClick={() => {
-                          this.setState({
-                            ...this.state,
-                            formStage: 'JOIN_ROOM',
-                          });
+                          this.setState({ formStage: 'JOIN_ROOM' });
                         }}
                       >
                         Join Room
@@ -772,6 +692,7 @@ class LoginForm extends React.Component {
                       return errors;
                     }}
                     onSubmit={values => {
+                      this.setState({ formValues: values });
                       this.handleCreateSubmit(values);
                     }}
                   >
@@ -789,10 +710,7 @@ class LoginForm extends React.Component {
                                     <ArrowLeftIcon
                                       className="text-gray-700 hover:text-black"
                                       onClick={() => {
-                                        this.setState({
-                                          ...this.state,
-                                          formStage: 'ROOM',
-                                        });
+                                        this.setState({ formStage: 'ROOM' });
                                         this.roomId = '';
                                       }}
                                     />
@@ -943,6 +861,7 @@ class LoginForm extends React.Component {
                     return errors;
                   }}
                   onSubmit={values => {
+                    this.setState({ formValues: values });
                     this.handleJoinSubmit(values);
                   }}
                 >
@@ -962,10 +881,7 @@ class LoginForm extends React.Component {
                                   <ArrowLeftIcon
                                     className="text-gray-700 hover:text-black"
                                     onClick={() => {
-                                      this.setState({
-                                        ...this.state,
-                                        formStage: 'ROOM',
-                                      });
+                                      this.setState({ formStage: 'ROOM' });
                                       this.roomId = '';
                                     }}
                                   />
@@ -1170,10 +1086,7 @@ class LoginForm extends React.Component {
                               <button
                                 className="rounded-md px-2 py-1 hover:bg-indigo-500 ml-1 border transition duration-150 ease-in-out"
                                 onClick={() => {
-                                  this.setState({
-                                    ...this.state,
-                                    formStage: 'NAME',
-                                  });
+                                  this.setState({ formStage: 'NAME' });
                                 }}
                               >
                                 Change

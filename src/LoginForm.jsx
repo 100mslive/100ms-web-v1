@@ -1422,7 +1422,7 @@ class LoginForm extends React.Component {
                         href="https://www.google.com/chrome/"
                         target="_blank"
                       >
-                        Download latest chrome
+                        Download Google Chrome
                       </a>
                     )}
                     <button

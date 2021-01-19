@@ -2,7 +2,6 @@ import React from 'react';
 import { notification, Avatar, Badge, Tooltip } from 'antd';
 import { Formik, Form, Field } from 'formik';
 import { LocalStream } from '@100mslive/hmsvideo-web';
-import { reactLocalStorage } from 'reactjs-localstorage';
 import {
   updateInputDevices,
   SingleSelect,
@@ -95,40 +94,41 @@ class LoginForm extends React.Component {
       formStage: 'ROOM',
       permissionGranted: false,
     };
-  }
-
-  testUpdateLoop = null;
-  localStorage = reactLocalStorage.getObject('loginInfo');
-  role =
-    getRequest() && getRequest().hasOwnProperty('role')
-      ? getRequest().role
-      : this.localStorage && this.localStorage.role
-      ? this.localStorage.role
+    testUpdateLoop = null;
+    this.localStorage = props.loginInfo;
+    console.log(this.localStorage);
+    console.log(props.loginInfo);
+    this.role =
+      getRequest() && getRequest().hasOwnProperty('role')
+        ? getRequest().role
+        : this.localStorage && this.localStorage.role
+        ? this.localStorage.role
+        : '';
+    this.roomId =
+      getRequest() && getRequest().hasOwnProperty('room')
+        ? getRequest().room
+        : '';
+    this.env = process.env.SFU_ENV
+      ? process.env.SFU_ENV
+      : getRequest() && getRequest().hasOwnProperty('env')
+      ? getRequest().env
       : '';
-  roomId =
-    getRequest() && getRequest().hasOwnProperty('room')
-      ? getRequest().room
-      : '';
-  env = process.env.SFU_ENV
-    ? process.env.SFU_ENV
-    : getRequest() && getRequest().hasOwnProperty('env')
-    ? getRequest().env
-    : '';
-  displayName = this.localStorage
-    ? this.localStorage.displayName
+    this.displayName = this.localStorage
       ? this.localStorage.displayName
-      : ''
-    : '';
-  audioOnly = this.localStorage
-    ? this.localStorage.audioOnly
+        ? this.localStorage.displayName
+        : ''
+      : '';
+    this.audioOnly = this.localStorage
       ? this.localStorage.audioOnly
-      : false
-    : false;
-  videoOnly = this.localStorage
-    ? this.localStorage.videoOnly
+        ? this.localStorage.audioOnly
+        : false
+      : false;
+    this.videoOnly = this.localStorage
       ? this.localStorage.videoOnly
-      : false
-    : false;
+        ? this.localStorage.videoOnly
+        : false
+      : false;
+  }
 
   componentDidMount = async () => {
     console.log(`%c[APP] Role=${this.role}`);
@@ -150,8 +150,8 @@ class LoginForm extends React.Component {
     console.log('Making test client');
 
     this.state.settings =
-      reactLocalStorage.getObject('settings').codec !== undefined
-        ? reactLocalStorage.getObject('settings')
+      this.props.appSettings.codec !== undefined
+        ? this.props.appSettings
         : {
             selectedAudioDevice: '',
             selectedVideoDevice: '',

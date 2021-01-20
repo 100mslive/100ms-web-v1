@@ -504,38 +504,42 @@ class OldAppUI extends React.Component {
               </Sider>
               <Layout className="app-right-layout">
                 <Content style={{ flex: 1, position: 'relative' }}>
-                  <div>
-                    <Conference
-                      roomName={this.props.loginInfo.roomName}
-                      roomId={this.props.loginInfo.roomId}
-                      collapsed={this.props.roomState.collapsed}
-                      client={this.props.client}
-                      settings={this.props.settings}
-                      localAudioEnabled={localAudioEnabled}
-                      localVideoEnabled={localVideoEnabled}
-                      vidFit={vidFit}
-                      loginInfo={this.props.loginInfo}
-                      ref={ref => {
-                        this.conference = ref;
-                      }}
-                      isScreenSharing={screenSharingEnabled}
-                      onScreenToggle={() =>
-                        this._handleScreenSharing(!screenSharingEnabled)
-                      }
-                      onLeave={this._handleLeave}
-                      onChatToggle={() => {
-                        if (collapsed) {
-                          this.props.setRoomState({
-                            hasUnreadMessages: false,
-                          });
-                        }
-                        this._openOrCloseLeftContainer(!collapsed);
-                      }}
-                      isChatOpen={!this.props.roomState.collapsed}
-                      cleanUp={this._cleanUp}
-                      role={this.props.loginInfo.role}
-                      hasUnreadMessages={this.props.roomState.hasUnreadMessages}
-                    />
+                    <div>
+                      <AppContext.Consumer>
+                        {context => (
+                          <Conference
+                            roomName={this.props.loginInfo.roomName}
+                            roomId={this.props.loginInfo.roomId}
+                            collapsed={this.props.roomState.collapsed}
+                            client={context.client}
+                            settings={this.props.settings}
+                            localAudioEnabled={localAudioEnabled}
+                            localVideoEnabled={localVideoEnabled}
+                            vidFit={vidFit}
+                            loginInfo={this.props.loginInfo}
+                            ref={ref => {
+                              this.conference = ref;
+                            }}
+                            isScreenSharing={screenSharingEnabled}
+                            onScreenToggle={() =>
+                              this._handleScreenSharing(!screenSharingEnabled)
+                            }
+                            onLeave={this._handleLeave}
+                            onChatToggle={() => {
+                              if (collapsed) {
+                                this.props.setRoomState({
+                                  hasUnreadMessages: false,
+                                });
+                              }
+                              this._openOrCloseLeftContainer(!collapsed);
+                            }}
+                            isChatOpen={!this.props.roomState.collapsed}
+                            cleanUp={this._cleanUp}
+                            role={this.props.loginInfo.role}
+                            hasUnreadMessages={this.props.roomState.hasUnreadMessages}
+                          />
+                        )}
+                        </AppContext.Consumer>
                   </div>
                 </Content>
               </Layout>

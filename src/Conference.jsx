@@ -13,8 +13,8 @@ const modes = {
 };
 
 class Conference extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       streams: [],
       streamInfo: [],
@@ -102,8 +102,10 @@ class Conference extends React.Component {
 
   componentWillUnmount = () => {
     const { client } = this.props;
-    client.off('stream-add', this._handleAddStream);
-    client.off('stream-remove', this._handleRemoveStream);
+    if (client) {
+      client.off('stream-add', this._handleAddStream);
+      client.off('stream-remove', this._handleRemoveStream);
+    }
     this.roomStateUnsubscribe && this.roomStateUnsubscribe();
   };
 
@@ -330,12 +332,13 @@ class Conference extends React.Component {
       audioMuted,
       videoMuted,
     } = this.state;
-    const id = client.uid;
+    const id = client ? client.uid : null;
     let videoCount = streams.length;
     if (localStream) videoCount++;
     if (localScreen) videoCount++;
 
-    return (
+    if(client) return (
+      
       <>
         {this.state.mode === modes.PINNED ? (
           <Pinned
@@ -357,25 +360,25 @@ class Conference extends React.Component {
             onRequest={this._onRequest}
           />
         ) : (
-          <Gallery
-            streams={streams}
-            audioMuted={audioMuted}
-            videoMuted={videoMuted}
-            videoCount={videoCount}
-            localStream={localStream}
-            localScreen={localScreen}
-            client={client}
-            id={id}
-            loginInfo={this.props.loginInfo}
-            onPin={streamId => {
-              this.setState({
-                mode: modes.PINNED,
-                pinned: streamId,
-              });
-            }}
-            onRequest={this._onRequest}
-          />
-        )}
+            <Gallery
+              streams={streams}
+              audioMuted={audioMuted}
+              videoMuted={videoMuted}
+              videoCount={videoCount}
+              localStream={localStream}
+              localScreen={localScreen}
+              client={client}
+              id={id}
+              loginInfo={this.props.loginInfo}
+              onPin={streamId => {
+                this.setState({
+                  mode: modes.PINNED,
+                  pinned: streamId,
+                });
+              }}
+              onRequest={this._onRequest}
+            />
+          )}
         <Controls
           role={role}
           isMuted={this.state.audioMuted}
@@ -412,7 +415,9 @@ class Conference extends React.Component {
           </Modal>
         )}
       </>
+          
     );
+    return <></>;
   };
 }
 export default Conference;

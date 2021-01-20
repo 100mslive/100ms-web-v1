@@ -32,9 +32,9 @@ Host your token generation service [following this guide](https://100ms.gitbook.
 
 Update the `TOKEN_ENDPOINT` in `.env` file with your token generation service endpoint (eg. `https://ms-services-vjml47hk9gmu.runkit.sh/`)
 
-### Firebase config
+### [Optional] Firebase config
 
-Update the following values in `.env` file from your firebase project settings:
+To turn on the remote-mute feature, update the following values in `.env` file from your firebase project settings:
 
 ```
 # Firebase config

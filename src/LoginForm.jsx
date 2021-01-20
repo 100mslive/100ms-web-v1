@@ -631,7 +631,7 @@ class LoginForm extends React.Component {
               </>
             )}
 
-            {!this.props.loginInfo.roomId &&
+            {(!this.props.loginInfo.roomId) &&
               this.state.formStage &&
               this.state.formStage === 'CREATE_ROOM' && (
                 <>

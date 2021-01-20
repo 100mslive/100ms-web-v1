@@ -341,15 +341,15 @@ class LoginForm extends React.Component {
         : { deviceId: videoSource ? { exact: videoSource } : undefined },
     };
     getUserMedia(constraints)
-      .then(function (stream) {
+      .then(stream => {
         if (!permissionTestMode) {
           window.stream = stream; // make stream available to console
           //videoElement.srcObject = stream;
           attachMediaStream(videoElement, stream);
           //TODO this throws an error when audio only is chosen. Handle it
-          // if(this && this.props.roomState.localAudioEnabled){
-          // soundMeter.connectToSource(stream);
-          // setTimeout(soundMeterProcess, 100);
+          // if (this.props.roomState.localAudioEnabled) {
+          //   soundMeter.connectToSource(stream);
+          //   setTimeout(soundMeterProcess, 100);
           // }
         }
         return navigator.mediaDevices.enumerateDevices();

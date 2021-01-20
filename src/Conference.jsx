@@ -198,6 +198,10 @@ class Conference extends React.Component {
       })
       .then(localStream => {
         this.setState({ localStream });
+        !localAudioEnabled &&
+          this.muteMediaTrack('audio', this.state.audioMuted);
+        !localVideoEnabled &&
+          this.muteMediaTrack('video', this.state.videoMuted);
       })
       .catch(error => {
         this.setState({

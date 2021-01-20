@@ -334,16 +334,13 @@ class LoginForm extends React.Component {
     }
     let constraints = {
       audio: !this.props.roomState.localAudioEnabled
-        ? false
+        ? true
         : { deviceId: audioSource ? { exact: audioSource } : undefined },
       video: !this.props.roomState.localVideoEnabled
-        ? false
+        ? true
         : { deviceId: videoSource ? { exact: videoSource } : undefined },
     };
-    getUserMedia({
-      audio: { deviceId: undefined },
-      video: { deviceId: undefined },
-    })
+    getUserMedia(constraints)
       .then(function (stream) {
         if (!permissionTestMode) {
           window.stream = stream; // make stream available to console

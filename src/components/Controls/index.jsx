@@ -15,7 +15,7 @@ import { ROLES } from '../../constants';
 const Controls = ({
   role,
   isMuted,
-  isScreenSharing,
+  screenSharingEnabled,
   isCameraOn,
   isChatOpen,
   onScreenToggle,
@@ -71,7 +71,7 @@ const Controls = ({
         icon={<TelevisionIcon className="text-indigo-100" />}
         activeIcon={<TelevisionOffIcon className="text-red-100" />}
         label="Screen"
-        isActive={isScreenSharing}
+        isActive={screenSharingEnabled}
         onClick={onScreenToggle}
       />
     </div>

@@ -5,7 +5,6 @@ const AppContext = React.createContext();
 class AppContextProvider extends Component {
   state = {
     client: null,
-    screen: 'CONFERENCE',
     loginInfo: {
       roomName: '',
       roomId: '',

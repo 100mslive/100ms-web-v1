@@ -80,7 +80,10 @@ const Controls = ({
   const chatButton = (
     <div className="mx-1 relative">
       {hasUnreadMessages && (
-        <div className="animate-pulse absolute top-0 right-0 mt-2 mr-3 w-2 h-2 bg-red-500 rounded-full" />
+        <div
+          className="absolute -top-1 right-0 w-3 h-3 bg-red-500 rounded-full border-2"
+          style={{ borderColor: 'rgb(26,22,25)' }}
+        />
       )}
       <ControlButton
         icon={

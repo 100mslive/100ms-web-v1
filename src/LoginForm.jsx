@@ -1078,25 +1078,22 @@ class LoginForm extends React.Component {
                             </p>
                           </div>
                           <div className="relative h-48 bg-black rounded-md mb-3">
-                            {this.props.localVideoEnabled && <video
+                            <video
                               id="previewVideo"
                               autoPlay
                               playsInline
                               muted={true}
                               className="rounded-md h-full w-full"
-                            ></video>}
-                            {(!this.props.roomState.localVideoEnabled) && (<div id='previewVideo' className="rounded-md mb-3 h-full w-full bg-black"></div>)}
+                            ></video>
+                            {/* {(!this.props.roomState.localVideoEnabled) && (<div id='previewVideo' className="rounded-md mb-3 h-full w-full bg-black"></div>)} */}
                             <div className="absolute bottom-0 w-full flex justify-center pb-1">
                                   <button
                                     onClick={e => {
                                       e.preventDefault();
                                   const initialValue = this.props.roomState.localVideoEnabled;
-                                  console.log('hiamit');
-                                  console.log(this.props.roomState);
-                                  this.props.setRoomState({
-                                    localVideoEnabled: (!initialValue)
-                                  });
-                                  console.log(this.props.roomState);
+                                      this.props.setRoomState({
+                                       localVideoEnabled: (!initialValue)
+                                      })
                                       this.startPreview(false);
                                     }}
                                     className={`py-1 px-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out ${

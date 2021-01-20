@@ -27,33 +27,39 @@ class LoginForm extends React.Component {
       formStage: 'ROOM',
       permissionGranted: false,
     };
-    if (getRequest() && getRequest().hasOwnProperty('role')) {
-      this.props.setLoginInfo({
-        role: getRequest().role,
-      });
-    }
-    if (getRequest() && getRequest().hasOwnProperty('room')) {
-      this.props.setLoginInfo({
-        roomId: getRequest().room,
-      });
-    }
-    if (process.env.SFU_ENV) {
-      this.props.setLoginInfo({
-        env: process.env.SFU_ENV,
-      });
-    } else if (getRequest() && getRequest().hasOwnProperty('env')) {
-      this.props.setLoginInfo({
-        env: getRequest().env,
-      });
-    }
   }
 
   componentDidMount = async () => {
     console.log(`%c[APP] Role=${this.props.loginInfo.role}`);
+
+    let role = '';
+    let roomId = '';
+    let env = process.env.SFU_ENV || '';
+
+    if (getRequest() && getRequest().hasOwnProperty('role')) {
+      role = getRequest().role;
+    }
+    if (getRequest() && getRequest().hasOwnProperty('room')) {
+      roomId = getRequest().room;
+    }
+    if (process.env.SFU_ENV) {
+      env = process.env.SFU_ENV;
+    } else if (getRequest() && getRequest().hasOwnProperty('env')) {
+      env = getRequest().env;
+    }
+
+    this.props.setLoginInfo({
+      role,
+      roomId,
+      env,
+    });
+
     this.setState({
       isSupported: deviceSupport().supported,
     });
+
     await this.updatePermission();
+
     console.log({ permissionGranted: this.state.permissionGranted });
     //const { form } = this.props;
     console.log('window.location:' + window.location);
@@ -65,19 +71,18 @@ class LoginForm extends React.Component {
         window.location.pathname +
         window.location.query
     );
-    console.log('Making test client');
 
-    if (!this.props.settings.codec) {
-      this.props.setSettings({
-        selectedAudioDevice: '',
-        selectedVideoDevice: '',
-        // selectedAudioOutputDevice: "",
-        resolution: 'qvga',
-        bandwidth: 256,
-        codec: 'vp8',
-        isDevMode: true,
-      });
-    }
+    // if (!this.props.settings.codec) {
+    //   this.props.setSettings({
+    //     selectedAudioDevice: '',
+    //     selectedVideoDevice: '',
+    //     // selectedAudioOutputDevice: "",
+    //     resolution: 'qvga',
+    //     bandwidth: 256,
+    //     codec: 'vp8',
+    //     isDevMode: true,
+    //   });
+    // }
 
     if (
       this.props.loginInfo.role === ROLES.LIVE_RECORD &&
@@ -93,6 +98,7 @@ class LoginForm extends React.Component {
         role: ROLES.LIVE_RECORD,
       });
       handleLogin();
+      return;
     }
 
     // ToDo: Show a confirmation dialog for ROLES.VIEWER
@@ -103,6 +109,8 @@ class LoginForm extends React.Component {
     });
 
     if (
+      getRequest() &&
+      getRequest().hasOwnProperty('room') &&
       this.props.loginInfo.displayName !== '' &&
       this.props.loginInfo.roomId !== '' &&
       this.props.loginInfo.env !== ''
@@ -464,22 +472,10 @@ class LoginForm extends React.Component {
                 <>
                   <Formik
                     initialValues={{
-                      roomName: this.props.loginInfo.roomName
-                        ? this.props.loginInfo.roomName
-                        : this.state.formValues
-                        ? this.state.formValues.roomName
-                        : '',
+                      roomName: '',
                       displayName: this.props.loginInfo.displayName,
-                      env: this.props.loginInfo.env
-                        ? this.props.loginInfo.env
-                        : this.state.formValues
-                        ? this.state.formValues.env
-                        : '',
-                      role: this.props.loginInfo.role
-                        ? this.props.loginInfo.role
-                        : this.state.formValues
-                        ? this.state.formValues.role
-                        : 'Host',
+                      env: '',
+                      role: 'Host',
                       isRecording: false,
                     }}
                     validate={values => {
@@ -532,16 +528,14 @@ class LoginForm extends React.Component {
                             </div>
                             <div className="rounded-m">
                               <div>
-                                {initialValues && !initialValues.roomName && (
-                                  <LoginTextField
-                                    label="Room Name"
-                                    name="roomName"
-                                    className="rounded-t-md"
-                                    placeholder="Room Name"
-                                    errors={errors.roomName}
-                                    touched={touched.roomName}
-                                  />
-                                )}
+                                <LoginTextField
+                                  label="Room Name"
+                                  name="roomName"
+                                  className="rounded-t-md"
+                                  placeholder="Room Name"
+                                  errors={errors.roomName}
+                                  touched={touched.roomName}
+                                />
                               </div>
                               <div className="-mt-px">
                                 {initialValues && (
@@ -649,19 +643,13 @@ class LoginForm extends React.Component {
                   initialValues={{
                     roomId: this.props.loginInfo.roomId
                       ? this.props.loginInfo.roomId
-                      : this.state.formValues
-                      ? this.state.formValues.roomId
                       : '',
                     displayName: this.props.loginInfo.displayName,
                     env: this.props.loginInfo.env
                       ? this.props.loginInfo.env
-                      : this.state.formValues
-                      ? this.state.formValues.env
                       : '',
                     role: this.props.loginInfo.role
                       ? this.props.loginInfo.role
-                      : this.state.formValues
-                      ? this.state.formValues.role
                       : 'Guest',
                   }}
                   validate={values => {
@@ -907,7 +895,7 @@ class LoginForm extends React.Component {
                               <button
                                 className="rounded-md px-2 py-1 hover:bg-indigo-500 ml-1 border transition duration-150 ease-in-out"
                                 onClick={() => {
-                                  this.setState({ formStage: 'NAME' });
+                                  this.setState({ formStage: 'JOIN_ROOM' });
                                 }}
                               >
                                 Change

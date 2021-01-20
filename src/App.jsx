@@ -43,34 +43,22 @@ async function getToken({ room_id, user_name, role = 'guest', env }) {
 class OldAppUI extends React.Component {
   constructor(props) {
     super(props);
-    this.client = null;
-    this.isConnected = false;
-    this.state = {
-      login: false,
-      loading: false,
-      localAudioEnabled: true,
-      localVideoEnabled: true,
-      screenSharingEnabled: false,
-      collapsed: true,
-      isFullScreen: false,
-      vidFit: false,
-      loginInfo: {},
-      messages: [],
-    };
-
-    this._settings = {
-      selectedAudioDevice: '',
-      selectedVideoDevice: '',
-      resolution: 'qvga',
-      bandwidth: 256,
-      codec: 'vp8',
-      frameRate: 20,
-      isDevMode: true,
-    };
-
-    let settings = props.appSettings;
-    if (settings.codec !== undefined) {
-      this._settings = { ...this._settings, ...settings };
+    props.setClient(null);
+    props.setRoomState({
+      isConnected: false
+    })
+    if (!props.settings.codec) {
+      props.setSettings(
+        {
+          selectedAudioDevice: '',
+          selectedVideoDevice: '',
+          resolution: 'qvga',
+          bandwidth: 256,
+          codec: 'vp8',
+          frameRate: 20,
+          isDevMode: true,
+        }
+      );
     }
   }
 
@@ -81,10 +69,12 @@ class OldAppUI extends React.Component {
       `${window.location.protocol}//${window.location.host}`
     );
     await this.conference.cleanUp();
-    await this.client.disconnect();
-    this.client = null;
-    this.isConnected = false;
-    this.setState({
+    await this.props.client.disconnect();
+    this.props.setClient(null);
+    this.props.setRoomState({
+      isConnected: false
+    })
+    this.props.setRoomState({
       login: false,
     });
   };
@@ -125,26 +115,31 @@ class OldAppUI extends React.Component {
   };
 
   _handleJoin = async values => {
-    this.setState({ loading: true });
-    let settings = this._settings;
-    this.roomName = values.roomName;
-    this.roomId = values.roomId;
-    this.env = values.env;
-    this.role = values.role;
-    this.hideMessage = () => {};
-    settings.selectedVideoDevice = values.selectedVideoDevice;
-    settings.selectedAudioDevice = values.selectedAudioDevice;
+    this.props.setRoomState({
+      loading: true
+    });
+    this.props.setLoginInfo({
+      roomName: values.roomName,
+      roomId: values.roomId,
+      env: values.env,
+      role: values.env
+    });
+    this.hideMessage = () => { };
+    this.props.setSettings({
+      selectedAudioDevice: values.selectedAudioDevice,
+      selectedVideoDevice: values.selectedVideoDevice
+    });
     //TODO this should reflect in initialization as well
 
     ![ROLES.LIVE_RECORD, ROLES.VIEWER].includes(this.role) &&
       this._onMediaSettingsChanged(
-        settings.selectedAudioDevice,
-        settings.selectedVideoDevice,
-        settings.resolution,
-        settings.bandwidth,
-        settings.codec,
-        settings.frameRate,
-        settings.isDevMode
+        this.props.settings.selectedAudioDevice,
+        this.props.settings.selectedVideoDevice,
+        this.props.settings.resolution,
+        this.props.settings.bandwidth,
+        this.props.settings.codec,
+        this.props.settings.frameRate,
+        this.props.settings.isDevMode
       );
 
     let client = await this._createClient({
@@ -171,14 +166,14 @@ class OldAppUI extends React.Component {
 
     client.on('connect', () => {
       console.log('on connect called');
-      if (this.isConnected) return;
+      if (this.props.roomState.isConnected) return;
       console.log('connected!');
       this._handleTransportOpen(values);
     });
 
     client.on('disconnect', () => {
       console.log('disconnected!');
-      this.setState({
+      this.props.setRoomState({
         loading: false,
       });
     });
@@ -207,21 +202,23 @@ class OldAppUI extends React.Component {
       location.reload();
     });
 
-    this.client = client;
+    this.props.setClient(client);
   };
 
   _handleTransportOpen = async values => {
-    this.isConnected = true;
+    this.props.setRoomState({
+      isConnected: true
+    })
     this.props.setLoginInfo(values);
     try {
-      await this.client.join(values.roomId).catch(error => {
+      await this.props.client.join(values.roomId).catch(error => {
         console.log('JOIN ERROR:', error);
       });
       let redirectURL = `${window.location.protocol}//${window.location.host}/?room=${values.roomId}&env=${values.env}&role=${values.role}`;
 
       window.history.pushState({}, '100ms', redirectURL);
 
-      this.setState({
+      this.props.setRoomState({
         login: true,
         loading: false,
         loginInfo: values,
@@ -253,7 +250,7 @@ class OldAppUI extends React.Component {
       content: 'Do you want to leave the room?',
       async onOk() {
         await this2._cleanUp();
-        this2.setState({ login: false });
+        this2.props.setRoomState({ login: false });
       },
       onCancel() {
         console.log('Cancel');
@@ -262,21 +259,21 @@ class OldAppUI extends React.Component {
   };
 
   _handleAudioTrackEnabled = enabled => {
-    this.setState({
+    this.props.setRoomState({
       localAudioEnabled: enabled,
     });
     this.conference.muteMediaTrack('audio', enabled);
   };
 
   _handleVideoTrackEnabled = enabled => {
-    this.setState({
+    this.props.setRoomState({
       localVideoEnabled: enabled,
     });
     this.conference.muteMediaTrack('video', enabled);
   };
 
   _handleScreenSharing = enabled => {
-    this.setState({
+    this.props.setRoomState({
       screenSharingEnabled: enabled,
     });
     this.conference.handleScreenSharing(enabled);
@@ -287,14 +284,14 @@ class OldAppUI extends React.Component {
   };
 
   _openOrCloseLeftContainer = collapsed => {
-    this.setState({
+    this.props.setRoomState({
       collapsed: collapsed,
     });
   };
 
   _onVidFitClickHandler = () => {
-    this.setState({
-      vidFit: !this.state.vidFit,
+    this.props.setRoomState({
+      vidFit: !this.props.roomState.vidFit,
     });
   };
 
@@ -312,7 +309,7 @@ class OldAppUI extends React.Component {
         document.msExitFullscreen();
       }
 
-      this.setState({ isFullScreen: false });
+      this.props.setRoomState({ isFullScreen: false });
     } else {
       if (docElm.requestFullscreen) {
         docElm.requestFullscreen();
@@ -330,7 +327,7 @@ class OldAppUI extends React.Component {
         elem.msRequestFullscreen();
       }
 
-      this.setState({ isFullScreen: true });
+      this.props.setRoomState({ isFullScreen: true });
     }
   };
 
@@ -353,7 +350,7 @@ class OldAppUI extends React.Component {
     isDevMode,
     reloadPage = false
   ) => {
-    this._settings = {
+    this.props.setSettings({
       selectedAudioDevice,
       selectedVideoDevice,
       resolution,
@@ -361,8 +358,7 @@ class OldAppUI extends React.Component {
       codec,
       frameRate,
       isDevMode,
-    };
-    this.props.setAppSettings(this._settings);
+    });
     const constraints = {
       frameRate: frameRate,
       bitrate: bandwidth,
@@ -377,34 +373,34 @@ class OldAppUI extends React.Component {
       },
     };
     if (reloadPage) {
-      this.client &&
-        this.client.applyConstraints(constraints, this.client.local);
+      this.props.client &&
+        this.props.client.applyConstraints(constraints, this.props.client.local);
     }
   };
 
   _onMessageReceived = (from, message) => {
     console.log('Received message:' + from + ':' + message);
-    let messages = this.state.messages;
+    let messages = this.props.roomState.messages;
     let uid = 1;
     messages.push(new Message({ id: uid, message: message, senderName: from }));
     let hasUnreadMessages = false;
-    if (this.state.collapsed) {
+    if (this.props.roomState.collapsed) {
       hasUnreadMessages = true;
     }
-    this.setState({ messages, hasUnreadMessages });
+    this.props.setRoomState({ messages, hasUnreadMessages });
   };
 
   _onSendMessage = data => {
     console.log('Send message:' + data);
     var info = {
-      senderName: this.state.loginInfo.displayName,
+      senderName: this.props.loginInfo.displayName,
       msg: data,
     };
-    this.client.broadcast(info, this.client.rid);
-    let messages = this.state.messages;
+    this.props.client.broadcast(info, this.props.client.rid);
+    let messages = this.props.roomState.messages;
     let uid = 0;
     messages.push(new Message({ id: uid, message: data, senderName: 'me' }));
-    this.setState({ messages });
+    this.props.setRoomState({ messages });
   };
 
   isValidParams() {
@@ -439,7 +435,7 @@ class OldAppUI extends React.Component {
       screenSharingEnabled,
       collapsed,
       vidFit,
-    } = this.state;
+    } = this.props.roomState;
 
     const isValidParams = this.isValidParams()[0];
 
@@ -463,7 +459,7 @@ class OldAppUI extends React.Component {
           <div className="app-header-right">
             <MediaSettings
               onMediaSettingsChanged={this._onMediaSettingsChanged}
-              settings={this._settings}
+              settings={this.props.roomState}
               isLoggedIn={login}
             />
           </div>
@@ -495,12 +491,12 @@ class OldAppUI extends React.Component {
                 collapsedWidth={0}
                 trigger={null}
                 collapsible
-                collapsed={this.state.collapsed}
+                collapsed={this.props.roomState.collapsed}
                 style={{ backgroundColor: '#1a1619' }}
               >
                 <div className="left-container">
                   <ChatFeed
-                    messages={this.state.messages}
+                    messages={this.props.roomState.messages}
                     onSendMessage={this._onSendMessage}
                     onClose={() => this._openOrCloseLeftContainer(!collapsed)}
                   />
@@ -510,15 +506,15 @@ class OldAppUI extends React.Component {
                 <Content style={{ flex: 1, position: 'relative' }}>
                   <div>
                     <Conference
-                      roomName={this.roomName}
-                      roomId={this.roomId}
-                      collapsed={this.state.collapsed}
-                      client={this.client}
-                      settings={this._settings}
+                      roomName={this.props.loginInfo.roomName}
+                      roomId={this.props.loginInfo.roomId}
+                      collapsed={this.props.roomState.collapsed}
+                      client={this.props.client}
+                      settings={this.props.settings}
                       localAudioEnabled={localAudioEnabled}
                       localVideoEnabled={localVideoEnabled}
                       vidFit={vidFit}
-                      loginInfo={this.state.loginInfo}
+                      loginInfo={this.props.loginInfo}
                       ref={ref => {
                         this.conference = ref;
                       }}
@@ -529,16 +525,16 @@ class OldAppUI extends React.Component {
                       onLeave={this._handleLeave}
                       onChatToggle={() => {
                         if (collapsed) {
-                          this.setState({
+                          this.props.setRoomState({
                             hasUnreadMessages: false,
                           });
                         }
                         this._openOrCloseLeftContainer(!collapsed);
                       }}
-                      isChatOpen={!this.state.collapsed}
+                      isChatOpen={!this.props.roomState.collapsed}
                       cleanUp={this._cleanUp}
-                      role={this.role}
-                      hasUnreadMessages={this.state.hasUnreadMessages}
+                      role={this.props.loginInfo.role}
+                      hasUnreadMessages={this.props.roomState.hasUnreadMessages}
                     />
                   </div>
                 </Content>
@@ -551,9 +547,13 @@ class OldAppUI extends React.Component {
                     <AppContext.Consumer>
                       {context => (
                         <LoginForm
-                          appSettings={context.settings} loginInfo={context.loginInfo} setAppSettings={context.setSettings} setLoginInfo={context.setLoginInfo}
+                          settings={context.settings} loginInfo={context.loginInfo} setSettings={context.setSettings} setLoginInfo={context.setLoginInfo}
                           handleLogin={this._handleJoin}
                           createClient={this._createClient}
+                          client={context.client}
+                          setClient={context.setClient}
+                          roomState={context.roomState}
+                          setRoomState={context.setRoomState}
                         />
                          )}
                     </AppContext.Consumer>
@@ -571,7 +571,7 @@ class OldApp extends React.Component {
     return (
       <AppContext.Consumer>
         {context => (
-          <OldAppUI appSettings={context.settings} loginInfo={context.loginInfo} setAppSettings={context.setSettings} setLoginInfo={context.setLoginInfo} />
+          <OldAppUI settings={context.settings} roomState={context.roomState} loginInfo={context.loginInfo} setSettings={context.setSettings} setLoginInfo={context.setLoginInfo} setRoomState={context.setRoomState} setClient={context.setClient} client={context.client} />
         )}
       </AppContext.Consumer>
     );

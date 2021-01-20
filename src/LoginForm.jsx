@@ -96,8 +96,6 @@ class LoginForm extends React.Component {
     };
     testUpdateLoop = null;
     this.localStorage = props.loginInfo;
-    console.log(this.localStorage);
-    console.log(props.loginInfo);
     this.role =
       getRequest() && getRequest().hasOwnProperty('role')
         ? getRequest().role
@@ -150,8 +148,8 @@ class LoginForm extends React.Component {
     console.log('Making test client');
 
     this.state.settings =
-      this.props.appSettings.codec !== undefined
-        ? this.props.appSettings
+      this.props.settings.codec !== undefined
+        ? this.props.settings
         : {
             selectedAudioDevice: '',
             selectedVideoDevice: '',

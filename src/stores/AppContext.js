@@ -4,13 +4,14 @@ const AppContext = React.createContext();
 
 class AppContextProvider extends Component {
   state = {
+    client: null,
+    screen: 'CONFERENCE',
     loginInfo: {
       roomName: '',
       roomId: '',
       displayName: '',
       role: '',
-      env: '',
-      shouldApplyConstraints: false
+      env: ''
     },
     settings: {
       selectedAudioDevice: '',
@@ -21,6 +22,21 @@ class AppContextProvider extends Component {
       frameRate: 20,
       isDevMode: false, 
       shouldApplyConstraints: false
+    },
+    roomState: {
+      isConnected: false,
+      login: false,
+      loading: false,
+      localAudioEnabled: true,
+      localVideoEnabled: true,
+      screenSharingEnabled: false,
+      collapsed: true,
+      isFullScreen: false,
+      vidFit: false,
+      messages: [],
+      hasUnreadMessages: false,
+      audioOnly: false,
+      videoOnly: false
     }
   };
   render() {
@@ -28,6 +44,8 @@ class AppContextProvider extends Component {
       <AppContext.Provider value={{
         loginInfo: this.state.loginInfo,
         settings: this.state.settings,
+        client: this.state.client,
+        roomState: this.state.roomState,
         setSettings: settings => {
           this.setState({
             settings: { ...this.state.settings, ...settings }
@@ -36,6 +54,16 @@ class AppContextProvider extends Component {
         setLoginInfo: loginInfo => {
           this.setState({
             loginInfo: loginInfo
+          })
+        },
+        setClient: client => {
+          this.setState({
+            client: client
+          })
+        },
+        setRoomState: (roomState) => {
+          this.setState({
+            roomState: { ...this.state.roomState, ...roomState }
           })
         }
       }}>

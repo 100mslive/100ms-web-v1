@@ -71,8 +71,6 @@ class OldAppUI extends React.Component {
     this.props.setClient(null);
     this.props.setRoomState({
       isConnected: false,
-    });
-    this.props.setRoomState({
       login: false,
     });
   };
@@ -272,6 +270,7 @@ class OldAppUI extends React.Component {
   _openOrCloseLeftContainer = collapsed => {
     this.props.setRoomState({
       collapsed: collapsed,
+      hasUnreadMessages: false,
     });
   };
 
@@ -490,7 +489,7 @@ class OldAppUI extends React.Component {
                 collapsedWidth={0}
                 trigger={null}
                 collapsible
-                collapsed={this.props.roomState.collapsed}
+                collapsed={collapsed}
                 style={{ backgroundColor: '#1a1619' }}
               >
                 <div className="left-container">
@@ -524,12 +523,6 @@ class OldAppUI extends React.Component {
                           }
                           onLeave={this._handleLeave}
                           onChatToggle={() => {
-                            console.log("COLLAPSED", collapsed)
-                            if (collapsed) {
-                              this.props.setRoomState({
-                                hasUnreadMessages: false,
-                              });
-                            }
                             this._openOrCloseLeftContainer(!collapsed);
                           }}
                           isChatOpen={!this.props.roomState.collapsed}

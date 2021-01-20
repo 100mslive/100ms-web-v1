@@ -405,15 +405,14 @@ class LoginForm extends React.Component {
   };
 
   updateDevice = (name, value) => {
-    this.props.setSettings({
-      [name]: value,
-    });
-    //console.log("Inside updateDevice");
-
-    // TODO: This is a patchy fix for now
-    setTimeout(() => {
-      this.startPreview(false);
-    }, 100);
+    this.props.setSettings(
+      {
+        [name]: value,
+      },
+      () => {
+        this.startPreview(false);
+      }
+    );
   };
 
   render() {

@@ -398,7 +398,9 @@ class Conference extends React.Component {
                 onChatToggle={this.props.onChatToggle}
                 isChatOpen={this.props.isChatOpen}
                 loginInfo={this.props.loginInfo}
-                hasUnreadMessages={this.props.roomState.hasUnreadMessages}
+                hasUnreadMessages={
+                  this.props.roomState && this.props.roomState.hasUnreadMessages
+                }
               />
             )}
           </AppContext.Consumer>

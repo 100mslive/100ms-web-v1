@@ -52,7 +52,7 @@ class AppContextProvider extends Component {
           },
           setLoginInfo: loginInfo => {
             this.setState({
-              loginInfo: loginInfo,
+              loginInfo: { ...this.state.loginInfo, ...loginInfo },
             });
           },
           setClient: client => {

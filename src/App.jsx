@@ -524,6 +524,7 @@ class OldAppUI extends React.Component {
                           }
                           onLeave={this._handleLeave}
                           onChatToggle={() => {
+                            console.log("COLLAPSED", collapsed)
                             if (collapsed) {
                               this.props.setRoomState({
                                 hasUnreadMessages: false,

@@ -403,7 +403,7 @@ class Conference extends React.Component {
                 isChatOpen={this.props.isChatOpen}
                 loginInfo={this.props.loginInfo}
                 hasUnreadMessages={
-                  this.props.roomState && this.props.roomState.hasUnreadMessages
+                  this.props.hasUnreadMessages
                 }
               />
             )}

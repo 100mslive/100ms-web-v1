@@ -1,4 +1,3 @@
-
 /*------------------app--------------------*/
 .app-layout {
   height: 100%;
@@ -55,7 +54,7 @@
   color: red;
 }
 
-.app-header-tool-container{
+.app-header-tool-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -94,16 +93,20 @@
   bottom: 16px;
 }
 
-.app-fullscreen-layout{
+.app-fullscreen-layout {
   position: absolute;
   right: 16px;
   bottom: 16px;
 }
 
-.app-fullscreen-button{
+.app-fullscreen-button {
   margin-left: 10px;
 }
 
 button:focus {
   outline: none;
+}
+
+#previewVideo {
+  transform: scale(-1, 1);
 }

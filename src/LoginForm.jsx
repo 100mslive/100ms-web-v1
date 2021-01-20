@@ -340,7 +340,10 @@ class LoginForm extends React.Component {
         ? false
         : { deviceId: videoSource ? { exact: videoSource } : undefined },
     };
-    getUserMedia(constraints)
+    getUserMedia({
+      audio: { deviceId: undefined },
+      video: { deviceId: undefined },
+    })
       .then(function (stream) {
         if (!permissionTestMode) {
           window.stream = stream; // make stream available to console
@@ -915,147 +918,153 @@ class LoginForm extends React.Component {
                               </button>
                             </p>
                           </div>
-                          <div className="relative h-48 bg-black rounded-md mb-3">
-                            <video
-                              id="previewVideo"
-                              autoPlay
-                              playsInline
-                              muted={true}
-                              className="rounded-md h-full w-full"
-                            ></video>
-                            {/* {(!this.props.roomState.localVideoEnabled) && (<div id='previewVideo' className="rounded-md mb-3 h-full w-full bg-black"></div>)} */}
-                            <div className="absolute bottom-0 w-full flex justify-center pb-1">
-                              <button
-                                onClick={e => {
-                                  e.preventDefault();
-                                  const initialValue = this.props.roomState
-                                    .localVideoEnabled;
-                                  this.props.setRoomState({
-                                    localVideoEnabled: !initialValue,
-                                  });
-                                  this.startPreview(false);
-                                }}
-                                className={`py-1 px-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out ${
-                                  this.props.roomState.localVideoEnabled
-                                    ? 'bg-opacity-50 bg-gray-600'
-                                    : 'bg-indigo-600'
+                          <div className="mb-3">
+                            <div className="relative h-48 bg-black rounded-md mb-1">
+                              <video
+                                id="previewVideo"
+                                autoPlay
+                                playsInline
+                                muted={true}
+                                className={`rounded-md h-full w-full ${
+                                  !this.props.roomState.localVideoEnabled &&
+                                  'hidden'
                                 }`}
-                              >
-                                {this.props.roomState.localVideoEnabled && (
-                                  <svg
-                                    className="w-6 h-6"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                                    />
-                                  </svg>
-                                )}
-                                {!this.props.roomState.localVideoEnabled && (
-                                  <svg
-                                    className="w-6 h-6"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      d="M15 10L19.553 7.724C19.7054 7.64784 19.8748 7.61188 20.045 7.61955C20.2152 7.62721 20.3806 7.67825 20.5256 7.76781C20.6706 7.85736 20.7902 7.98248 20.8733 8.13127C20.9563 8.28007 20.9999 8.44761 21 8.618V15.382C20.9999 15.5524 20.9563 15.7199 20.8733 15.8687C20.7902 16.0175 20.6706 16.1426 20.5256 16.2322C20.3806 16.3218 20.2152 16.3728 20.045 16.3805C19.8748 16.3881 19.7054 16.3522 19.553 16.276L15 14V10ZM5 18H13C13.5304 18 14.0391 17.7893 14.4142 17.4142C14.7893 17.0391 15 16.5304 15 16V8C15 7.46957 14.7893 6.96086 14.4142 6.58579C14.0391 6.21071 13.5304 6 13 6H5C4.46957 6 3.96086 6.21071 3.58579 6.58579C3.21071 6.96086 3 7.46957 3 8V16C3 16.5304 3.21071 17.0391 3.58579 17.4142C3.96086 17.7893 4.46957 18 5 18Z"
+                              ></video>
+                              {/* {(!this.props.roomState.localVideoEnabled) && (<div id='previewVideo' className="rounded-md mb-3 h-full w-full bg-black"></div>)} */}
+                              <div className="absolute bottom-0 w-full flex justify-center pb-1">
+                                <button
+                                  onClick={e => {
+                                    e.preventDefault();
+                                    const initialValue = this.props.roomState
+                                      .localVideoEnabled;
+                                    this.props.setRoomState({
+                                      localVideoEnabled: !initialValue,
+                                    });
+                                  }}
+                                  className={`py-1 px-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out ${
+                                    this.props.roomState.localVideoEnabled
+                                      ? 'bg-opacity-50 bg-gray-600'
+                                      : 'bg-indigo-600'
+                                  }`}
+                                >
+                                  {this.props.roomState.localVideoEnabled && (
+                                    <svg
+                                      className="w-6 h-6"
+                                      fill="none"
                                       stroke="currentColor"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                    <line
-                                      x1="2.00177"
-                                      y1="19.7113"
-                                      x2="16.1289"
-                                      y2="4.10676"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                  </svg>
-                                )}
-                              </button>
+                                      viewBox="0 0 24 24"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                                      />
+                                    </svg>
+                                  )}
+                                  {!this.props.roomState.localVideoEnabled && (
+                                    <svg
+                                      className="w-6 h-6"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M15 10L19.553 7.724C19.7054 7.64784 19.8748 7.61188 20.045 7.61955C20.2152 7.62721 20.3806 7.67825 20.5256 7.76781C20.6706 7.85736 20.7902 7.98248 20.8733 8.13127C20.9563 8.28007 20.9999 8.44761 21 8.618V15.382C20.9999 15.5524 20.9563 15.7199 20.8733 15.8687C20.7902 16.0175 20.6706 16.1426 20.5256 16.2322C20.3806 16.3218 20.2152 16.3728 20.045 16.3805C19.8748 16.3881 19.7054 16.3522 19.553 16.276L15 14V10ZM5 18H13C13.5304 18 14.0391 17.7893 14.4142 17.4142C14.7893 17.0391 15 16.5304 15 16V8C15 7.46957 14.7893 6.96086 14.4142 6.58579C14.0391 6.21071 13.5304 6 13 6H5C4.46957 6 3.96086 6.21071 3.58579 6.58579C3.21071 6.96086 3 7.46957 3 8V16C3 16.5304 3.21071 17.0391 3.58579 17.4142C3.96086 17.7893 4.46957 18 5 18Z"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                      <line
+                                        x1="2.00177"
+                                        y1="19.7113"
+                                        x2="16.1289"
+                                        y2="4.10676"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                    </svg>
+                                  )}
+                                </button>
 
-                              <button
-                                onClick={e => {
-                                  e.preventDefault();
-                                  const initialValue = this.props.roomState
-                                    .localAudioEnabled;
-                                  this.props.setRoomState({
-                                    localAudioEnabled: !initialValue,
-                                  });
-                                  this.startPreview(false);
-                                }}
-                                className={`ml-1 py-1 px-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out ${
-                                  this.props.roomState.localAudioEnabled
-                                    ? 'bg-opacity-50 bg-gray-600'
-                                    : 'bg-indigo-600'
-                                }`}
-                              >
-                                {this.props.roomState.localAudioEnabled && (
-                                  <svg
-                                    className="w-6 h-6"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth="2"
-                                      d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-                                    ></path>
-                                  </svg>
-                                )}
-                                {!this.props.roomState.localAudioEnabled && (
-                                  <svg
-                                    className="h-6 w-6"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      d="M19 11C19 12.8565 18.2625 14.637 16.9497 15.9497C15.637 17.2625 13.8565 18 12 18M12 18C10.1435 18 8.36301 17.2625 7.05025 15.9497C5.7375 14.637 5 12.8565 5 11M12 18V22M12 22H8M12 22H16M12 14C11.2044 14 10.4413 13.6839 9.87868 13.1213C9.31607 12.5587 9 11.7956 9 11V5C9 4.20435 9.31607 3.44129 9.87868 2.87868C10.4413 2.31607 11.2044 2 12 2C12.7956 2 13.5587 2.31607 14.1213 2.87868C14.6839 3.44129 15 4.20435 15 5V11C15 11.7956 14.6839 12.5587 14.1213 13.1213C13.5587 13.6839 12.7956 14 12 14Z"
+                                <button
+                                  onClick={e => {
+                                    e.preventDefault();
+                                    const initialValue = this.props.roomState
+                                      .localAudioEnabled;
+                                    this.props.setRoomState({
+                                      localAudioEnabled: !initialValue,
+                                    });
+                                  }}
+                                  className={`ml-1 py-1 px-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out ${
+                                    this.props.roomState.localAudioEnabled
+                                      ? 'bg-opacity-50 bg-gray-600'
+                                      : 'bg-indigo-600'
+                                  }`}
+                                >
+                                  {this.props.roomState.localAudioEnabled && (
+                                    <svg
+                                      className="w-6 h-6"
+                                      fill="none"
                                       stroke="currentColor"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                    <line
-                                      x1="4.43121"
-                                      y1="18.0549"
-                                      x2="18.5583"
-                                      y2="2.45033"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                  </svg>
-                                )}
-                              </button>
+                                      viewBox="0 0 24 24"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+                                      ></path>
+                                    </svg>
+                                  )}
+                                  {!this.props.roomState.localAudioEnabled && (
+                                    <svg
+                                      className="h-6 w-6"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M19 11C19 12.8565 18.2625 14.637 16.9497 15.9497C15.637 17.2625 13.8565 18 12 18M12 18C10.1435 18 8.36301 17.2625 7.05025 15.9497C5.7375 14.637 5 12.8565 5 11M12 18V22M12 22H8M12 22H16M12 14C11.2044 14 10.4413 13.6839 9.87868 13.1213C9.31607 12.5587 9 11.7956 9 11V5C9 4.20435 9.31607 3.44129 9.87868 2.87868C10.4413 2.31607 11.2044 2 12 2C12.7956 2 13.5587 2.31607 14.1213 2.87868C14.6839 3.44129 15 4.20435 15 5V11C15 11.7956 14.6839 12.5587 14.1213 13.1213C13.5587 13.6839 12.7956 14 12 14Z"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                      <line
+                                        x1="4.43121"
+                                        y1="18.0549"
+                                        x2="18.5583"
+                                        y2="2.45033"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                    </svg>
+                                  )}
+                                </button>
+                              </div>
                             </div>
-                            <div className="px-1">
-                              <div
-                                style={{
-                                  width: !this.props.roomState.localAudioEnabled
-                                    ? '1px'
-                                    : this.state.audioLevel + 'px',
-                                  height: '4px',
-                                  backgroundColor: '#8dc63f',
-                                }}
-                              ></div>
-                            </div>
+                            {this.props.roomState.localAudioEnabled && (
+                              <div className="px-1">
+                                <div
+                                  style={{
+                                    width: !this.props.roomState
+                                      .localAudioEnabled
+                                      ? '1px'
+                                      : this.state.audioLevel + 'px',
+                                    height: '4px',
+                                    backgroundColor: '#8dc63f',
+                                  }}
+                                ></div>
+                              </div>
+                            )}
                           </div>
                           <div className="rounded-md shadow-sm">
                             <div>

@@ -220,8 +220,8 @@ class OldAppUI extends React.Component {
         login: true,
         loading: false,
         loginInfo: values,
-        localVideoEnabled: !values.audioOnly,
-        localAudioEnabled: !values.videoOnly,
+        localVideoEnabled: this.props.roomState.localAudioEnabled,
+        localAudioEnabled: this.props.roomState.localVideoEnabled,
       });
 
       console.log('VALUES:', values);

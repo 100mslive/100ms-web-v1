@@ -115,16 +115,6 @@ class LoginForm extends React.Component {
         ? props.loginInfo.displayName
         : ''
       : '';
-    this.audioOnly = props.loginInfo
-      ? props.loginInfo.audioOnly
-        ? props.loginInfo.audioOnly
-        : false
-      : false;
-    this.videoOnly = props.loginInfo
-      ? props.loginInfo.videoOnly
-        ? props.loginInfo.videoOnly
-        : false
-      : false;
   }
 
   componentDidMount = async () => {
@@ -170,8 +160,6 @@ class LoginForm extends React.Component {
         roomId: this.roomId,
         roomName: this.roomName,
         env: this.env,
-        audioOnly: false,
-        videoOnly: false,
         permissionGranted: false,
         selectedAudioDevice: null,
         selectedVideoDevice: null,
@@ -181,8 +169,6 @@ class LoginForm extends React.Component {
     // ToDo: Show a confirmation dialog for ROLES.VIEWER
 
     this.setState({
-      audioOnly: this.audioOnly,
-      videoOnly: this.videoOnly,
       permissionText:
         'We will need your permission to use your webcam and microphone.',
     });
@@ -461,8 +447,6 @@ class LoginForm extends React.Component {
         roomId: this.roomId,
         roomName: values.roomName ? values.roomName : this.roomName,
         env: values.env ? values.env : this.env,
-        audioOnly: false,
-        videoOnly: false,
         permissionGranted: false,
         selectedAudioDevice: null,
         selectedVideoDevice: null,
@@ -489,8 +473,6 @@ class LoginForm extends React.Component {
         ? this.state.formValues.roomName
         : this.roomName,
       env: this.state.formValues ? this.state.formValues.env : this.env,
-      audioOnly: values.audioOnly,
-      videoOnly: values.videoOnly,
       permissionGranted: this.state.permissionGranted,
       selectedAudioDevice: values.selectedAudioDevice,
       selectedVideoDevice: values.selectedVideoDevice,
@@ -530,10 +512,10 @@ class LoginForm extends React.Component {
       soundMeterProcess = this.soundMeterProcess;
     }
     let constraints = {
-      audio: this.state.videoOnly
+      audio: (!this.props.roomState.localAudioEnabled)
         ? false
         : { deviceId: audioSource ? { exact: audioSource } : undefined },
-      video: this.state.audioOnly
+      video: (!this.props.roomState.localVideoEnabled)
         ? false
         : { deviceId: videoSource ? { exact: videoSource } : undefined },
     };
@@ -544,7 +526,7 @@ class LoginForm extends React.Component {
           //videoElement.srcObject = stream;
           attachMediaStream(videoElement, stream);
           //TODO this throws an error when audio only is chosen. Handle it
-          // if(this && !this.state.videoOnly){
+          // if(this && this.props.roomState.localAudioEnabled){
           soundMeter.connectToSource(stream);
           setTimeout(soundMeterProcess, 100);
           // }
@@ -1043,8 +1025,6 @@ class LoginForm extends React.Component {
                     // selectedAudioOutputDevice: this.state.settings
                     //   ? this.state.settings.selectedAudioOutputDevice
                     //   : null,
-                    audioOnly: this.state.audioOnly,
-                    videoOnly: this.state.videoOnly,
                   }}
                   validate={values => {
                     const errors = {};
@@ -1098,36 +1078,34 @@ class LoginForm extends React.Component {
                             </p>
                           </div>
                           <div className="relative h-48 bg-black rounded-md mb-3">
-                            <video
+                            {this.props.localVideoEnabled && <video
                               id="previewVideo"
                               autoPlay
                               playsInline
                               muted={true}
                               className="rounded-md h-full w-full"
-                            ></video>
-                            {/* {values.audioOnly && (<div id='previewVideo' className="rounded-md mb-3 h-full w-full bg-black"></div>)} */}
+                            ></video>}
+                            {(!this.props.roomState.localVideoEnabled) && (<div id='previewVideo' className="rounded-md mb-3 h-full w-full bg-black"></div>)}
                             <div className="absolute bottom-0 w-full flex justify-center pb-1">
-                              <Field name="audioOnly">
-                                {({
-                                  field,
-                                  form: { setFieldValue, values },
-                                  meta,
-                                }) => (
                                   <button
                                     onClick={e => {
                                       e.preventDefault();
-                                      const initialValue = values.audioOnly;
-                                      setFieldValue('audioOnly', !initialValue);
-                                      this.state.audioOnly = !initialValue;
+                                  const initialValue = this.props.roomState.localVideoEnabled;
+                                  console.log('hiamit');
+                                  console.log(this.props.roomState);
+                                  this.props.setRoomState({
+                                    localVideoEnabled: (!initialValue)
+                                  });
+                                  console.log(this.props.roomState);
                                       this.startPreview(false);
                                     }}
                                     className={`py-1 px-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out ${
-                                      !values.audioOnly
+                                      this.props.roomState.localVideoEnabled
                                         ? 'bg-opacity-50 bg-gray-600'
                                         : 'bg-indigo-600'
                                     }`}
                                   >
-                                    {!values.audioOnly && (
+                                {this.props.roomState.localVideoEnabled && (
                                       <svg
                                         className="w-6 h-6"
                                         fill="none"
@@ -1143,7 +1121,7 @@ class LoginForm extends React.Component {
                                         />
                                       </svg>
                                     )}
-                                    {values.audioOnly && (
+                                {(!this.props.roomState.localVideoEnabled) && (
                                       <svg
                                         className="w-6 h-6"
                                         viewBox="0 0 24 24"
@@ -1170,25 +1148,24 @@ class LoginForm extends React.Component {
                                       </svg>
                                     )}
                                   </button>
-                                )}
-                              </Field>
-                              <Field name="videoOnly">
-                                {({ form: { setFieldValue, values } }) => (
+
+
                                   <button
                                     onClick={e => {
                                       e.preventDefault();
-                                      const initialValue = values.videoOnly;
-                                      setFieldValue('videoOnly', !initialValue);
-                                      this.state.videoOnly = !initialValue;
+                                  const initialValue = this.props.roomState.localAudioEnabled;
+                                  this.props.setRoomState({
+                                    localAudioEnabled: (!initialValue)
+                                  })
                                       this.startPreview(false);
                                     }}
                                     className={`ml-1 py-1 px-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out ${
-                                      !values.videoOnly
+                                      this.props.roomState.localAudioEnabled
                                         ? 'bg-opacity-50 bg-gray-600'
                                         : 'bg-indigo-600'
                                     }`}
                                   >
-                                    {!values.videoOnly && (
+                                {this.props.roomState.localAudioEnabled && (
                                       <svg
                                         className="w-6 h-6"
                                         fill="none"
@@ -1204,7 +1181,7 @@ class LoginForm extends React.Component {
                                         ></path>
                                       </svg>
                                     )}
-                                    {values.videoOnly && (
+                                {(!this.props.roomState.localAudioEnabled) && (
                                       <svg
                                         className="h-6 w-6"
                                         viewBox="0 0 24 24"
@@ -1231,13 +1208,12 @@ class LoginForm extends React.Component {
                                       </svg>
                                     )}
                                   </button>
-                                )}
-                              </Field>
+
                             </div>
                             <div className="px-1">
                               <div
                                 style={{
-                                  width: values.videoOnly
+                                  width: (!this.props.roomState.localAudioEnabled)
                                     ? '1px'
                                     : this.state.audioLevel + 'px',
                                   height: '4px',

@@ -112,21 +112,11 @@ class OldAppUI extends React.Component {
     }
   };
 
-  _handleJoin = async values => {
+  _handleJoin = async () => {
     this.props.setRoomState({
       loading: true,
     });
-    this.props.setLoginInfo({
-      roomName: values.roomName,
-      roomId: values.roomId,
-      env: values.env,
-      role: values.env,
-    });
     this.hideMessage = () => {};
-    this.props.setSettings({
-      selectedAudioDevice: values.selectedAudioDevice,
-      selectedVideoDevice: values.selectedVideoDevice,
-    });
     //TODO this should reflect in initialization as well
 
     ![ROLES.LIVE_RECORD, ROLES.VIEWER].includes(this.role) &&
@@ -141,10 +131,10 @@ class OldAppUI extends React.Component {
       );
 
     let client = await this._createClient({
-      userName: values.displayName,
-      env: values.env,
-      roomId: values.roomId,
-      role: values.role,
+      userName: this.props.loginInfo.displayName,
+      env: this.props.loginInfo.env,
+      roomId: this.props.loginInfo.roomId,
+      role: this.props.loginInfo.role,
     });
     client.connect().catch(error => {
       alert(error.message);
@@ -166,7 +156,7 @@ class OldAppUI extends React.Component {
       console.log('on connect called');
       if (this.props.roomState.isConnected) return;
       console.log('connected!');
-      this._handleTransportOpen(values);
+      this._handleTransportOpen();
     });
 
     client.on('disconnect', () => {
@@ -203,37 +193,35 @@ class OldAppUI extends React.Component {
     this.props.setClient(client);
   };
 
-  _handleTransportOpen = async values => {
+  _handleTransportOpen = async () => {
     this.props.setRoomState({
       isConnected: true,
     });
-    this.props.setLoginInfo(values);
     try {
-      await this.props.client.join(values.roomId).catch(error => {
+      await this.props.client.join(this.props.loginInfo.roomId).catch(error => {
         console.log('JOIN ERROR:', error);
       });
-      let redirectURL = `${window.location.protocol}//${window.location.host}/?room=${values.roomId}&env=${values.env}&role=${values.role}`;
+      let redirectURL = `${window.location.protocol}//${window.location.host}/?room=${this.props.loginInfo.roomId}&env=${this.props.loginInfo.env}&role=${this.props.loginInfo.role}`;
 
       window.history.pushState({}, '100ms', redirectURL);
 
       this.props.setRoomState({
         login: true,
         loading: false,
-        loginInfo: values,
-        localVideoEnabled: this.props.roomState.localAudioEnabled,
-        localAudioEnabled: this.props.roomState.localVideoEnabled,
       });
-
-      console.log('VALUES:', values);
 
       this._notification(
         'Connected!',
-        `Welcome to the ${values.roomName || '100ms'} room => ${values.roomId}`
+        `Welcome to the ${this.props.loginInfo.roomName || '100ms'} room => ${
+          this.props.loginInfo.roomId
+        }`
       );
 
       // Local video & audio are disabled for the 'live-record'
       // and 'viewer' roles. Their local stream is also not published.
-      if (![ROLES.LIVE_RECORD, ROLES.VIEWER].includes(values.role)) {
+      if (
+        ![ROLES.LIVE_RECORD, ROLES.VIEWER].includes(this.props.loginInfo.role)
+      ) {
         await this.conference.handleLocalStream();
       }
     } catch (error) {
@@ -482,6 +470,16 @@ class OldAppUI extends React.Component {
                     The requested {this.isValidParams()[1]} is invalid. Please
                     verify your credentials.
                   </p>
+
+                  <button
+                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
+                    onClick={() => {
+                      this._cleanUp();
+                      location.reload();
+                    }}
+                  >
+                    Back to Home
+                  </button>
                 </div>
               </div>
             </div>

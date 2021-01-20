@@ -1,5 +1,5 @@
 import React from 'react';
-import { notification, Avatar, Badge, Tooltip } from 'antd';
+import { notification } from 'antd';
 import { Formik, Form, Field } from 'formik';
 import { LocalStream } from '@100mslive/hmsvideo-web';
 import {
@@ -15,110 +15,41 @@ import {
 import SoundMeter from './settings/soundmeter';
 
 import '../styles/css/login.scss';
-
-import CheckIcon from 'mdi-react/CheckIcon';
-import ServerNetworkIcon from 'mdi-react/ServerNetworkIcon';
-import GoogleClassroomIcon from 'mdi-react/GoogleClassroomIcon';
-import ProgressClockIcon from 'mdi-react/ProgressClockIcon';
-import ProgressAlertIcon from 'mdi-react/ProgressAlertIcon';
-import ProgressCloseIcon from 'mdi-react/ProgressCloseIcon';
-import UploadLockIcon from 'mdi-react/UploadLockIcon';
-import DownloadLockIcon from 'mdi-react/DownloadLockIcon';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
 import { ROLES } from './constants';
 import LoginTextField from './components/LoginTextField';
 
-let testUpdateLoop;
-
-const TEST_STEPS = {
-  biz: { title: 'Biz Websocket', icon: <ServerNetworkIcon /> },
-  lobby: { title: 'Joining Test Room', icon: <GoogleClassroomIcon /> },
-  publish: { title: 'Publish', icon: <UploadLockIcon /> },
-  subscribe: { title: 'Subscription', icon: <DownloadLockIcon /> },
-};
-
-const ICONS = {
-  connected: CheckIcon,
-  ok: CheckIcon,
-  pending: ProgressClockIcon,
-  warning: ProgressAlertIcon,
-  'no candidates': ProgressAlertIcon,
-  error: ProgressCloseIcon,
-  joined: CheckIcon,
-  published: CheckIcon,
-  subscribed: CheckIcon,
-  back: ArrowLeftIcon,
-};
-
-const DEFAULT_STATE = {
-  testing: null,
-  success: null,
-  steps: TEST_STEPS,
-};
-const ConnectionStep = ({ step }) => {
-  const color =
-    step.status === 'pending'
-      ? null
-      : step.status === 'warning' || step.status === 'no candidates'
-      ? 'orange'
-      : step.status === 'error'
-      ? 'red'
-      : 'green';
-  const Icon = ICONS[step.status];
-
-  return (
-    <div className="test-connection-step">
-      <Badge count={Icon ? <Icon style={{ color }} /> : null}>
-        <Tooltip
-          title={
-            <>
-              {step.title}
-              {step.status ? ': ' + step.status : null}
-              {step.info ? <div>{step.info}</div> : null}
-            </>
-          }
-        >
-          <Avatar shape="square" size="large" icon={step.icon} />
-        </Tooltip>
-      </Badge>
-    </div>
-  );
-};
-
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ...DEFAULT_STATE,
       formStage: 'ROOM',
       permissionGranted: false,
     };
-    testUpdateLoop = null;
-    this.role =
-      getRequest() && getRequest().hasOwnProperty('role')
-        ? getRequest().role
-        : props.loginInfo && props.loginInfo.role
-        ? props.loginInfo.role
-        : '';
-    this.roomId =
-      getRequest() && getRequest().hasOwnProperty('room')
-        ? getRequest().room
-        : '';
-    this.env = process.env.SFU_ENV
-      ? process.env.SFU_ENV
-      : getRequest() && getRequest().hasOwnProperty('env')
-      ? getRequest().env
-      : '';
-    this.displayName = props.loginInfo
-      ? props.loginInfo.displayName
-        ? props.loginInfo.displayName
-        : ''
-      : '';
+    if (getRequest() && getRequest().hasOwnProperty('role')) {
+      this.props.setLoginInfo({
+        role: getRequest().role,
+      });
+    }
+    if (getRequest() && getRequest().hasOwnProperty('room')) {
+      this.props.setLoginInfo({
+        roomId: getRequest().room,
+      });
+    }
+    if (process.env.SFU_ENV) {
+      this.props.setLoginInfo({
+        env: process.env.SFU_ENV,
+      });
+    } else if (getRequest() && getRequest().hasOwnProperty('env')) {
+      this.props.setLoginInfo({
+        env: getRequest().env,
+      });
+    }
   }
 
   componentDidMount = async () => {
-    console.log(`%c[APP] Role=${this.role}`);
+    console.log(`%c[APP] Role=${this.props.loginInfo.role}`);
     this.setState({
       isSupported: deviceSupport().supported,
     });
@@ -148,22 +79,20 @@ class LoginForm extends React.Component {
       });
     }
 
-    if (this.role === ROLES.LIVE_RECORD && this.roomId !== '') {
+    if (
+      this.props.loginInfo.role === ROLES.LIVE_RECORD &&
+      this.props.loginInfo.roomId !== ''
+    ) {
       console.log(
         `%c[APP] Skipping audio & video permission promt for the live-record bot`,
         'color: blue'
       );
       const handleLogin = this.props.handleLogin;
-      handleLogin({
+      this.props.setLoginInfo({
         displayName: null,
         role: ROLES.LIVE_RECORD,
-        roomId: this.roomId,
-        roomName: this.roomName,
-        env: this.env,
-        permissionGranted: false,
-        selectedAudioDevice: null,
-        selectedVideoDevice: null,
       });
+      handleLogin();
     }
 
     // ToDo: Show a confirmation dialog for ROLES.VIEWER
@@ -173,7 +102,11 @@ class LoginForm extends React.Component {
         'We will need your permission to use your webcam and microphone.',
     });
 
-    if (this.displayName !== '' && this.roomId !== '' && this.env !== '') {
+    if (
+      this.props.loginInfo.displayName !== '' &&
+      this.props.loginInfo.roomId !== '' &&
+      this.props.loginInfo.env !== ''
+    ) {
       if (this.state.permissionGranted) {
         console.log('Showing preview');
         this.startPreview(true);
@@ -183,7 +116,7 @@ class LoginForm extends React.Component {
     } else {
       let formStage = 'ROOM';
       console.log(`[FormStage: ${formStage}]`);
-      if (this.roomId != '') {
+      if (this.props.loginInfo.roomId != '') {
         formStage = 'JOIN_ROOM';
       }
       this.setState({ formStage: formStage });
@@ -222,17 +155,6 @@ class LoginForm extends React.Component {
     }
   };
 
-  _testStep(step, status, info = null) {
-    const prior = this.state.steps[step];
-    this.setState({
-      steps: {
-        ...this.state.steps,
-        [step]: { ...prior, status, info },
-      },
-    });
-    console.log('Test Connection:', step, status, info);
-  }
-
   _stopMediaStream = async stream => {
     let tracks = stream.getTracks();
     for (let i = 0, len = tracks.length; i < len; i++) {
@@ -241,117 +163,11 @@ class LoginForm extends React.Component {
   };
 
   _cleanup = async () => {
-    if (testUpdateLoop) clearInterval(testUpdateLoop);
     if (this.stream) {
       await this._stopMediaStream(this.stream);
       await this.client.unpublish(this.stream, this.client.rid);
     }
     if (this.client) await this.client.leave();
-  };
-
-  _testConnection = async () => {
-    this.setState({ test: true });
-    this._testStep('biz', 'pending');
-    let client = this.props.createClient();
-    testUpdateLoop = null;
-
-    window.onunload = () => {
-      cleanup();
-    };
-
-    client.on('transport-open', async () => {
-      console.log('{{{{{{');
-      this._testStep('biz', 'connected', client.url);
-      this._testStep('lobby', 'pending');
-      const rid = 'lobby-' + Math.floor(1000000 * Math.random());
-      await this.client.join(rid, { name: 'lobby-user' });
-      this._testStep('lobby', 'joined', 'room id=' + rid);
-      const localStream = await LocalStream.getUserMedia({
-        codec: 'VP8',
-        resolution: 'hd',
-        bandwidth: 1024,
-        audio: true,
-        video: true,
-      });
-
-      this._testStep('publish', 'pending');
-
-      const publish = await client.publish(localStream);
-
-      let nominated = null;
-
-      const testConnectionUpdateLoop = () => {
-        updateConnectionStats();
-        const subStatus = this.state.steps.subscribe.status;
-        if (subStatus === 'pending' || subStatus === 'error') {
-          trySubscribe();
-        }
-      };
-      testUpdateLoop = setInterval(testConnectionUpdateLoop, 3000);
-      setTimeout(testConnectionUpdateLoop, 150);
-
-      const trySubscribe = async () => {
-        const mid = client.local.mid;
-        let tracks = {};
-
-        try {
-          for (let track of localStream.getTracks()) {
-            tracks[`${mid} ${track.id}`] = {
-              codec: track.codec,
-              fmtp: '',
-              id: track.id,
-              pt: client.local.transport.rtp[0].payload,
-              type: track.kind,
-            };
-          }
-        } catch (e) {
-          console.log('No tracks yet...');
-        }
-
-        if (!mid) return;
-        client.knownStreams.set(mid, objToStrMap(tracks));
-
-        console.log('Trying to subscribe to ...', mid);
-
-        try {
-          let stream = await client.subscribe(mid);
-          this._testStep('subscribe', 'subscribed', 'mid: ' + mid);
-        } catch (e) {
-          console.log(e);
-          this._testStep('subscribe', 'error');
-        }
-      };
-
-      const updateConnectionStats = async () => {
-        const report = await client.local.transport.pc.getStats();
-        const stats = {};
-        for (let [name, stat] of report) {
-          stats[name] = stat;
-          if (stat.nominated) {
-            nominated = stat;
-          }
-        }
-
-        if (nominated) {
-          const latency = nominated.currentRoundTripTime;
-          const availableBitrate = nominated.availableOutgoingBitrate;
-          const info =
-            `${localStream.getTracks().length} tracks, ${Math.floor(
-              latency / 1000.0
-            )}ms latency` +
-            (availableBitrate
-              ? `, ${Math.floor(availableBitrate / 1024)}kbps available`
-              : '');
-          this._testStep('publish', 'published', info);
-        } else {
-          this._testStep('publish', 'no candidates');
-        }
-      };
-
-      this._testStep('subscribe', 'pending');
-    });
-
-    window.test_client = this.client = client;
   };
 
   updateDeviceList = callback => {
@@ -432,25 +248,33 @@ class LoginForm extends React.Component {
   };
 
   handleNameSubmit = values => {
-    this.roomId = values.roomId;
     console.log(this.state.permissionGranted);
-
-    const role = values.role ? values.role : this.role;
-    const displayName = values.displayName
-      ? values.displayName
-      : this.displayName;
-
-    if (role === ROLES.VIEWER) {
-      this.props.handleLogin({
-        displayName,
-        role: ROLES.VIEWER,
-        roomId: this.roomId,
-        roomName: values.roomName ? values.roomName : this.roomName,
-        env: values.env ? values.env : this.env,
-        permissionGranted: false,
-        selectedAudioDevice: null,
-        selectedVideoDevice: null,
+    this.props.setLoginInfo({
+      roomId: values.roomId,
+    });
+    if (values.roomName) {
+      this.props.setLoginInfo({
+        roomName: values.roomName,
       });
+    }
+    if (values.role) {
+      this.props.setLoginInfo({
+        role: values.role,
+      });
+    }
+    if (values.env) {
+      this.props.setLoginInfo({
+        env: values.env,
+      });
+    }
+    if (values.displayName) {
+      this.props.setLoginInfo({
+        displayName: values.displayName,
+      });
+    }
+
+    if (this.props.loginInfo.role === ROLES.VIEWER) {
+      this.props.handleLogin();
     } else if (this.state.permissionGranted) {
       console.log('Showing preview');
       this.startPreview(true);
@@ -462,21 +286,18 @@ class LoginForm extends React.Component {
   handleSubmit = values => {
     const handleLogin = this.props.handleLogin;
     console.log('Values in handleSubmit: ', values);
-    console.log('this.roomId in handleSubmit: ', this.roomId);
-    handleLogin({
-      displayName: this.state.formValues
-        ? this.state.formValues.displayName
-        : this.displayName,
-      role: values.role ? values.role : this.role,
-      roomId: this.roomId,
-      roomName: this.state.formValues
-        ? this.state.formValues.roomName
-        : this.roomName,
-      env: this.state.formValues ? this.state.formValues.env : this.env,
-      permissionGranted: this.state.permissionGranted,
-      selectedAudioDevice: values.selectedAudioDevice,
-      selectedVideoDevice: values.selectedVideoDevice,
-    });
+    console.log(
+      'this.props.loginInfo.roomId in handleSubmit: ',
+      this.props.loginInfo.roomId
+    );
+    if (values.role) this.props.setLoginInfo({ role: values.role });
+    if (this.state.formValues)
+      this.props.setLoginInfo({
+        displayName: this.state.formValues.displayName,
+        roomName: this.state.formValues.roomName,
+        env: this.state.formValues.env,
+      });
+    handleLogin();
   };
 
   updatePermission = async () => {
@@ -508,8 +329,8 @@ class LoginForm extends React.Component {
     let videoElement, soundMeterProcess;
     if (!permissionTestMode) {
       videoElement = document.getElementById('previewVideo');
-      this.soundMeter = window.soundMeter = new SoundMeter(window.audioContext);
-      soundMeterProcess = this.soundMeterProcess;
+      // this.soundMeter = window.soundMeter = new SoundMeter(window.audioContext);
+      // soundMeterProcess = this.soundMeterProcess;
     }
     let constraints = {
       audio: !this.props.roomState.localAudioEnabled
@@ -596,12 +417,9 @@ class LoginForm extends React.Component {
   };
 
   render() {
-    const steps = this.state.steps;
     console.log(this.state.formStage);
     const showEnv = !Boolean(process.env.SFU_ENV);
     const showRoleSelect = Boolean(process.env.SFU_ENV);
-
-    console.log('SETTINGS:', this.props.settings);
 
     return (
       <>
@@ -641,25 +459,25 @@ class LoginForm extends React.Component {
               </>
             )}
 
-            {!this.roomId &&
+            {!this.props.loginInfo.roomId &&
               this.state.formStage &&
               this.state.formStage === 'CREATE_ROOM' && (
                 <>
                   <Formik
                     initialValues={{
-                      roomName: this.roomName
-                        ? this.roomName
+                      roomName: this.props.loginInfo.roomName
+                        ? this.props.loginInfo.roomName
                         : this.state.formValues
                         ? this.state.formValues.roomName
                         : '',
-                      displayName: this.displayName,
-                      env: this.env
-                        ? this.env
+                      displayName: this.props.loginInfo.displayName,
+                      env: this.props.loginInfo.env
+                        ? this.props.loginInfo.env
                         : this.state.formValues
                         ? this.state.formValues.env
                         : '',
-                      role: this.role
-                        ? this.role
+                      role: this.props.loginInfo.role
+                        ? this.props.loginInfo.role
                         : this.state.formValues
                         ? this.state.formValues.role
                         : 'Host',
@@ -703,7 +521,9 @@ class LoginForm extends React.Component {
                                       className="text-gray-700 hover:text-black"
                                       onClick={() => {
                                         this.setState({ formStage: 'ROOM' });
-                                        this.roomId = '';
+                                        this.props.setLoginInfo({
+                                          roomId: '',
+                                        });
                                       }}
                                     />
                                     100ms Conference
@@ -749,7 +569,10 @@ class LoginForm extends React.Component {
                                       as={showRoleSelect ? 'select' : null}
                                       className={!showEnv && 'rounded-b-md'}
                                       placeholder="Role"
-                                      disabled={this.role === ROLES.VIEWER}
+                                      disabled={
+                                        this.props.loginInfo.role ===
+                                        ROLES.VIEWER
+                                      }
                                       errors={errors.role}
                                       touched={touched.rol}
                                     >
@@ -772,7 +595,10 @@ class LoginForm extends React.Component {
                                       name="role"
                                       className={!showEnv && 'rounded-b-md'}
                                       placeholder="Role"
-                                      disabled={this.role === ROLES.VIEWER}
+                                      disabled={
+                                        this.props.loginInfo.role ===
+                                        ROLES.VIEWER
+                                      }
                                       errors={errors.role}
                                       touched={touched.rol}
                                     />
@@ -822,19 +648,19 @@ class LoginForm extends React.Component {
               <>
                 <Formik
                   initialValues={{
-                    roomId: this.roomId
-                      ? this.roomId
+                    roomId: this.props.loginInfo.roomId
+                      ? this.props.loginInfo.roomId
                       : this.state.formValues
                       ? this.state.formValues.roomId
                       : '',
-                    displayName: this.displayName,
-                    env: this.env
-                      ? this.env
+                    displayName: this.props.loginInfo.displayName,
+                    env: this.props.loginInfo.env
+                      ? this.props.loginInfo.env
                       : this.state.formValues
                       ? this.state.formValues.env
                       : '',
-                    role: this.role
-                      ? this.role
+                    role: this.props.loginInfo.role
+                      ? this.props.loginInfo.role
                       : this.state.formValues
                       ? this.state.formValues.role
                       : 'Guest',
@@ -874,7 +700,9 @@ class LoginForm extends React.Component {
                                     className="text-gray-700 hover:text-black"
                                     onClick={() => {
                                       this.setState({ formStage: 'ROOM' });
-                                      this.roomId = '';
+                                      this.props.setLoginInfo({
+                                        roomId: '',
+                                      });
                                     }}
                                   />
                                   100ms Conference
@@ -927,7 +755,9 @@ class LoginForm extends React.Component {
                                     as={showRoleSelect ? 'select' : null}
                                     className={!showEnv && 'rounded-b-md'}
                                     placeholder="Role"
-                                    disabled={this.role === ROLES.VIEWER}
+                                    disabled={
+                                      this.props.loginInfo.role === ROLES.VIEWER
+                                    }
                                     errors={errors.role}
                                     touched={touched.rol}
                                   >
@@ -948,7 +778,9 @@ class LoginForm extends React.Component {
                                     name="role"
                                     className={!showEnv && 'rounded-b-md'}
                                     placeholder="Role"
-                                    disabled={this.role === ROLES.VIEWER}
+                                    disabled={
+                                      this.props.loginInfo.role === ROLES.VIEWER
+                                    }
                                     errors={errors.role}
                                     touched={touched.rol}
                                   />
@@ -1065,13 +897,13 @@ class LoginForm extends React.Component {
                               <span className="font-semibold">
                                 {this.state.formValues
                                   ? this.state.formValues.roomName
-                                  : this.roomName}
+                                  : this.props.loginInfo.roomName}
                               </span>{' '}
                               as{' '}
                               <span className="font-semibold">
                                 {this.state.formValues
                                   ? this.state.formValues.displayName
-                                  : this.displayName}
+                                  : this.props.loginInfo.displayName}
                               </span>
                               <button
                                 className="rounded-md px-2 py-1 hover:bg-indigo-500 ml-1 border transition duration-150 ease-in-out"

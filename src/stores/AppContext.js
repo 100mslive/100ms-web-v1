@@ -44,10 +44,15 @@ class AppContextProvider extends Component {
           settings: this.state.settings,
           client: this.state.client,
           roomState: this.state.roomState,
-          setSettings: settings => {
-            this.setState({
-              settings: { ...this.state.settings, ...settings },
-            });
+          setSettings: (settings, cb) => {
+            this.setState(
+              {
+                settings: { ...this.state.settings, ...settings },
+              },
+              () => {
+                cb && cb();
+              }
+            );
           },
           setLoginInfo: loginInfo => {
             this.setState({

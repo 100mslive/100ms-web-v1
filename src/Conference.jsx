@@ -6,6 +6,7 @@ import { Gallery } from './components/Conference/gallery';
 import { Pinned } from './components/Conference/pinned';
 import PeerState, { onRoomStateChange } from './utils/state';
 import { getLocalStreamException } from './utils';
+import { AppContext } from "./stores/AppContext";
 
 const modes = {
   GALLERY: 'GALLERY',
@@ -379,24 +380,28 @@ class Conference extends React.Component {
               onRequest={this._onRequest}
             />
           )}
-        <Controls
-          role={role}
-          isMuted={this.state.audioMuted}
-          isCameraOn={!this.state.videoMuted}
-          isScreenSharing={this.props.isScreenSharing}
-          onScreenToggle={this.props.onScreenToggle}
-          onLeave={this.props.onLeave}
-          onMicToggle={() => {
-            this.muteMediaTrack('audio', this.state.audioMuted);
-          }}
-          onCamToggle={() => {
-            this.muteMediaTrack('video', this.state.videoMuted);
-          }}
-          onChatToggle={this.props.onChatToggle}
-          isChatOpen={this.props.isChatOpen}
-          loginInfo={this.props.loginInfo}
-          hasUnreadMessages={this.props.hasUnreadMessages}
-        />
+        <AppContext.Consumer>
+          {context => (
+            <Controls
+              role={role}
+              isMuted={this.state.audioMuted}
+              isCameraOn={!this.state.videoMuted}
+              screenSharingEnabled={context.roomState.screenSharingEnabled}
+              onScreenToggle={this.props.onScreenToggle}
+              onLeave={this.props.onLeave}
+              onMicToggle={() => {
+                this.muteMediaTrack('audio', this.state.audioMuted);
+              }}
+              onCamToggle={() => {
+                this.muteMediaTrack('video', this.state.videoMuted);
+              }}
+              onChatToggle={this.props.onChatToggle}
+              isChatOpen={this.props.isChatOpen}
+              loginInfo={this.props.loginInfo}
+              hasUnreadMessages={this.props.hasUnreadMessages}
+            />
+          )}
+          </AppContext.Consumer>
         {this.state.localStreamError && (
           <Modal
             visible={!!this.state.localStreamError}

@@ -95,12 +95,11 @@ class LoginForm extends React.Component {
       permissionGranted: false,
     };
     testUpdateLoop = null;
-    this.localStorage = props.loginInfo;
     this.role =
       getRequest() && getRequest().hasOwnProperty('role')
         ? getRequest().role
-        : this.localStorage && this.localStorage.role
-        ? this.localStorage.role
+      : props.loginInfo && props.loginInfo.role
+        ? props.loginInfo.role
         : '';
     this.roomId =
       getRequest() && getRequest().hasOwnProperty('room')
@@ -111,19 +110,19 @@ class LoginForm extends React.Component {
       : getRequest() && getRequest().hasOwnProperty('env')
       ? getRequest().env
       : '';
-    this.displayName = this.localStorage
-      ? this.localStorage.displayName
-        ? this.localStorage.displayName
+    this.displayName = props.loginInfo
+      ? props.loginInfo.displayName
+        ? props.loginInfo.displayName
         : ''
       : '';
-    this.audioOnly = this.localStorage
-      ? this.localStorage.audioOnly
-        ? this.localStorage.audioOnly
+    this.audioOnly = props.loginInfo
+      ? props.loginInfo.audioOnly
+        ? props.loginInfo.audioOnly
         : false
       : false;
-    this.videoOnly = this.localStorage
-      ? this.localStorage.videoOnly
-        ? this.localStorage.videoOnly
+    this.videoOnly = props.loginInfo
+      ? props.loginInfo.videoOnly
+        ? props.loginInfo.videoOnly
         : false
       : false;
   }
@@ -147,18 +146,18 @@ class LoginForm extends React.Component {
     );
     console.log('Making test client');
 
-    this.state.settings =
-      this.props.settings.codec !== undefined
-        ? this.props.settings
-        : {
-            selectedAudioDevice: '',
-            selectedVideoDevice: '',
-            // selectedAudioOutputDevice: "",
-            resolution: 'qvga',
-            bandwidth: 256,
-            codec: 'vp8',
-            isDevMode: true,
-          };
+    this.state.settings = {};
+    if (!this.props.settings.codec) {
+      this.props.setSettings({
+        selectedAudioDevice: '',
+        selectedVideoDevice: '',
+        // selectedAudioOutputDevice: "",
+        resolution: 'qvga',
+        bandwidth: 256,
+        codec: 'vp8',
+        isDevMode: true,
+      })
+    }
 
     if (this.role === ROLES.LIVE_RECORD && this.roomId !== '') {
       console.log(
@@ -373,16 +372,20 @@ class LoginForm extends React.Component {
   updateDeviceList = callback => {
     updateInputDevices().then(data => {
       if (
-        this.state.settings.selectedAudioDevice === '' &&
+        this.props.settings.selectedAudioDevice === '' &&
         data.audioDevices.length > 0
       ) {
-        this.state.settings.selectedAudioDevice = data.audioDevices[0].deviceId;
+        this.props.setSettings({
+          selectedAudioDevice: data.audioDevices[0].deviceId
+        });
       }
       if (
-        this.state.settings.selectedVideoDevice === '' &&
+        this.props.settings.selectedVideoDevice === '' &&
         data.videoDevices.length > 0
       ) {
-        this.state.settings.selectedVideoDevice = data.videoDevices[0].deviceId;
+        this.props.setSettings({
+          selectedVideoDevice : data.videoDevices[0].deviceId
+        });
       }
 
       // if (
@@ -519,8 +522,8 @@ class LoginForm extends React.Component {
 
   startPreview = (permissionTestMode = false) => {
     closeMediaStream(window.stream);
-    let audioSource = this.state.settings.selectedAudioDevice;
-    let videoSource = this.state.settings.selectedVideoDevice;
+    let audioSource = this.props.settings.selectedAudioDevice;
+    let videoSource = this.props.settings.selectedVideoDevice;
     let videoElement, soundMeterProcess;
     if (!permissionTestMode) {
       videoElement = document.getElementById('previewVideo');
@@ -566,18 +569,18 @@ class LoginForm extends React.Component {
         }
         let data = { videoDevices, audioDevices, audioOutputDevices };
         if (
-          this.state.settings.selectedAudioDevice === '' &&
+          this.props.settings.selectedAudioDevice === '' &&
           data.audioDevices.length > 0
         ) {
-          this.state.settings.selectedAudioDevice =
-            data.audioDevices[0].deviceId;
+          this.props.setSettings({
+            selectedAudioDevice: data.audioDevices[0].deviceId
+          });
         }
         if (
-          this.state.settings.selectedVideoDevice === '' &&
+          this.props.settings.selectedVideoDevice === '' &&
           data.videoDevices.length > 0
         ) {
-          this.state.settings.selectedVideoDevice =
-            data.videoDevices[0].deviceId;
+          this.props.setSettings({ selectedVideoDevice: data.videoDevices[0].deviceId })
         }
         this.setState({
           audioDevices: data.audioDevices,
@@ -1028,11 +1031,11 @@ class LoginForm extends React.Component {
               <>
                 <Formik
                   initialValues={{
-                    selectedAudioDevice: this.state.settings
-                      ? this.state.settings.selectedAudioDevice
+                    selectedAudioDevice: this.props.settings
+                      ? this.props.settings.selectedAudioDevice
                       : null,
-                    selectedVideoDevice: this.state.settings
-                      ? this.state.settings.selectedVideoDevice
+                    selectedVideoDevice: this.props.settings
+                      ? this.props.settings.selectedVideoDevice
                       : null,
                     // selectedAudioOutputDevice: this.state.settings
                     //   ? this.state.settings.selectedAudioOutputDevice

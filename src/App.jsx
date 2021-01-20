@@ -512,7 +512,7 @@ class OldAppUI extends React.Component {
                             roomId={this.props.loginInfo.roomId}
                             collapsed={this.props.roomState.collapsed}
                             client={context.client}
-                            settings={this.props.settings}
+                            settings={context.settings}
                             localAudioEnabled={localAudioEnabled}
                             localVideoEnabled={localVideoEnabled}
                             vidFit={vidFit}
@@ -520,7 +520,6 @@ class OldAppUI extends React.Component {
                             ref={ref => {
                               this.conference = ref;
                             }}
-                            isScreenSharing={screenSharingEnabled}
                             onScreenToggle={() =>
                               this._handleScreenSharing(!screenSharingEnabled)
                             }

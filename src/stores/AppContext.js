@@ -34,9 +34,7 @@ class AppContextProvider extends Component {
       isFullScreen: false,
       vidFit: false,
       messages: [],
-      hasUnreadMessages: false,
-      audioOnly: false,
-      videoOnly: false
+      hasUnreadMessages: false
     }
   };
   render() {

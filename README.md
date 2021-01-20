@@ -30,7 +30,6 @@ cp example.env .env
 
 Host your token generation service [following this guide](https://100ms.gitbook.io/100ms/helpers/runkit)
 
-Update `HMS_ENDPOINT` key in `.env` to 'wss://prod-in.100ms.live'
 Update the `TOKEN_ENDPOINT` in `.env` file with your token generation service endpoint (eg. `https://ms-services-vjml47hk9gmu.runkit.sh/`)
 
 ### Firebase config

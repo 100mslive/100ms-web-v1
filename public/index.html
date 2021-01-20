@@ -1,37 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>100ms Conference</title>
-    <meta http-equiv="Cache-Control" content="max-age=0, must-revalidate"/>
-    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="max-age=0, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <link rel="icon" type="image/x-icon" href="favicon.ico"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
 
-    <script
-  src="https://browser.sentry-cdn.com/5.29.0/bundle.min.js"
-  integrity="sha384-/dYT/04VSU9ItKRPTkWeVZ0kqRsVh/T/5rNCjzBwpx7sYeeueKgJzGMNXSal3xoo"
-  crossorigin="anonymous"
-></script>
-<script>
-    Sentry.init({
-      dsn: "https://examplePublicKey@o0.ingest.sentry.io/0",
-      beforeSend(event, hint) {
-        // Check if it is an exception, and if so, show the report dialog
-        if (event.exception) {
-          Sentry.showReportDialog({ eventId: event.event_id });
-        }
-        return event;
-      },
-    });
-  </script>
-</head>
-
-<body>
-    <div id="app" style="height:100%"></div>
-</body>
-
+  <body>
+    <div id="app" style="height: 100%"></div>
+  </body>
 </html>

@@ -116,7 +116,7 @@ class OldAppUI extends React.Component {
     this.props.setRoomState({
       loading: true,
     });
-    this.hideMessage = () => { };
+    this.hideMessage = () => {};
     //TODO this should reflect in initialization as well
 
     ![ROLES.LIVE_RECORD, ROLES.VIEWER].includes(this.role) &&
@@ -210,15 +210,18 @@ class OldAppUI extends React.Component {
         loading: false,
       });
 
-
       this._notification(
         'Connected!',
-        `Welcome to the ${this.props.loginInfo.roomName || '100ms'} room => ${this.props.loginInfo.roomId}`
+        `Welcome to the ${this.props.loginInfo.roomName || '100ms'} room => ${
+          this.props.loginInfo.roomId
+        }`
       );
 
       // Local video & audio are disabled for the 'live-record'
       // and 'viewer' roles. Their local stream is also not published.
-      if (![ROLES.LIVE_RECORD, ROLES.VIEWER].includes(this.props.loginInfo.role)) {
+      if (
+        ![ROLES.LIVE_RECORD, ROLES.VIEWER].includes(this.props.loginInfo.role)
+      ) {
         await this.conference.handleLocalStream();
       }
     } catch (error) {

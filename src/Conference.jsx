@@ -6,7 +6,7 @@ import { Gallery } from './components/Conference/gallery';
 import { Pinned } from './components/Conference/pinned';
 import PeerState, { onRoomStateChange } from './utils/state';
 import { getLocalStreamException } from './utils';
-import { AppContext } from "./stores/AppContext";
+import { AppContext } from './stores/AppContext';
 
 const modes = {
   GALLERY: 'GALLERY',
@@ -338,29 +338,29 @@ class Conference extends React.Component {
     if (localStream) videoCount++;
     if (localScreen) videoCount++;
 
-    if(client) return (
-      
-      <>
-        {this.state.mode === modes.PINNED ? (
-          <Pinned
-            streams={streams}
-            audioMuted={audioMuted}
-            videoMuted={videoMuted}
-            videoCount={videoCount}
-            localStream={localStream}
-            localScreen={localScreen}
-            client={client}
-            id={id}
-            loginInfo={this.props.loginInfo}
-            pinned={this.state.pinned}
-            onUnpin={() => {
-              this.setState({
-                mode: modes.GALLERY,
-              });
-            }}
-            onRequest={this._onRequest}
-          />
-        ) : (
+    if (client)
+      return (
+        <>
+          {this.state.mode === modes.PINNED ? (
+            <Pinned
+              streams={streams}
+              audioMuted={audioMuted}
+              videoMuted={videoMuted}
+              videoCount={videoCount}
+              localStream={localStream}
+              localScreen={localScreen}
+              client={client}
+              id={id}
+              loginInfo={this.props.loginInfo}
+              pinned={this.state.pinned}
+              onUnpin={() => {
+                this.setState({
+                  mode: modes.GALLERY,
+                });
+              }}
+              onRequest={this._onRequest}
+            />
+          ) : (
             <Gallery
               streams={streams}
               audioMuted={audioMuted}
@@ -380,48 +380,47 @@ class Conference extends React.Component {
               onRequest={this._onRequest}
             />
           )}
-        <AppContext.Consumer>
-          {context => (
-            <Controls
-              role={role}
-              isMuted={this.state.audioMuted}
-              isCameraOn={!this.state.videoMuted}
-              screenSharingEnabled={context.roomState.screenSharingEnabled}
-              onScreenToggle={this.props.onScreenToggle}
-              onLeave={this.props.onLeave}
-              onMicToggle={() => {
-                this.muteMediaTrack('audio', this.state.audioMuted);
-              }}
-              onCamToggle={() => {
-                this.muteMediaTrack('video', this.state.videoMuted);
-              }}
-              onChatToggle={this.props.onChatToggle}
-              isChatOpen={this.props.isChatOpen}
-              loginInfo={this.props.loginInfo}
-              hasUnreadMessages={this.props.hasUnreadMessages}
-            />
-          )}
+          <AppContext.Consumer>
+            {context => (
+              <Controls
+                role={role}
+                isMuted={this.state.audioMuted}
+                isCameraOn={!this.state.videoMuted}
+                screenSharingEnabled={context.roomState.screenSharingEnabled}
+                onScreenToggle={this.props.onScreenToggle}
+                onLeave={this.props.onLeave}
+                onMicToggle={() => {
+                  this.muteMediaTrack('audio', this.state.audioMuted);
+                }}
+                onCamToggle={() => {
+                  this.muteMediaTrack('video', this.state.videoMuted);
+                }}
+                onChatToggle={this.props.onChatToggle}
+                isChatOpen={this.props.isChatOpen}
+                loginInfo={this.props.loginInfo}
+                hasUnreadMessages={this.props.hasUnreadMessages}
+              />
+            )}
           </AppContext.Consumer>
-        {this.state.localStreamError && (
-          <Modal
-            visible={!!this.state.localStreamError}
-            title={this.state.localStreamError.title}
-            footer={[
-              <Button
-                key="submit"
-                type="primary"
-                onClick={() => this.props.cleanUp()}
-              >
-                Try Again
-              </Button>,
-            ]}
-          >
-            <p>{this.state.localStreamError.message}</p>
-          </Modal>
-        )}
-      </>
-          
-    );
+          {this.state.localStreamError && (
+            <Modal
+              visible={!!this.state.localStreamError}
+              title={this.state.localStreamError.title}
+              footer={[
+                <Button
+                  key="submit"
+                  type="primary"
+                  onClick={() => this.props.cleanUp()}
+                >
+                  Try Again
+                </Button>,
+              ]}
+            >
+              <p>{this.state.localStreamError.message}</p>
+            </Modal>
+          )}
+        </>
+      );
     return <></>;
   };
 }

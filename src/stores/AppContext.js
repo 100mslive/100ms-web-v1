@@ -1,4 +1,4 @@
-import React, { Component }  from 'react';
+import React, { Component } from 'react';
 
 const AppContext = React.createContext();
 
@@ -11,7 +11,7 @@ class AppContextProvider extends Component {
       roomId: '',
       displayName: '',
       role: '',
-      env: ''
+      env: '',
     },
     settings: {
       selectedAudioDevice: '',
@@ -20,8 +20,8 @@ class AppContextProvider extends Component {
       bandwidth: 256,
       codec: 'vp8',
       frameRate: 20,
-      isDevMode: false, 
-      shouldApplyConstraints: false
+      isDevMode: false,
+      shouldApplyConstraints: false,
     },
     roomState: {
       isConnected: false,
@@ -34,41 +34,43 @@ class AppContextProvider extends Component {
       isFullScreen: false,
       vidFit: false,
       messages: [],
-      hasUnreadMessages: false
-    }
+      hasUnreadMessages: false,
+    },
   };
   render() {
     return (
-      <AppContext.Provider value={{
-        loginInfo: this.state.loginInfo,
-        settings: this.state.settings,
-        client: this.state.client,
-        roomState: this.state.roomState,
-        setSettings: settings => {
-          this.setState({
-            settings: { ...this.state.settings, ...settings }
-          })
-        },
-        setLoginInfo: loginInfo => {
-          this.setState({
-            loginInfo: loginInfo
-          })
-        },
-        setClient: client => {
-          this.setState({
-            client: client
-          })
-        },
-        setRoomState: (roomState) => {
-          this.setState({
-            roomState: { ...this.state.roomState, ...roomState }
-          })
-        }
-      }}>
-        { this.props.children } 
+      <AppContext.Provider
+        value={{
+          loginInfo: this.state.loginInfo,
+          settings: this.state.settings,
+          client: this.state.client,
+          roomState: this.state.roomState,
+          setSettings: settings => {
+            this.setState({
+              settings: { ...this.state.settings, ...settings },
+            });
+          },
+          setLoginInfo: loginInfo => {
+            this.setState({
+              loginInfo: loginInfo,
+            });
+          },
+          setClient: client => {
+            this.setState({
+              client: client,
+            });
+          },
+          setRoomState: roomState => {
+            this.setState({
+              roomState: { ...this.state.roomState, ...roomState },
+            });
+          },
+        }}
+      >
+        {this.props.children}
       </AppContext.Provider>
-    )
+    );
   }
-};
+}
 
 export { AppContext, AppContextProvider };

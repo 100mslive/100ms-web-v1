@@ -98,7 +98,7 @@ class LoginForm extends React.Component {
     this.role =
       getRequest() && getRequest().hasOwnProperty('role')
         ? getRequest().role
-      : props.loginInfo && props.loginInfo.role
+        : props.loginInfo && props.loginInfo.role
         ? props.loginInfo.role
         : '';
     this.roomId =
@@ -156,7 +156,7 @@ class LoginForm extends React.Component {
         bandwidth: 256,
         codec: 'vp8',
         isDevMode: true,
-      })
+      });
     }
 
     if (this.role === ROLES.LIVE_RECORD && this.roomId !== '') {
@@ -376,7 +376,7 @@ class LoginForm extends React.Component {
         data.audioDevices.length > 0
       ) {
         this.props.setSettings({
-          selectedAudioDevice: data.audioDevices[0].deviceId
+          selectedAudioDevice: data.audioDevices[0].deviceId,
         });
       }
       if (
@@ -384,7 +384,7 @@ class LoginForm extends React.Component {
         data.videoDevices.length > 0
       ) {
         this.props.setSettings({
-          selectedVideoDevice : data.videoDevices[0].deviceId
+          selectedVideoDevice: data.videoDevices[0].deviceId,
         });
       }
 
@@ -573,14 +573,16 @@ class LoginForm extends React.Component {
           data.audioDevices.length > 0
         ) {
           this.props.setSettings({
-            selectedAudioDevice: data.audioDevices[0].deviceId
+            selectedAudioDevice: data.audioDevices[0].deviceId,
           });
         }
         if (
           this.props.settings.selectedVideoDevice === '' &&
           data.videoDevices.length > 0
         ) {
-          this.props.setSettings({ selectedVideoDevice: data.videoDevices[0].deviceId })
+          this.props.setSettings({
+            selectedVideoDevice: data.videoDevices[0].deviceId,
+          });
         }
         this.setState({
           audioDevices: data.audioDevices,

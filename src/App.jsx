@@ -459,7 +459,7 @@ class OldAppUI extends React.Component {
           <div className="app-header-right">
             <MediaSettings
               onMediaSettingsChanged={this._onMediaSettingsChanged}
-              settings={this.props.roomState}
+              settings={this.props.settings}
               isLoggedIn={login}
             />
           </div>

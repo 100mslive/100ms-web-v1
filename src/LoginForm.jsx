@@ -146,7 +146,6 @@ class LoginForm extends React.Component {
     );
     console.log('Making test client');
 
-    this.state.settings = {};
     if (!this.props.settings.codec) {
       this.props.setSettings({
         selectedAudioDevice: '',
@@ -603,7 +602,9 @@ class LoginForm extends React.Component {
   };
 
   updateDevice = (name, value) => {
-    this.state.settings[name] = value;
+    this.props.setSettings({
+      [name]: value
+    });
     //console.log("Inside updateDevice");
     this.startPreview(false);
   };

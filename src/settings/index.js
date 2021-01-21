@@ -160,8 +160,9 @@ export default class MediaSettings extends React.Component {
         // Refresh button list in case labels have become available
         return navigator.mediaDevices.enumerateDevices();
       })
-      .then(devces => {})
-      .catch(erro => {});
+      .catch(error => {
+        this.props.setLocalStreamError(error);
+      });
   };
 
   stopPreview = () => {

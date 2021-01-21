@@ -3,12 +3,8 @@ import {
   Layout,
   Button,
   Modal,
-  Icon,
   notification,
-  Card,
   Spin,
-  Tooltip,
-  message,
 } from 'antd';
 const { confirm } = Modal;
 const { Header, Content, Sider } = Layout;
@@ -273,57 +269,6 @@ class OldAppUI extends React.Component {
       collapsed: collapsed,
       hasUnreadMessages: false,
     });
-  };
-
-  _onVidFitClickHandler = () => {
-    this.props.setRoomState({
-      vidFit: !this.props.roomState.vidFit,
-    });
-  };
-
-  _onFullScreenClickHandler = () => {
-    let docElm = document.documentElement;
-
-    if (this._fullscreenState()) {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } else if (document.webkitCancelFullScreen) {
-        document.webkitCancelFullScreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      }
-
-      this.props.setRoomState({ isFullScreen: false });
-    } else {
-      if (docElm.requestFullscreen) {
-        docElm.requestFullscreen();
-      }
-      //FireFox
-      else if (docElm.mozRequestFullScreen) {
-        docElm.mozRequestFullScreen();
-      }
-      //Chrome等
-      else if (docElm.webkitRequestFullScreen) {
-        docElm.webkitRequestFullScreen();
-      }
-      //IE11
-      else if (elem.msRequestFullscreen) {
-        elem.msRequestFullscreen();
-      }
-
-      this.props.setRoomState({ isFullScreen: true });
-    }
-  };
-
-  _fullscreenState = () => {
-    return (
-      document.fullscreen ||
-      document.webkitIsFullScreen ||
-      document.mozFullScreen ||
-      false
-    );
   };
 
   _onMediaSettingsChanged = (

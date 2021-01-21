@@ -3,48 +3,13 @@ import { Modal, Button, Select, Tooltip, Switch, InputNumber } from 'antd';
 import SoundMeter from './soundmeter';
 import PropTypes from 'prop-types';
 import './style.scss';
+import {
+  attachMediaStream,
+  closeMediaStream,
+  updateInputDevices,
+} from '../utils';
 
 const Option = Select.Option;
-
-const closeMediaStream = function (stream) {
-  if (!stream) {
-    return;
-  }
-  if (
-    MediaStreamTrack &&
-    MediaStreamTrack.prototype &&
-    MediaStreamTrack.prototype.stop
-  ) {
-    var tracks, i, len;
-
-    if (stream.getTracks) {
-      tracks = stream.getTracks();
-      for (i = 0, len = tracks.length; i < len; i += 1) {
-        tracks[i].stop();
-      }
-    } else {
-      tracks = stream.getAudioTracks();
-      for (i = 0, len = tracks.length; i < len; i += 1) {
-        tracks[i].stop();
-      }
-
-      tracks = stream.getVideoTracks();
-      for (i = 0, len = tracks.length; i < len; i += 1) {
-        tracks[i].stop();
-      }
-    }
-    // Deprecated by the spec, but still in use.
-  } else if (typeof stream.stop === 'function') {
-    console.log('closeMediaStream() | calling stop() on the MediaStream');
-    stream.stop();
-  }
-};
-
-// Attach a media stream to an element.
-const attachMediaStream = function (element, stream) {
-  element.srcObject = stream;
-};
-
 export default class MediaSettings extends React.Component {
   constructor(props) {
     super(props);
@@ -71,44 +36,19 @@ export default class MediaSettings extends React.Component {
     }
   }
 
-  updateInputDevices = () => {
-    return new Promise((pResolve, pReject) => {
-      let videoDevices = [];
-      let audioDevices = [];
-      let audioOutputDevices = [];
-      navigator.mediaDevices
-        .enumerateDevices()
-        .then(devices => {
-          for (let device of devices) {
-            if (device.kind === 'videoinput') {
-              videoDevices.push(device);
-            } else if (device.kind === 'audioinput') {
-              audioDevices.push(device);
-            } else if (device.kind === 'audiooutput') {
-              audioOutputDevices.push(device);
-            }
-          }
-        })
-        .then(() => {
-          let data = { videoDevices, audioDevices, audioOutputDevices };
-          pResolve(data);
-        });
-    });
-  };
-
-  componentDidMount() {
-    this.updateInputDevices().then(data => {
+  setDeviceState = () => {
+    updateInputDevices().then(data => {
       if (
         this.state.selectedAudioDevice === '' &&
         data.audioDevices.length > 0
       ) {
-        this.state.selectedAudioDevice = data.audioDevices[0].deviceId;
+        this.setState({ selectedAudioDevice: data.audioDevices[0].deviceId });
       }
       if (
         this.state.selectedVideoDevice === '' &&
         data.videoDevices.length > 0
       ) {
-        this.state.selectedVideoDevice = data.videoDevices[0].deviceId;
+        this.setState({ selectedVideoDevice: data.videoDevices[0].deviceId });
       }
 
       this.setState({
@@ -128,6 +68,10 @@ export default class MediaSettings extends React.Component {
         }
       });
     });
+  };
+
+  componentDidMount() {
+    this.setDeviceState();
   }
 
   soundMeterProcess = () => {
@@ -151,17 +95,17 @@ export default class MediaSettings extends React.Component {
     };
     navigator.mediaDevices
       .getUserMedia(constraints)
-      .then(function (stream) {
+      .then(stream => {
         window.stream = stream; // make stream available to console
         //videoElement.srcObject = stream;
         attachMediaStream(videoElement, stream);
         soundMeter.connectToSource(stream);
         setTimeout(soundMeterProcess, 100);
-        // Refresh button list in case labels have become available
-        return navigator.mediaDevices.enumerateDevices();
+        this.setDeviceState();
       })
-      .then(devces => {})
-      .catch(erro => {});
+      .catch(error =>
+        console.log('Settings Stream Error: ', error.name, error)
+      );
   };
 
   stopPreview = () => {

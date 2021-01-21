@@ -60,19 +60,20 @@ class OldAppUI extends React.Component {
     }
   }
 
-  _cleanUp = async () => {
-    window.history.pushState(
-      {},
-      '100ms',
-      `${window.location.protocol}//${window.location.host}`
-    );
-    await this.conference.cleanUp();
-    await this.props.client.disconnect();
+  _cleanUp = async (home = true) => {
+    let redirectURL = home
+      ? `${window.location.protocol}//${window.location.host}`
+      : window.location.href;
+    window.history.pushState({}, '100ms', redirectURL);
+
+    this.conference && (await this.conference.cleanUp());
+    this.props.client && (await this.props.client.disconnect());
     this.props.setClient(null);
     this.props.setRoomState({
       isConnected: false,
       login: false,
     });
+    location.reload();
   };
 
   _notification = (message, description) => {
@@ -449,6 +450,7 @@ class OldAppUI extends React.Component {
               onMediaSettingsChanged={this._onMediaSettingsChanged}
               settings={this.props.settings}
               isLoggedIn={login}
+              setLocalStreamError={this.props.setLocalStreamError}
             />
           </div>
         </Header>
@@ -531,6 +533,7 @@ class OldAppUI extends React.Component {
                           hasUnreadMessages={
                             this.props.roomState.hasUnreadMessages
                           }
+                          setLocalStreamError={this.props.setLocalStreamError}
                         />
                       )}
                     </AppContext.Consumer>
@@ -555,10 +558,30 @@ class OldAppUI extends React.Component {
                     setClient={context.setClient}
                     roomState={context.roomState}
                     setRoomState={context.setRoomState}
+                    setLocalStreamError={this.props.setLocalStreamError}
                   />
                 )}
               </AppContext.Consumer>
             </div>
+          )}
+          {this.props.localStreamError && (
+            <Modal
+              visible={!!this.props.localStreamError}
+              title={this.props.localStreamError.title}
+              footer={[
+                <Button
+                  key="submit"
+                  type="primary"
+                  onClick={() => {
+                    this._cleanUp(false);
+                  }}
+                >
+                  Try Again
+                </Button>,
+              ]}
+            >
+              <p>{this.props.localStreamError.message}</p>
+            </Modal>
           )}
         </Content>
       </Layout>
@@ -580,6 +603,8 @@ class OldApp extends React.Component {
             setRoomState={context.setRoomState}
             setClient={context.setClient}
             client={context.client}
+            localStreamError={context.localStreamError}
+            setLocalStreamError={context.setLocalStreamError}
           />
         )}
       </AppContext.Consumer>

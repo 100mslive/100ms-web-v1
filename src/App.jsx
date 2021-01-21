@@ -60,20 +60,24 @@ class OldAppUI extends React.Component {
     }
   }
 
-  _cleanUp = async (home = true) => {
-    let redirectURL = home
-      ? `${window.location.protocol}//${window.location.host}`
-      : window.location.href;
-    window.history.pushState({}, '100ms', redirectURL);
+  _cleanUp = async (shouldRedirectToHome = true) => {
+    if (shouldRedirectToHome) {
+      window.history.pushState(
+        {},
+        '100ms',
+        `${window.location.protocol}//${window.location.host}`
+      );
 
-    this.conference && (await this.conference.cleanUp());
-    this.props.client && (await this.props.client.disconnect());
-    this.props.setClient(null);
-    this.props.setRoomState({
-      isConnected: false,
-      login: false,
-    });
-    location.reload();
+      this.conference && (await this.conference.cleanUp());
+      this.props.client && (await this.props.client.disconnect());
+      this.props.setClient(null);
+      this.props.setRoomState({
+        isConnected: false,
+        login: false,
+      });
+    } else {
+      window.location.reload();
+    }
   };
 
   _notification = (message, description) => {

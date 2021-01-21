@@ -27,10 +27,6 @@ class LoginForm extends React.Component {
       formStage: 'ROOM',
       permissionGranted: false,
     };
-  }
-
-  componentDidMount = async () => {
-    console.log(`%c[APP] Role=${this.props.loginInfo.role}`);
 
     let role = '';
     let roomId = '';
@@ -42,9 +38,7 @@ class LoginForm extends React.Component {
     if (getRequest() && getRequest().hasOwnProperty('room')) {
       roomId = getRequest().room;
     }
-    if (process.env.SFU_ENV) {
-      env = process.env.SFU_ENV;
-    } else if (getRequest() && getRequest().hasOwnProperty('env')) {
+    if (getRequest() && getRequest().hasOwnProperty('env')) {
       env = getRequest().env;
     }
 
@@ -53,6 +47,10 @@ class LoginForm extends React.Component {
       roomId,
       env,
     });
+  }
+
+  componentDidMount = async () => {
+    console.log(`%c[APP] Role=${this.props.loginInfo.role}`);
 
     this.setState({
       isSupported: deviceSupport().supported,
@@ -474,7 +472,7 @@ class LoginForm extends React.Component {
                     initialValues={{
                       roomName: '',
                       displayName: this.props.loginInfo.displayName,
-                      env: '',
+                      env: process.env.SFU_ENV || '',
                       role: 'Host',
                       isRecording: false,
                     }}

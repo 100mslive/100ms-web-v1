@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Layout,
-  Button,
-  Modal,
-  notification,
-  Spin,
-} from 'antd';
+import { Layout, Button, Modal, notification, Spin } from 'antd';
 const { confirm } = Modal;
 const { Header, Content, Sider } = Layout;
 import MediaSettings from './settings';

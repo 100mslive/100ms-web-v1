@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { getLocalStreamException } from '../utils';
 
 const AppContext = React.createContext();
 
 class AppContextProvider extends Component {
   state = {
     client: null,
+    localStreamError: null,
     loginInfo: {
       roomName: '',
       roomId: '',
@@ -43,7 +45,11 @@ class AppContextProvider extends Component {
           loginInfo: this.state.loginInfo,
           settings: this.state.settings,
           client: this.state.client,
+          localStreamError: this.state.localStreamError,
           roomState: this.state.roomState,
+          setLocalStreamError: error => {
+            this.setState({ localStreamError: getLocalStreamException(error) });
+          },
           setSettings: (settings, cb) => {
             this.setState(
               {

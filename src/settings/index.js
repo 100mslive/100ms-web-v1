@@ -103,9 +103,9 @@ export default class MediaSettings extends React.Component {
         setTimeout(soundMeterProcess, 100);
         this.setDeviceState();
       })
-      .catch(error =>
-        console.log('Settings Stream Error: ', error.name, error)
-      );
+      .catch(error => {
+        this.props.setLocalStreamError(error);
+      });
   };
 
   stopPreview = () => {

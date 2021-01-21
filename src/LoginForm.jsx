@@ -403,7 +403,7 @@ class LoginForm extends React.Component {
       })
       .catch(error => {
         //TODO - look for only permission error. Rest of the errors should be handled
-        console.log('Preview Error', error.name, error);
+        this.props.setLocalStreamError(error);
         this.setState({
           permissionGranted: false,
           permissionText:

@@ -204,9 +204,7 @@ class Conference extends React.Component {
           this.muteMediaTrack('video', this.state.videoMuted);
       })
       .catch(error => {
-        this.setState({
-          localStreamError: getLocalStreamException(error),
-        });
+        this.props.setLocalStreamError(error);
       });
   };
 
@@ -406,23 +404,6 @@ class Conference extends React.Component {
               />
             )}
           </AppContext.Consumer>
-          {this.state.localStreamError && (
-            <Modal
-              visible={!!this.state.localStreamError}
-              title={this.state.localStreamError.title}
-              footer={[
-                <Button
-                  key="submit"
-                  type="primary"
-                  onClick={() => this.props.cleanUp()}
-                >
-                  Try Again
-                </Button>,
-              ]}
-            >
-              <p>{this.state.localStreamError.message}</p>
-            </Modal>
-          )}
         </>
       );
     return <></>;

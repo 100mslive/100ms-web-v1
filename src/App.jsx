@@ -365,7 +365,6 @@ class OldAppUI extends React.Component {
   }
 
   render() {
-
     const {
       login,
       loading,

@@ -404,7 +404,7 @@ class OldAppUI extends React.Component {
               className="min-h-screen flex items-center justify-center w-full py-8 px-4 sm:px-6 lg:px-8"
               style={{ backgroundColor: '#1a1619' }}
             >
-              <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100">
+              <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100 my-3">
                 <div className="">
                   <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
                     100ms Conference
@@ -495,7 +495,7 @@ class OldAppUI extends React.Component {
               <Spin size="large" tip="Connecting..." />
             </div>
           ) : (
-            <div className="relative w-full mt-16">
+            <div className="relative w-full">
               <AppContext.Consumer>
                 {context => (
                   <LoginForm

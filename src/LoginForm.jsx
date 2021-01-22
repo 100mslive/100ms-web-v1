@@ -430,12 +430,15 @@ class LoginForm extends React.Component {
     return (
       <>
         {this.state.isSupported && (
-          <div className="relative -mt-24 z-0">
+          <div className="relative z-0">
             {this.state.formStage && this.state.formStage === 'ROOM' && (
               <>
                 <div
-                  className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
-                  style={{ backgroundColor: '#1a1619' }}
+                  className=" flex items-center justify-center w-full px-4 sm:px-6 lg:px-8"
+                  style={{
+                    backgroundColor: '#1a1619',
+                    minHeight: 'calc(100vh - 64px)',
+                  }}
                 >
                   <div className="overflow-hidden justify-right items-right shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100">
                     <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
@@ -503,8 +506,11 @@ class LoginForm extends React.Component {
                     {({ errors, touched, initialValues }) => (
                       <Form>
                         <div
-                          className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
-                          style={{ backgroundColor: '#1a1619' }}
+                          className=" flex items-center justify-center w-full px-4 sm:px-6 lg:px-8"
+                          style={{
+                            backgroundColor: '#1a1619',
+                            minHeight: 'calc(100vh - 64px)',
+                          }}
                         >
                           <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 p-6 bg-gray-100">
                             <div>
@@ -672,8 +678,11 @@ class LoginForm extends React.Component {
                   {({ errors, touched, initialValues }) => (
                     <Form>
                       <div
-                        className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
-                        style={{ backgroundColor: '#1a1619' }}
+                        className=" flex items-center justify-center w-full px-4 sm:px-6 lg:px-8"
+                        style={{
+                          backgroundColor: '#1a1619',
+                          minHeight: 'calc(100vh - 64px)',
+                        }}
                       >
                         <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 p-6 bg-gray-100">
                           <div>
@@ -808,10 +817,13 @@ class LoginForm extends React.Component {
             {this.state.formStage && this.state.formStage === 'PERMISSION' && (
               <>
                 <div
-                  className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
-                  style={{ backgroundColor: '#1a1619' }}
+                  className=" flex items-center justify-center w-full px-4 sm:px-6 lg:px-8"
+                  style={{
+                    backgroundColor: '#1a1619',
+                    minHeight: 'calc(100vh - 64px)',
+                  }}
                 >
-                  <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100">
+                  <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100 my-3">
                     <div className="">
                       <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
                         100ms Conference
@@ -870,10 +882,13 @@ class LoginForm extends React.Component {
                   {({ values, initialValues }) => (
                     <Form>
                       <div
-                        className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
-                        style={{ backgroundColor: '#1a1619' }}
+                        className=" flex items-center justify-center w-full px-4 sm:px-6 lg:px-8"
+                        style={{
+                          backgroundColor: '#1a1619',
+                          minHeight: 'calc(100vh - 64px)',
+                        }}
                       >
-                        <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100">
+                        <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100 my-3">
                           <div className="">
                             <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
                               <>100ms Conference</>
@@ -1112,10 +1127,13 @@ class LoginForm extends React.Component {
         {!this.state.isSupported && (
           <>
             <div
-              className="min-h-screen flex items-center justify-center w-full py-12 px-4 sm:px-6 lg:px-8"
-              style={{ backgroundColor: '#1a1619' }}
+              className=" flex items-center justify-center w-full px-4 sm:px-6 lg:px-8"
+              style={{
+                backgroundColor: '#1a1619',
+                minHeight: 'calc(100vh - 64px)',
+              }}
             >
-              <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100">
+              <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100 my-3">
                 <div className="">
                   <h2 className="mt-2 text-center text-3xl leading-9 font-extrabold text-gray-900">
                     100ms Conference

@@ -445,7 +445,10 @@ class OldAppUI extends React.Component {
                   />
                 </div>
               </Sider>
-              <Layout className="app-right-layout">
+              <Layout
+                className="app-right-layout"
+                style={{ height: 'calc(100vh - 64px)' }}
+              >
                 <Content style={{ flex: 1, position: 'relative' }}>
                   <div>
                     <AppContext.Consumer>
@@ -485,7 +488,12 @@ class OldAppUI extends React.Component {
               </Layout>
             </Layout>
           ) : loading ? (
-            <Spin size="large" tip="Connecting..." />
+            <div
+              className="flex items-center justify-center"
+              style={{ height: 'calc(100vh - 64px)' }}
+            >
+              <Spin size="large" tip="Connecting..." />
+            </div>
           ) : (
             <div className="relative w-full mt-16">
               <AppContext.Consumer>

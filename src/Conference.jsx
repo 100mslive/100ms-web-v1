@@ -296,7 +296,7 @@ class Conference extends React.Component {
   };
 
   _onRequest = (uid, request) => {
-    this.peerState.setRequest(uid, request);
+    this.peerState && this.peerState.setRequest(uid, request);
   };
 
   _onChangeVideoPosition = data => {

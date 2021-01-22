@@ -26,6 +26,7 @@ class LoginForm extends React.Component {
     this.state = {
       formStage: 'ROOM',
       permissionGranted: false,
+      isSupported: deviceSupport().supported,
     };
 
     let role = '';

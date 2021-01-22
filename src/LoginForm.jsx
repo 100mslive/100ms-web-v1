@@ -31,6 +31,7 @@ class LoginForm extends React.Component {
     let role = '';
     let roomId = '';
     let env = process.env.SFU_ENV || '';
+    let displayName = localStorage.getItem('loginInfo.displayName') || props.loginInfo.displayName || '';
 
     if (getRequest() && getRequest().hasOwnProperty('role')) {
       role = getRequest().role;
@@ -42,10 +43,12 @@ class LoginForm extends React.Component {
       env = getRequest().env;
     }
 
+
     this.props.setLoginInfo({
       role,
       roomId,
       env,
+      displayName
     });
   }
 
@@ -299,7 +302,7 @@ class LoginForm extends React.Component {
     if (values.role) this.props.setLoginInfo({ role: values.role });
     if (this.state.formValues)
       this.props.setLoginInfo({
-        displayName: this.state.formValues.displayName,
+        displayName: this.state.formValues.displayName || localStorage.getItem('loginInfo.displayName') || '',
         roomName: this.state.formValues.roomName,
         env: this.state.formValues.env,
       });

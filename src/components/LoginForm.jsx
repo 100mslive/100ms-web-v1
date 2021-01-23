@@ -11,14 +11,13 @@ import {
   deviceSupport,
   getUserMedia,
   getPermissionStatus,
-} from '../src/utils';
+} from '../utils';
 import SoundMeter from './settings/soundmeter';
 
-import '../styles/css/login.scss';
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
-import { ROLES } from './constants';
-import LoginTextField from './components/LoginTextField';
+import { ROLES } from '../constants';
+import LoginTextField from './LoginTextField';
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -31,8 +30,11 @@ class LoginForm extends React.Component {
 
     let role = '';
     let roomId = '';
-    let env = process.env.SFU_ENV || '';
-    let displayName = localStorage.getItem('loginInfo.displayName') || props.loginInfo.displayName || '';
+    let env = process.env.NEXT_PUBLIC_SFU_ENV || '';
+    let displayName =
+      localStorage.getItem('loginInfo.displayName') ||
+      props.loginInfo.displayName ||
+      '';
 
     if (getRequest() && getRequest().hasOwnProperty('role')) {
       role = getRequest().role;
@@ -44,12 +46,11 @@ class LoginForm extends React.Component {
       env = getRequest().env;
     }
 
-
     this.props.setLoginInfo({
       role,
       roomId,
       env,
-      displayName
+      displayName,
     });
   }
 
@@ -220,7 +221,7 @@ class LoginForm extends React.Component {
   };
 
   handleCreateSubmit = async values => {
-    const endpoint = process.env.CREATE_ROOM_ENDPOINT;
+    const endpoint = process.env.NEXT_PUBLIC_CREATE_ROOM_ENDPOINT;
     console.log('endpoint', endpoint);
     console.log('Create Room values: ', values);
     const response = await fetch(endpoint, {
@@ -303,7 +304,10 @@ class LoginForm extends React.Component {
     if (values.role) this.props.setLoginInfo({ role: values.role });
     if (this.state.formValues)
       this.props.setLoginInfo({
-        displayName: this.state.formValues.displayName || localStorage.getItem('loginInfo.displayName') || '',
+        displayName:
+          this.state.formValues.displayName ||
+          localStorage.getItem('loginInfo.displayName') ||
+          '',
         roomName: this.state.formValues.roomName,
         env: this.state.formValues.env,
       });
@@ -427,8 +431,8 @@ class LoginForm extends React.Component {
 
   render() {
     console.log(this.state.formStage);
-    const showEnv = !Boolean(process.env.SFU_ENV);
-    const showRoleSelect = Boolean(process.env.SFU_ENV);
+    const showEnv = !Boolean(process.env.NEXT_PUBLIC_SFU_ENV);
+    const showRoleSelect = Boolean(process.env.NEXT_PUBLIC_SFU_ENV);
 
     return (
       <>
@@ -479,7 +483,7 @@ class LoginForm extends React.Component {
                     initialValues={{
                       roomName: '',
                       displayName: this.props.loginInfo.displayName,
-                      env: process.env.SFU_ENV || '',
+                      env: process.env.NEXT_PUBLIC_SFU_ENV || '',
                       role: 'Host',
                       isRecording: false,
                     }}

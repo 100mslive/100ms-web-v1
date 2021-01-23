@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { Modal, Button, Tooltip, Input, Icon } from 'antd';
-import { ControlButton } from './components/Controls/ControlButton';
+import { ControlButton } from './controls/ControlButton';
 import ShareIcon from 'mdi-react/ShareIcon';
 
 export default class ToolShare extends React.Component {

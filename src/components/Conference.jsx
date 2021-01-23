@@ -1,12 +1,10 @@
+import { notification } from 'antd';
 import React from 'react';
-import { Button, Modal, notification } from 'antd';
-import { Controls } from './components/Controls';
-import '../styles/css/conference.scss';
-import { Gallery } from './components/Conference/gallery';
-import { Pinned } from './components/Conference/pinned';
-import PeerState, { onRoomStateChange } from './utils/state';
-import { getLocalStreamException } from './utils';
-import { AppContext } from './stores/AppContext';
+import { AppContext } from '../stores/AppContext';
+import { Gallery } from './conference/gallery';
+import { Pinned } from './conference/pinned';
+import { Controls } from './controls';
+import PeerState, { onRoomStateChange } from '../utils/state';
 
 const modes = {
   GALLERY: 'GALLERY',

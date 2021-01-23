@@ -100,7 +100,7 @@ samp {
 }
 q:before,
 q:after {
-  content: "none";
+  content: 'none';
 }
 textarea {
   overflow: auto;
@@ -160,3 +160,5 @@ body {
   width: 100%;
   height: 100%;
 }
+
+@import '~antd/dist/antd.css';

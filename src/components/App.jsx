@@ -5,22 +5,20 @@ const { Header, Content, Sider } = Layout;
 import MediaSettings from './settings';
 import ChatFeed from './chat/index';
 import Message from './chat/message';
-import bLogo from '../public/100ms-logo-on-black.png';
-import { AppContextProvider, AppContext } from './stores/AppContext';
-import '../styles/css/app.scss';
+import { AppContextProvider, AppContext } from '../stores/AppContext';
 
 import LoginForm from './LoginForm';
 import Conference from './Conference';
 import { HMSClient, HMSPeer, HMSClientConfig } from '@100mslive/hmsvideo-web';
-import { ENVS, ROLES } from './constants';
-import { dependencies } from '../package.json';
-import { getRequest } from './utils';
+import { ENVS, ROLES } from '../constants';
+import { dependencies } from '../../package.json';
+import { getRequest } from '../utils';
 
 const sdkVersion = dependencies['@100mslive/hmsvideo-web'].substring(1);
 console.info(`Using hmsvideo-web SDK version ${sdkVersion}`);
 
 async function getToken({ room_id, user_name, role = 'guest', env }) {
-  const endpoint = process.env.TOKEN_ENDPOINT;
+  const endpoint = process.env.NEXT_PUBLIC_TOKEN_ENDPOINT;
   const { token } = await fetch(endpoint, {
     method: 'POST',
     body: JSON.stringify({ room_id, user_name, env, role }),
@@ -79,7 +77,9 @@ class OldAppUI extends React.Component {
   };
 
   _createClient = async ({ userName, env, roomId, role }) => {
-    let url = `wss://${env}.${process.env.SFU_HOST || window.location.host}`;
+    let url = `wss://${env}.${
+      process.env.NEXT_PUBLIC_SFU_HOST || window.location.host
+    }`;
     let authToken = await getToken({
       env,
       room_id: roomId,
@@ -88,7 +88,6 @@ class OldAppUI extends React.Component {
     });
 
     console.log(`%cTOKEN IS: ${authToken}`, 'color: orange');
-
     console.log('Websocket URL', url);
 
     try {
@@ -385,7 +384,7 @@ class OldAppUI extends React.Component {
         >
           <div className="app-header-left">
             <a href="https://100ms.live/" target="_blank">
-              <img src={bLogo} className="h-8" />
+              <img src="/100ms-logo-on-black.png" className="h-8" />
             </a>
           </div>
           <div className="app-header-right">

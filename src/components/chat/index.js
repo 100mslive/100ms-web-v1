@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import ChatBubble from './chatbubble';
 import ChatInput from './chatinput';
-import './style.scss';
 
 export default class ChatFeed extends Component {
   constructor(props) {

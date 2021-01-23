@@ -8,7 +8,7 @@ import PhoneHangupIcon from 'mdi-react/PhoneHangupIcon';
 import TelevisionIcon from 'mdi-react/TelevisionIcon';
 import TelevisionOffIcon from 'mdi-react/TelevisionOffIcon';
 import VideoCheckIcon from 'mdi-react/VideoCheckIcon';
-import ToolShare from '../../ToolShare';
+import ToolShare from '../ToolShare';
 
 import { ROLES } from '../../constants';
 

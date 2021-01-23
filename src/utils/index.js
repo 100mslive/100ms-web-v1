@@ -75,44 +75,34 @@ const SingleSelect = ({ field, form, ...props }) => {
   const { options, updateDevice } = props;
   const { setFieldValue } = form;
   return (
-    <>
-      <FormControl variant="outlined">
-        <InputLabel id="demo-simple-select-outlined-label">{label}</InputLabel>
-        <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={form.values[name]}
-          label={label}
-          renderValue={value =>
-            options.find(device => device.deviceId === value).label
-          }
-        >
-          {options &&
-            options.map((option, index) => (
-              <div
-                onClick={e => {
-                  e.preventDefault();
-                  setFieldValue(name, option.deviceId);
-                  updateDevice(name, option.deviceId);
-                }}
-                key={index}
-              >
-                <MenuItem key={index} value={option.deviceId}>
-                  {option.label}
-                </MenuItem>
-              </div>
-            ))}
-        </Select>
-      </FormControl>
-      <style jsx="true">
-        {`
-          .MuiFormControl-root {
-            width: 100%;
-            margin-bottom: 12px;
-          }
-        `}
-      </style>
-    </>
+    <FormControl variant="outlined">
+      <InputLabel id="demo-simple-select-outlined-label">{label}</InputLabel>
+      <Select
+        labelId="demo-simple-select-outlined-label"
+        id="demo-simple-select-outlined"
+        value={form.values[name]}
+        label={label}
+        renderValue={value =>
+          options.find(device => device.deviceId === value).label
+        }
+      >
+        {options &&
+          options.map((option, index) => (
+            <div
+              onClick={e => {
+                e.preventDefault();
+                setFieldValue(name, option.deviceId);
+                updateDevice(name, option.deviceId);
+              }}
+              key={index}
+            >
+              <MenuItem key={index} value={option.deviceId}>
+                {option.label}
+              </MenuItem>
+            </div>
+          ))}
+      </Select>
+    </FormControl>
   );
 };
 

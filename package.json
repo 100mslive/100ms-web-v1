@@ -2,10 +2,10 @@
   "name": "hms-app-web",
   "version": "0.9.2",
   "description": "A web app built using 100mslive",
-  "main": "src/index.jsx",
   "scripts": {
-    "build": "webpack --mode production --env.production",
-    "start": "webpack-dev-server --config ./webpack.config.js --mode development --open",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "format": "prettier --write src"
   },
   "author": "100mslive",
@@ -46,6 +46,7 @@
     "logrocket": "^1.0.14",
     "logrocket-react": "^4.0.1",
     "mdi-react": "^6.4.0",
+    "next": "^10.0.5",
     "react": "^16.13.1",
     "react-container-dimensions": "^1.4.1",
     "react-dom": "^16.13.1",

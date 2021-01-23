@@ -1,16 +1,14 @@
 import React from 'react';
-import { ControlButton } from './ControlButton';
-import VideoIcon from 'mdi-react/VideoIcon';
-import VideocamOffIcon from 'mdi-react/VideocamOffIcon';
 import MicrophoneIcon from 'mdi-react/MicrophoneIcon';
 import MicrophoneOffIcon from 'mdi-react/MicrophoneOffIcon';
 import PhoneHangupIcon from 'mdi-react/PhoneHangupIcon';
 import TelevisionIcon from 'mdi-react/TelevisionIcon';
 import TelevisionOffIcon from 'mdi-react/TelevisionOffIcon';
-import VideoCheckIcon from 'mdi-react/VideoCheckIcon';
-import ToolShare from '../ToolShare';
-
+import VideocamOffIcon from 'mdi-react/VideocamOffIcon';
+import VideoIcon from 'mdi-react/VideoIcon';
 import { ROLES } from '../../constants';
+import ToolShare from '../ToolShare';
+import { ControlButton } from './ControlButton';
 
 const Controls = ({
   role,

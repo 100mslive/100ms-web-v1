@@ -1,13 +1,12 @@
 import React from 'react';
-import { Modal, Button, Select, Tooltip, Switch, InputNumber } from 'antd';
-import SoundMeter from './soundmeter';
+import { Button, InputNumber, Modal, Select, Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-
 import {
   attachMediaStream,
   closeMediaStream,
   updateInputDevices,
 } from '../../utils';
+import SoundMeter from './soundmeter';
 
 const Option = Select.Option;
 export default class MediaSettings extends React.Component {

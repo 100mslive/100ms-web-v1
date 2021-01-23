@@ -12,7 +12,7 @@ import {
   getUserMedia,
   getPermissionStatus,
 } from '../utils';
-import SoundMeter from './settings/soundmeter';
+import SoundMeter from './Settings/soundmeter';
 
 import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 

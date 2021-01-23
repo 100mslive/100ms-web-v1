@@ -1,9 +1,9 @@
 import { notification } from 'antd';
 import React from 'react';
 import { AppContext } from '../stores/AppContext';
-import { Gallery } from './conference/gallery';
-import { Pinned } from './conference/pinned';
-import { Controls } from './controls/index';
+import { Gallery } from './Conference/gallery';
+import { Pinned } from './Conference/pinned';
+import { Controls } from './Controls';
 import PeerState, { onRoomStateChange } from '../utils/state';
 
 const modes = {

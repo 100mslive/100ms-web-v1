@@ -1,5 +1,5 @@
 import React from 'react';
-import { LocalVideoView, MainVideoView } from '../videoview/index';
+import { LocalVideoView, MainVideoView } from '../Videoview';
 import ContainerDimensions from 'react-container-dimensions';
 import { largestRect } from 'rect-scaler';
 

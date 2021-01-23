@@ -18,6 +18,7 @@ class MyApp extends App {
         <Head>
           <link
             href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+            type="text/css"
             rel="stylesheet"
           />
         </Head>

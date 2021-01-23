@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout, Button, Modal, notification, Spin } from 'antd';
 const { confirm } = Modal;
 const { Header, Content, Sider } = Layout;
-import MediaSettings from './settings';
+import MediaSettings from './settings/index';
 import ChatFeed from './chat/index';
 import Message from './chat/message';
 import { AppContextProvider, AppContext } from '../stores/AppContext';

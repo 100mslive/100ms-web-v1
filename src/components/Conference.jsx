@@ -3,7 +3,7 @@ import React from 'react';
 import { AppContext } from '../stores/AppContext';
 import { Gallery } from './conference/gallery';
 import { Pinned } from './conference/pinned';
-import { Controls } from './controls';
+import { Controls } from './controls/index';
 import PeerState, { onRoomStateChange } from '../utils/state';
 
 const modes = {

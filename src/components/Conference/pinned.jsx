@@ -1,5 +1,9 @@
 import React from 'react';
-import { LocalVideoView, MainVideoView, SmallVideoView } from '../videoview';
+import {
+  LocalVideoView,
+  MainVideoView,
+  SmallVideoView,
+} from '../videoview/index';
 
 const Pinned = ({
   id,

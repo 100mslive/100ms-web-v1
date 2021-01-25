@@ -24,25 +24,24 @@
   right: 24px;
 }
 
-
-@media (orientation:portrait) {
+@media (orientation: portrait) {
   .conference-layout {
     flex-direction: column;
   }
-  .v1>div {
+  .v1 > div {
     height: 100%;
   }
-  .v2>div,
-  .v3>div,
-  .v4>div {
+  .v2 > div,
+  .v3 > div,
+  .v4 > div {
     height: 50%;
   }
-  .v3>div,
-  .v4>div {
+  .v3 > div,
+  .v4 > div {
     width: 50%;
   }
 }
-@media (orientation:landscape) {
+@media (orientation: landscape) {
   .conference-layout {
     flex-direction: row;
   }
@@ -51,7 +50,7 @@
   }
   .v2 > div,
   .v3 > div,
-  .v4 > div  {
+  .v4 > div {
     width: 50%;
   }
   .v3 > div,

@@ -65,7 +65,10 @@ class AppContextProvider extends Component {
               loginInfo: { ...this.state.loginInfo, ...loginInfo },
             });
             if (loginInfo.displayName) {
-              localStorage.setItem('loginInfo.displayName', loginInfo.displayName);
+              localStorage.setItem(
+                'loginInfo.displayName',
+                loginInfo.displayName
+              );
             }
           },
           setClient: client => {

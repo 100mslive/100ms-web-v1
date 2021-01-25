@@ -11,3 +11,10 @@ export const ENVS = {
   STAGING: 'staging-in',
   DEV3: 'dev3-in',
 };
+
+export const envMapping = {
+  'staging-in': 'STAGING_IN',
+  'qa-in': 'QA_IN',
+  'dev3-in': 'QA_IN',
+  'prod-in': 'PROD_IN',
+};

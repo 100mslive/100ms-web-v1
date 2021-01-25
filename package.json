@@ -37,12 +37,14 @@
     "@100mslive/hmsvideo-web": "^0.9.14",
     "@material-ui/core": "^4.11.0",
     "antd": "^3.26.16",
+    "axios": "^0.21.1",
     "babel-plugin-add-react-displayname": "0.0.5",
     "bowser": "^2.11.0",
     "copy-webpack-plugin": "^5.0.5",
     "dotenv": "^8.2.0",
     "firebase": "^8.0.0",
     "formik": "^2.1.7",
+    "jsonwebtoken": "^8.5.1",
     "logrocket": "^1.0.14",
     "logrocket-react": "^4.0.1",
     "mdi-react": "^6.4.0",
@@ -52,7 +54,8 @@
     "react-dom": "^16.13.1",
     "react-mdi": "^0.5.7",
     "react-router": "^5.0.1",
-    "rect-scaler": "^1.0.0"
+    "rect-scaler": "^1.0.0",
+    "uuid4": "^2.0.2"
   },
   "keywords": [
     "100mslive",

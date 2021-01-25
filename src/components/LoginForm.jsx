@@ -221,7 +221,8 @@ class LoginForm extends React.Component {
   };
 
   handleCreateSubmit = async values => {
-    const endpoint = process.env.NEXT_PUBLIC_CREATE_ROOM_ENDPOINT;
+    const endpoint =
+      process.env.NEXT_PUBLIC_CREATE_ROOM_ENDPOINT || '/api/room';
     console.log('endpoint', endpoint);
     console.log('Create Room values: ', values);
     const response = await fetch(endpoint, {

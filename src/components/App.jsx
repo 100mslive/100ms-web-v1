@@ -18,7 +18,7 @@ const sdkVersion = dependencies['@100mslive/hmsvideo-web'].substring(1);
 console.info(`Using hmsvideo-web SDK version ${sdkVersion}`);
 
 async function getToken({ room_id, user_name, role = 'guest', env }) {
-  const endpoint = process.env.NEXT_PUBLIC_TOKEN_ENDPOINT;
+  const endpoint = process.env.NEXT_PUBLIC_TOKEN_ENDPOINT || '/api/token';
   const { token } = await fetch(endpoint, {
     method: 'POST',
     body: JSON.stringify({ room_id, user_name, env, role }),

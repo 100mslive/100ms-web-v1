@@ -1,0 +1,28 @@
+{
+  "name": "100ms conference app",
+  "website": "https://100ms.live",
+  "env": {
+    "MANAGEMENT_KEY": {
+      "description": "Managment key"
+    },
+    "MANAGEMENT_SECRET": {
+      "description": "Management secret"
+    },
+    "CUSTOMER_ID": {
+      "description": "Customer Id"
+    },
+    "APP_ID": {
+      "description": "App Id"
+    },
+    "APP_ACCESS_KEY": {
+      "description": "App Access Key"
+    },
+    "APP_SECRET": {
+      "description": "App Secret"
+    },
+    "NEXT_PUBLIC_SFU_HOST": {
+      "description": "SFU HOST",
+      "value": "100ms.live"
+    }
+  }
+}

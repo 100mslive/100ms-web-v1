@@ -42,7 +42,6 @@
     "bowser": "^2.11.0",
     "copy-webpack-plugin": "^5.0.5",
     "dotenv": "^8.2.0",
-    "firebase": "^8.0.0",
     "formik": "^2.1.7",
     "jsonwebtoken": "^8.5.1",
     "logrocket": "^1.0.14",

@@ -55,7 +55,6 @@ export default async (req, res) => {
 
     generateToken({ token_variables, secret, customer_id, res });
   } else {
-    const token = 'dummy';
-    res.status(200).json({ token });
+    res.status(400).json({ error: { message: 'Wrong env specified' } });
   }
 };

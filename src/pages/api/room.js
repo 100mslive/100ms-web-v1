@@ -8,7 +8,7 @@ function getJWT(payload, secret) {
 
   return jwt.sign(payload, secret, {
     algorithm: 'HS256',
-    expiresIn: '1y',
+    expiresIn: '24h',
     issuer: issuer,
     jwtid: uuid4(),
   });
@@ -54,7 +54,6 @@ export default async (req, res) => {
   };
   try {
     var resp = await axios(options);
-    console.log({ resp });
 
     if (resp.status == 200) {
       res.status(200).json(resp.data);

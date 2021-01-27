@@ -4,7 +4,7 @@ import { AppContext } from '../stores/AppContext';
 import { Gallery } from './Conference/gallery';
 import { Pinned } from './Conference/pinned';
 import { Controls } from './Controls';
-import PeerState, { onRoomStateChange } from '../utils/state';
+// import PeerState, { onRoomStateChange } from '../utils/state';
 
 const modes = {
   GALLERY: 'GALLERY',
@@ -31,73 +31,7 @@ class Conference extends React.Component {
     const { client } = this.props;
     client.on('stream-add', this._handleAddStream);
     client.on('stream-remove', this._handleRemoveStream);
-    this.roomStateUnsubscribe = onRoomStateChange(
-      client.rid,
-      peers => {
-        console.log('CHANGED VALUES: ', peers);
-        const streamsMap = peers.reduce((a, c) => {
-          return { ...a, ...c.streams };
-        }, {});
-        this.setState({ streamInfo: streamsMap });
-        const newStreams = this.state.streams.map(stream => {
-          return { ...stream, ...streamsMap[stream.mid] };
-        });
-
-        this.setState({ streams: newStreams });
-      },
-
-      console.error
-    );
   };
-
-  updateLocalPeerState = () => {
-    console.log('Updating state');
-    this.peerState = new PeerState({
-      mid: this.state.localStream.mid,
-      uid: this.props.client.uid,
-      rid: this.props.client.rid,
-    });
-
-    console.info('New peerState created', this.peerState);
-
-    this.peerState.update({
-      audioEnabled: true,
-      videoEnabled: true,
-    });
-
-    this.peerState.onRequest(request => {
-      console.log('REQUEST', request);
-      const isMuted = this.state.audioMuted;
-      if (request.mute) {
-        if (isMuted) return;
-        console.log('Muting');
-        this.muteMediaTrack('audio', false);
-      } else {
-        if (!isMuted) return;
-        console.log('Unmuting');
-        this.muteMediaTrack('audio', true);
-      }
-    });
-  };
-
-  pollForMid = count => {
-    //if(this.state.localStream.mid) console.log("Count is", count);
-    if (this.state.localStream.mid) {
-      console.log('Stream Mid is', this.state.localStream.mid);
-      this.updateLocalPeerState();
-    }
-    if (!this.state.localStream.mid)
-      setTimeout(() => {
-        this.pollForMid(count + 1);
-      }, 250);
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevState.localStream && this.state.localStream) {
-      this.pollForMid(0);
-      console.log('Got stream', this.state.localStream.mid);
-    }
-  }
 
   componentWillUnmount = () => {
     const { client } = this.props;
@@ -105,26 +39,14 @@ class Conference extends React.Component {
       client.off('stream-add', this._handleAddStream);
       client.off('stream-remove', this._handleRemoveStream);
     }
-    this.roomStateUnsubscribe && this.roomStateUnsubscribe();
   };
 
   cleanUp = async () => {
     let { localStream, localScreen, streams } = this.state;
     await this.setState({ localStream: null, localScreen: null, streams: [] });
 
-    // streams.forEach(async item => {
-    //   await this.client.unsubscribe(item.stream,this.client.rid);
-    // });
-
     await this._unpublish(localStream);
     await this._unpublish(localScreen);
-    // this.peerStateUnsubscribe();
-    this.peerState && this.peerState.delete();
-  };
-
-  // @TODO: Move this to utils or core lib
-  tuneLocalStream = participantCount => {
-    console.warn('autoTune is not supported yet');
   };
 
   _notification = (message, description) => {
@@ -156,10 +78,10 @@ class Conference extends React.Component {
 
     if (type === 'audio') {
       this.setState({ audioMuted: !enabled });
-      this.peerState && this.peerState.update({ audioEnabled: enabled });
+      // this.peerState && this.peerState.update({ audioEnabled: enabled });
     } else if (type === 'video') {
       this.setState({ videoMuted: !enabled });
-      this.peerState && this.peerState.update({ videoEnabled: enabled });
+      // this.peerState && this.peerState.update({ videoEnabled: enabled });
     }
   };
 
@@ -270,7 +192,6 @@ class Conference extends React.Component {
       }
 
       this.setState({ streams });
-      this.tuneLocalStream(streams.length);
     } catch (error) {
       this._notification(`ERROR: Error in subscribing`, error.message);
       this.props.cleanUp();
@@ -282,7 +203,6 @@ class Conference extends React.Component {
     let streams = this.state.streams;
     streams = streams.filter(item => item.sid !== streamInfo.mid);
     this.setState({ streams });
-    this.tuneLocalStream(streams.length);
     if (
       this.state.mode === modes.PINNED &&
       this.state.pinned === streamInfo.mid
@@ -294,7 +214,7 @@ class Conference extends React.Component {
   };
 
   _onRequest = (uid, request) => {
-    this.peerState && this.peerState.setRequest(uid, request);
+    // this.peerState && this.peerState.setRequest(uid, request);
   };
 
   _onChangeVideoPosition = data => {

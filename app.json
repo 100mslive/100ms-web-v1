@@ -20,9 +20,9 @@
     "APP_SECRET": {
       "description": "App Secret"
     },
-    "NEXT_PUBLIC_SFU_HOST": {
-      "description": "SFU HOST",
-      "value": "100ms.live"
+    "NEXT_PUBLIC_SFU_ENV": {
+      "description": "SFU ENV",
+      "value": "prod-in"
     }
   }
 }

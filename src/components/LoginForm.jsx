@@ -30,7 +30,7 @@ class LoginForm extends React.Component {
 
     let role = '';
     let roomId = '';
-    let env = process.env.NEXT_PUBLIC_SFU_ENV || '';
+    let env = process.env.NEXT_PUBLIC_SFU_ENV || 'prod-in';
     let displayName =
       localStorage.getItem('loginInfo.displayName') ||
       props.loginInfo.displayName ||
@@ -484,7 +484,7 @@ class LoginForm extends React.Component {
                     initialValues={{
                       roomName: '',
                       displayName: this.props.loginInfo.displayName,
-                      env: process.env.NEXT_PUBLIC_SFU_ENV || '',
+                      env: process.env.NEXT_PUBLIC_SFU_ENV || 'prod-in',
                       role: 'Host',
                       isRecording: false,
                     }}

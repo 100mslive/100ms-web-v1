@@ -1,0 +1,9 @@
+{
+  "/_app": "pages/_app.js",
+  "/api/room": "pages/api/room.js",
+  "/api/token": "pages/api/token.js",
+  "/": "pages/index.html",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/404": "pages/404.html"
+}

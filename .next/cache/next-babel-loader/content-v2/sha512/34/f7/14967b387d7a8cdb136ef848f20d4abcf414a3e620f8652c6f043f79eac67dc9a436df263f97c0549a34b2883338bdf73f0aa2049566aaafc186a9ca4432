@@ -1,0 +1,1 @@
+{"ast":null,"code":"export default class Message {\n  constructor(messageData) {\n    this.id = messageData.id;\n    this.message = messageData.message;\n    this.senderName = messageData.senderName || undefined;\n  }\n\n}","map":null,"metadata":{},"sourceType":"module"}

@@ -382,7 +382,7 @@ class OldAppUI extends React.Component {
         >
           <div className="app-header-left">
             <a href="https://100ms.live/" target="_blank">
-              <img src="/100ms-logo-on-black.png" className="h-8" />
+              <img src="/logo-blue-dark.svg" className="h-8" />
             </a>
           </div>
           <div className="app-header-right">
@@ -399,7 +399,7 @@ class OldAppUI extends React.Component {
           {!isValidParams ? (
             <div
               className="min-h-screen flex items-center justify-center w-full py-8 px-4 sm:px-6 lg:px-8"
-              style={{ backgroundColor: '#1a1619' }}
+              style={{ backgroundColor: '#0F141D' }}
             >
               <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100 my-3">
                 <div className="">

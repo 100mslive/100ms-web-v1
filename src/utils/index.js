@@ -162,31 +162,79 @@ const isSupported = () => {
   return isValidBrowser;
 };
 
+let localStreamErrors = new Map();
+//required track is missing
+localStreamErrors.set('NotFoundError', {
+  title: 'Camera/Microphone not detected!',
+  message:
+    'We were unable to detect any camera/microphone devices. Please connect and try again.',
+});
+//webcam or mic are already in use
+localStreamErrors.set('NotReadableError', {
+  title: 'Camera/Microphone not accessible!',
+  message:
+    'Please close any other application using camera/microphone and try again.',
+});
+//constraints can not be satisfied by avb. devices
+localStreamErrors.set('OverconstrainedError', {
+  title: 'Invalid Audio/Video constraints',
+  message: 'The constraints provided for audio/video cannot be met.',
+});
+//permission denied in browser
+localStreamErrors.set('NotAllowedError', {
+  title: 'Permission Denied!',
+  message:
+    'Please grant camera/microphone permissions in the address bar or site settings and try again.',
+});
+// returning null continues the call without error modal.
+localStreamErrors.set('TypeError', null);
+
 const getLocalStreamException = error => {
-  let title, message;
-  if (error.name == 'NotFoundError') {
-    //required track is missing
-    title = 'Camera/Microphone not detected!';
-    message =
-      'We were unable to detect any camera/microphone devices. Please connect and try again.';
-  } else if (error.name == 'NotReadableError') {
-    //webcam or mic are already in use
-    title = 'Camera/Microphone not accessible!';
-    message =
-      'Another application might be using camera/microphone. Please close the app and try again.';
-  } else if (error.name == 'OverconstrainedError') {
-    //constraints can not be satisfied by avb. devices
-  } else if (error.name == 'NotAllowedError') {
-    //permission denied in browser
-    title = 'Permission Denied!';
-    message =
-      'Please grant camera/microphone permissions in the address bar or site settings and try again.';
+  let errorMessage = null;
+  if (localStreamErrors.has(error.name)) {
+    errorMessage = localStreamErrors.get(error.name);
   } else {
     //other errors
-    title = 'Unable to access camera/microphone!';
-    message = 'Please switch your device and try again.';
+    errorMessage = {
+      title: 'Unable to access camera/microphone!',
+      message: 'Please switch your device and try again.',
+    };
   }
-  return { title, message };
+  console.log('LocalStream error: ', { error: error.name, ...errorMessage });
+  return errorMessage;
+};
+
+const getUserMedia = constraints => {
+  // Older browsers might not implement mediaDevices at all, so we set an empty object first
+  if (navigator.mediaDevices === undefined) {
+    navigator.mediaDevices = {};
+  }
+
+  // Some browsers partially implement mediaDevices. We can't just assign an object
+  // with getUserMedia as it would overwrite existing properties.
+  // Here, we will just add the getUserMedia property if it's missing.
+  if (navigator.mediaDevices.getUserMedia === undefined) {
+    navigator.mediaDevices.getUserMedia = function (constraints) {
+      // First get ahold of the legacy getUserMedia, if present
+      var getUserMedia =
+        navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+      // Some browsers just don't implement it - return a rejected promise with an error
+      // to keep a consistent interface
+      if (!getUserMedia) {
+        return Promise.reject(
+          new Error('getUserMedia is not implemented in this browser')
+        );
+      }
+
+      // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+      return new Promise(function (resolve, reject) {
+        getUserMedia.call(navigator, constraints, resolve, reject);
+      });
+    };
+  } else {
+    return navigator.mediaDevices.getUserMedia(constraints);
+  }
 };
 
 export {
@@ -196,4 +244,5 @@ export {
   SingleSelect,
   isSupported,
   getLocalStreamException,
+  getUserMedia,
 };

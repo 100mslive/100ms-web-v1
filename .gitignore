@@ -8,3 +8,5 @@ debug.log
 nohup.out
 
 .vercel
+.next
+.env.local

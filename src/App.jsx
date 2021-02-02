@@ -6,7 +6,7 @@ import { reactLocalStorage } from 'reactjs-localstorage';
 import MediaSettings from './settings';
 import ChatFeed from './chat/index';
 import Message from './chat/message';
-import bLogo from '../public/100ms-logo-on-black.png';
+import bLogo from '../public/logo-blue-dark.svg';
 import '../styles/css/app.scss';
 
 import LoginForm from './LoginForm';
@@ -386,7 +386,7 @@ class App extends React.Component {
         <Header
           className="app-header"
           style={{
-            backgroundColor: '#1a1619',
+            backgroundColor: '#0B0F15',
             zIndex: '10',
             padding: '0 0',
             margin: '0 auto',
@@ -416,7 +416,7 @@ class App extends React.Component {
                 trigger={null}
                 collapsible
                 collapsed={this.state.collapsed}
-                style={{ backgroundColor: '#1a1619' }}
+                style={{ backgroundColor: '#0B0F15' }}
               >
                 <div className="left-container">
                   <ChatFeed

@@ -688,7 +688,7 @@ class LoginForm extends React.Component {
                       <div
                         className=" flex items-center justify-center w-full px-4 sm:px-6 lg:px-8"
                         style={{
-                          backgroundColor: '#1a1619',
+                          backgroundColor: '#0B0F15',
                           minHeight: 'calc(100vh - 64px)',
                         }}
                       >

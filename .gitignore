@@ -43,3 +43,6 @@ debug.log
 nohup.out
 
 /ignore
+
+package-lock.json
+public/.DS_Store

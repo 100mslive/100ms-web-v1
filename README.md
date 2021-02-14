@@ -1,6 +1,6 @@
-# 100mslive sample web app
+# 100ms Sample React App
 
-This is an example web app to demo 100mslive's web SDK
+This is an example web app to demo 100ms' web SDK
 
 ## Prerequisites
 

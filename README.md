@@ -90,7 +90,7 @@ This guide provides an overview of the key objects you'll use with 100ms' JavaSc
 
 Sign up on https://dashboard.100ms.live/register & visit `Developer` tab to get your access credentials
 
-### Generate a server-side token
+### 3. Generate a server-side token
 
 To generate a server-side token, follow the steps described here - https://docs.100ms.live/server-side/generate-server-side-token
 

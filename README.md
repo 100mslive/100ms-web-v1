@@ -206,7 +206,7 @@ const localStream = await client.getLocalStream({
 
 ## Connect to specific device
 
-In order to connect to a specific camera/mic, you can use the advancedMediaConstraints key which accepts browser's native [MediaStreamConstraints](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamConstraints) as shown below. To get deviceIDs, use [enumerateDevices] (https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices)
+In order to connect to a specific camera/mic, you can use the advancedMediaConstraints key which accepts browser's native [MediaStreamConstraints](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamConstraints) as shown below. To get deviceIDs, use [enumerateDevices](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices)
 
 ```
 const localStream = await client.getLocalStream({
@@ -227,7 +227,7 @@ const localStream = await client.getLocalStream({
 });
 ```
 
-> For advanced use cases: all `stream` objects returned by `getLocalStream` extends browser's native MediaStream class and implements all its [methods] (https://developer.mozilla.org/en-US/docs/Web/API/MediaStream)
+> For advanced use cases: all `stream` objects returned by `getLocalStream` extends browser's native MediaStream class and implements all its [methods](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream)
 
 > The settings above are recommended settings for most use cases. You can increase resolution to hd and bandwidth to 1024 to get higher quality video.
 

@@ -10,6 +10,7 @@ export const ENVS = {
   PROD: 'prod-in',
   STAGING: 'staging-in',
   DEV3: 'dev3-in',
+  LOCAL: 'localhost',
 };
 
 export const envMapping = {
@@ -17,4 +18,5 @@ export const envMapping = {
   'qa-in': 'QA_IN',
   'dev3-in': 'QA_IN',
   'prod-in': 'PROD_IN',
+  'localhost': 'LOCAL_IN',
 };

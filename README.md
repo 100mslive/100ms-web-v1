@@ -70,3 +70,7 @@ npm start
 ```
 
 The app should now be up and running at http://localhost:8080 🚀
+
+### Deployment
+
+NOTE: When deploying to prod, set `SFU_ENV` to `prod-in` in the .env file and build the docker image

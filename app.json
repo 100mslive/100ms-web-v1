@@ -1,6 +1,6 @@
 {
   "name": "100ms conference app",
-  "website": "http://localhost:3000/",
+  "website": "https://100ms.live",
   "env": {
     "MANAGEMENT_KEY": {
       "description": "Managment key"
@@ -22,7 +22,7 @@
     },
     "NEXT_PUBLIC_SFU_ENV": {
       "description": "SFU ENV",
-      "value": ""
+      "value": "prod-in"
     }
   }
 }

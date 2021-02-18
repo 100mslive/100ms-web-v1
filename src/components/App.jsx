@@ -77,7 +77,7 @@ class OldAppUI extends React.Component {
   };
 
   _createClient = async ({ userName, env, roomId, role }) => {
-    let url = `ws://${env}:8443`;
+    let url = `wss://${env}.100ms.live`;
     let authToken = await getToken({
       env,
       room_id: roomId,

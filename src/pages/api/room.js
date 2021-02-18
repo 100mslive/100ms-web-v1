@@ -41,7 +41,7 @@ export default async (req, res) => {
 
   const options = {
     method: 'post',
-    url: `http://${env}:8080/api/v1/rooms`,
+    url: `https://${env}.100ms.live/api/v1/rooms`,
     data: {
       name: room_name,
       description: 'nk room',

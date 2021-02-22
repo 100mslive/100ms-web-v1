@@ -108,16 +108,16 @@ class Conference extends React.Component {
   };
 
   cleanUp = async () => {
-    let { localStream } = this.state;
+    let { localStream, localScreen } = this.state;
     await this.setState({ localStream: null, localScreen: null, streams: [] });
 
     await this._unpublish(localStream);
+    await this._unpublish(localScreen);
     this.peerState && this.peerState.delete();
   };
 
-  // @TODO: Move this to utils or core lib
   tuneLocalStream = participantCount => {
-    console.warn('autoTune is not supported yet');
+    // console.warn('autoTune is not supported yet');
   };
 
   _notification = (message, description) => {
@@ -252,7 +252,7 @@ class Conference extends React.Component {
         streams.push({
           mid: stream.mid,
           stream,
-          sid: streamInfo.mid,
+          sid: stream.mid,
           ...this.state.streamInfo[stream.mid],
         });
       } else {
@@ -267,10 +267,8 @@ class Conference extends React.Component {
     }
   };
 
-  _handleRemoveStream = async (room, streamInfo) => {
-    // `room` might be used later in future
-    let streams = this.state.streams;
-    streams = streams.filter(item => item.sid !== streamInfo.mid);
+  _handleRemoveStream = async (room, peer, streamInfo) => {
+    const streams = this.state.streams.filter(item => item.sid !== streamInfo.mid);
     this.setState({ streams });
     this.tuneLocalStream(streams.length);
     if (

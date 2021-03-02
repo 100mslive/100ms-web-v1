@@ -268,7 +268,9 @@ class Conference extends React.Component {
   };
 
   _handleRemoveStream = async (room, peer, streamInfo) => {
-    const streams = this.state.streams.filter(item => item.sid !== streamInfo.mid);
+    const streams = this.state.streams.filter(
+      item => item.sid !== streamInfo.mid
+    );
     this.setState({ streams });
     this.tuneLocalStream(streams.length);
     if (

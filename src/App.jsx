@@ -193,7 +193,7 @@ class App extends React.Component {
     try {
       await this.client.join(values.roomId);
       //TODO ugly hack
-      let redirectURL = `/?room=${values.roomId}`;
+      let redirectURL = `/?room=${values.roomId}&role=${values.role}`;
       window.history.pushState({}, '100ms', redirectURL);
       this.setState({
         login: true,

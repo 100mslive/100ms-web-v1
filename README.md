@@ -28,9 +28,9 @@ cp example.env .env
 
 ### Token generation
 
-Host your token generation service [following this guide](https://100ms.gitbook.io/100ms/helpers/runkit)
+Host your token generation service [following this guide](https://docs.100ms.live/helpers/runkit)
 
-Update the `TOKEN_ENDPOINT` in `.env` file with your token generation service endpoint (eg. `https://ms-services-vjml47hk9gmu.runkit.sh/`)
+Update the `TOKEN_ENDPOINT` in `.env` file with your token generation service endpoint (eg. `https://ms-services-29qzq06nzogv.runkit.sh/`)
 
 ### [Optional] Firebase config
 
@@ -104,7 +104,7 @@ To generate a client-side token, follow the steps described here - https://docs.
 
 ## Import modules & instantiate 100ms Client (HMSClient)
 
-```import { HMSPeer, HMSClientConfig, HMSClient, LocalStream } from "@100mslive/hmsvideo-web';
+```import { HMSPeer, HMSClientConfig, HMSClient } from "@100mslive/hmsvideo-web';
 
 const peer = new HMSPeer(userName:"<userName here>",authToken:"<authToken here>")
 

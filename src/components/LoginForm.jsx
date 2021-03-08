@@ -18,6 +18,7 @@ import ArrowLeftIcon from 'mdi-react/ArrowLeftIcon';
 
 import { ROLES } from '../constants';
 import LoginTextField from './LoginTextField';
+import {changeToSecondaryColor} from "./../changeTheme"
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -455,18 +456,21 @@ class LoginForm extends React.Component {
 
                     <div className="mt-6 space-y-2">
                       <button
-                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
+                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white focus:outline-none transition duration-150 ease-in-out bg-indigo-600 hover:bg-indigo-700"
                         onClick={() => {
                           this.setState({ formStage: 'CREATE_ROOM' });
                         }}
+                        ref={changeToSecondaryColor}
+                        
                       >
                         Create Room
                       </button>
                       <button
-                        className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-indigo-600 bg-white hover:text-indigo-700 hover:border-indigo-700 focus:outline-none border-indigo-600 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
+                        className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md  focus:outline-none   transition duration-150 ease-in-out process.env.NEXT_PUBLIC_SECONDARY_COLOR&&'focus:shadow-outline-indigo active:bg-indigo-700 border-indigo-600 text-indigo-600 bg-white hover:text-indigo-700 hover:border-indigo-700'`}
                         onClick={() => {
                           this.setState({ formStage: 'JOIN_ROOM' });
                         }}
+                        ref={changeToSecondaryColor}
                       >
                         Join Room
                       </button>
@@ -638,6 +642,7 @@ class LoginForm extends React.Component {
                               <button
                                 type="submit"
                                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
+                                ref={changeToSecondaryColor}
                               >
                                 <span className="absolute left-0 inset-y-0 flex items-center pl-3"></span>
                                 Create Room
@@ -810,6 +815,7 @@ class LoginForm extends React.Component {
                             <button
                               type="submit"
                               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
+                              ref={changeToSecondaryColor}
                             >
                               <span className="absolute left-0 inset-y-0 flex items-center pl-3"></span>
                               Join Room
@@ -1117,7 +1123,8 @@ class LoginForm extends React.Component {
                           <div className="mt-0">
                             <button
                               type="submit"
-                              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
+                              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white focus:outline-none  transition duration-150 ease-in-out ${!process.env.NEXT_PUBLIC_SECONDARY_COLOR&&'focus:shadow-outline-indigo active:bg-indigo-700 bg-indigo-600 hover:bg-indigo-500  focus:border-indigo-700'}`} 
+                              ref={changeToSecondaryColor}
                             >
                               <span className="absolute left-0 inset-y-0 flex items-center pl-3"></span>
                               Join

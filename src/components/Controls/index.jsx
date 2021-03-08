@@ -9,6 +9,7 @@ import VideoIcon from 'mdi-react/VideoIcon';
 import { ROLES } from '../../constants';
 import ToolShare from '../ToolShare';
 import { ControlButton } from './ControlButton';
+import {getContrastYIQ} from "./../../changeTheme"
 
 const Controls = ({
   role,
@@ -30,7 +31,7 @@ const Controls = ({
   const cameraButton = (
     <div className="mr-1">
       <ControlButton
-        icon={<VideoIcon className="text-indigo-100" />}
+        icon={<VideoIcon  style={{color:getContrastYIQ(process.env.NEXT_PUBLIC_SECONDARY_COLOR)?'black':'white'}} />}
         activeIcon={<VideocamOffIcon className="text-red-100" />}
         label="Camera"
         isActive={!isCameraOn}
@@ -42,7 +43,7 @@ const Controls = ({
   const micButton = (
     <div className="mx-1">
       <ControlButton
-        icon={<MicrophoneIcon className="text-indigo-100" />}
+        icon={<MicrophoneIcon  style={{color:getContrastYIQ(process.env.NEXT_PUBLIC_SECONDARY_COLOR)?'black':'white'}}  />}
         activeIcon={<MicrophoneOffIcon className="text-red-100" />}
         label="Mic"
         isActive={isMuted}
@@ -66,7 +67,7 @@ const Controls = ({
   const screenShareButton = (
     <div className="mx-1">
       <ControlButton
-        icon={<TelevisionIcon className="text-indigo-100" />}
+        icon={<TelevisionIcon  style={{color:getContrastYIQ(process.env.NEXT_PUBLIC_SECONDARY_COLOR)?'black':'white'}}  />}
         activeIcon={<TelevisionOffIcon className="text-red-100" />}
         label="Screen"
         isActive={screenSharingEnabled}
@@ -88,9 +89,10 @@ const Controls = ({
           <svg
             className="w-6 h-6"
             fill="none"
-            stroke="white"
+            stroke={getContrastYIQ(process.env.NEXT_PUBLIC_SECONDARY_COLOR)?'black':'white'}
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
+            
           >
             <path
               strokeLinecap="round"

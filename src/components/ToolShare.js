@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { Modal, Button, Tooltip, Input, Icon } from 'antd';
 import { ControlButton } from './Controls/ControlButton';
 import ShareIcon from 'mdi-react/ShareIcon';
+import {getContrastYIQ} from "./../changeTheme"
 
 export default class ToolShare extends React.Component {
   constructor(props) {
@@ -43,8 +44,8 @@ export default class ToolShare extends React.Component {
     return (
       <div>
         <ControlButton
-          icon={<ShareIcon className="text-indigo-100" />}
-          activeIcon={<ShareIcon className="text-red-100" />}
+          icon={<ShareIcon  style={{color:getContrastYIQ(process.env.NEXT_PUBLIC_SECONDARY_COLOR)?'black':'white'}}  />}
+          activeIcon={<ShareIcon className="text-red-100" style={{color:getContrastYIQ(process.env.NEXT_PUBLIC_SECONDARY_COLOR)?'black':'white'}}  />}
           label="Share"
           isActive={false}
           onClick={this.showModal}
@@ -56,6 +57,8 @@ export default class ToolShare extends React.Component {
           onCancel={this.handleCancel}
           okText="Ok"
           cancelText="Cancel"
+          okButtonProps={{style:{backgroundColor:process.env.NEXT_PUBLIC_SECONDARY_COLOR, borderColor:"black",color:getContrastYIQ(process.env.NEXT_PUBLIC_SECONDARY_COLOR)?"black":"white"}}}
+          
         >
           <div>
             <div>

@@ -3,6 +3,7 @@ import PinIcon from 'mdi-react/PinIcon';
 import PinOffIcon from 'mdi-react/PinOffIcon';
 import MicrophoneIcon from 'mdi-react/MicrophoneIcon';
 import MicrophoneOffIcon from 'mdi-react/MicrophoneOffIcon';
+import {changeToSecondaryColor} from "./../../changeTheme"
 
 class MainVideoView extends React.Component {
   componentDidMount = () => {
@@ -45,6 +46,7 @@ class MainVideoView extends React.Component {
           <span
             className="px-3 bg-indigo-900 rounded text-white inline-block bg-opacity-75 h-6 inline-block mr-0.5"
             style={{ lineHeight: '1.5rem' }}
+            ref={changeToSecondaryColor}
           >
             {label || stream.info.name}
           </span>

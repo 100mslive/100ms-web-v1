@@ -7,6 +7,7 @@ import {
   updateInputDevices,
 } from '../../utils';
 import SoundMeter from './soundmeter';
+import {getContrastYIQ} from "./../../changeTheme"
 
 const Option = Select.Option;
 export default class MediaSettings extends React.Component {
@@ -199,6 +200,8 @@ export default class MediaSettings extends React.Component {
           onCancel={this.handleCancel}
           okText="Ok"
           cancelText="Cancel"
+          okButtonProps={{style:{backgroundColor:process.env.NEXT_PUBLIC_SECONDARY_COLOR, borderColor:"black",color:getContrastYIQ(process.env.NEXT_PUBLIC_SECONDARY_COLOR)?"black":"white"}}}
+          // cancelButtonProps={{style:{borderColor:"black", color:getContrastYIQ(process.env.NEXT_PUBLIC_SECONDARY_COLOR)?"black":"white"}}}
         >
           <div className="settings-item">
             <span className="settings-item-left">Micphone</span>

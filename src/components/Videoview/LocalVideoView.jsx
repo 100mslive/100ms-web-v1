@@ -1,6 +1,7 @@
 import React from 'react';
 import PinIcon from 'mdi-react/PinIcon';
 import PinOffIcon from 'mdi-react/PinOffIcon';
+import {changeToSecondaryColor} from './../../changeTheme'
 
 class LocalVideoView extends React.Component {
   constructor() {
@@ -67,6 +68,7 @@ class LocalVideoView extends React.Component {
           <span
             className="px-3 bg-indigo-900 rounded text-white inline-block bg-opacity-75 h-6 inline-block mr-0.5"
             style={{ lineHeight: '1.5rem' }}
+            ref={changeToSecondaryColor}
           >
             {label}
           </span>

@@ -13,6 +13,7 @@ import { HMSClient, HMSPeer, HMSClientConfig } from '@100mslive/hmsvideo-web';
 import { ENVS, ROLES } from '../constants';
 import { dependencies } from '../../package.json';
 import { getRequest } from '../utils';
+import {getContrastYIQ} from "../changeTheme"
 
 const sdkVersion = dependencies['@100mslive/hmsvideo-web'].substring(1);
 console.info(`Using hmsvideo-web SDK version ${sdkVersion}`);
@@ -224,6 +225,7 @@ class OldAppUI extends React.Component {
     confirm({
       title: 'Leave Now?',
       content: 'Do you want to leave the room?',
+      okButtonProps:{style:{backgroundColor:process.env.NEXT_PUBLIC_SECONDARY_COLOR,borderColor:"black", color:getContrastYIQ(process.env.NEXT_PUBLIC_SECONDARY_COLOR)?"black":"white"}},
       async onOk() {
         await this2._cleanUp();
         this2.props.setRoomState({ login: false });
@@ -231,6 +233,7 @@ class OldAppUI extends React.Component {
       onCancel() {
         console.log('Cancel');
       },
+      
     });
   };
 
@@ -367,7 +370,7 @@ class OldAppUI extends React.Component {
     } = this.props.roomState;
 
     const isValidParams = this.isValidParams()[0];
-
+    
     return (
       <Layout className="app-layout">
         <Header
@@ -399,7 +402,7 @@ class OldAppUI extends React.Component {
           {!isValidParams ? (
             <div
               className="min-h-screen flex items-center justify-center w-full py-8 px-4 sm:px-6 lg:px-8"
-              style={{ backgroundColor: '#0F141D' }}
+              style={{ backgroundColor:'#0F141D' }}
             >
               <div className="overflow-hidden shadow rounded-lg max-w-sm w-full px-4 py-5 p-6 bg-gray-100 my-3">
                 <div className="">
@@ -432,7 +435,7 @@ class OldAppUI extends React.Component {
                 trigger={null}
                 collapsible
                 collapsed={collapsed}
-                style={{ backgroundColor: '#1a1619' }}
+                style={{ backgroundColor:'#1a1619' }}
               >
                 <div className="left-container">
                   <ChatFeed

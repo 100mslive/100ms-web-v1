@@ -54,7 +54,7 @@ class App extends React.Component {
       selectedVideoDevice: '',
       resolution: 'qvga',
       bandwidth: 256,
-      codec: 'vp8',
+      codec: 'VP8',
       frameRate: 20,
       isDevMode: true,
     };

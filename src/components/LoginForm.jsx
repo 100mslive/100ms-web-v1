@@ -24,7 +24,7 @@ class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      formStage: 'ROOM',
+      formStage: 'JOIN_ROOM',
       permissionGranted: false,
       isSupported: deviceSupport().supported,
     };
@@ -126,7 +126,7 @@ class LoginForm extends React.Component {
         this.setState({ formStage: 'PERMISSION' });
       }
     } else {
-      let formStage = 'ROOM';
+      let formStage = 'JOIN_ROOM';
       console.log(`[FormStage: ${formStage}]`);
       if (this.props.loginInfo.roomId != '') {
         formStage = 'JOIN_ROOM';
@@ -136,6 +136,8 @@ class LoginForm extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
+    //console.log(prevState.formStage)
+    //console.log("current ", this.state.formStage)
     if (
       (prevState.formStage || this.state.formStage) &&
       prevState.formStage !== this.state.formStage
@@ -432,7 +434,7 @@ class LoginForm extends React.Component {
   };
 
   render() {
-    console.log(this.state.formStage);
+    //console.log(this.state.formStage);
     const showEnv = !Boolean(process.env.NEXT_PUBLIC_SFU_ENV);
     const showRoleSelect = Boolean(process.env.NEXT_PUBLIC_SFU_ENV);
 
@@ -704,7 +706,7 @@ class LoginForm extends React.Component {
                             <h2 className="text-center text-3xl leading-9 font-extrabold text-gray-900 mb-2">
                               {initialValues && (
                                 <>
-                                  <ArrowLeftIcon
+                                  {/* <ArrowLeftIcon
                                     className="text-gray-700 hover:text-black"
                                     onClick={() => {
                                       this.setState({ formStage: 'ROOM' });
@@ -712,7 +714,7 @@ class LoginForm extends React.Component {
                                         roomId: '',
                                       });
                                     }}
-                                  />
+                                  /> */}
                                   100ms Conference
                                 </>
                               )}

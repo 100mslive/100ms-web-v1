@@ -22,6 +22,7 @@ console.info(
   `%c[APP] Using hmsvideo-web SDK version ${sdkVersion}`,
   'color:#268bd2'
 );
+console.info(process.env)
 
 async function getToken({ room_id, user_name, role = 'guest', env }) {
   const endpoint = `${process.env.TOKEN_ENDPOINT}?api=token`;
@@ -401,6 +402,8 @@ class App extends React.Component {
   }
 
   render() {
+    alert(process.env.NEXT_PUBLIC_SECONDARY_COLOR)
+    console.info(process.env)
     const {
       login,
       loading,
@@ -425,7 +428,7 @@ class App extends React.Component {
         >
           <div className="app-header-left">
             <a href="https://100ms.live/" target="_blank">
-              <img src={bLogo} className="h-8" />
+              <img src={process.env.NEXT_PUBLIC_LOGO} className="h-8" />
             </a>
           </div>
           <div className="app-header-right">

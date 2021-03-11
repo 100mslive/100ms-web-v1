@@ -17,6 +17,9 @@ import {getContrastYIQ} from "../changeTheme"
 
 const sdkVersion = dependencies['@100mslive/hmsvideo-web'].substring(1);
 console.info(`Using hmsvideo-web SDK version ${sdkVersion}`);
+console.info("we are on self serve app builder branch")
+console.log("logo name",process.env.NEXT_PUBLIC_BRAND_LOGO)
+console.log("Secondary color",process.env.NEXT_PUBLIC_SECONDARY_COLOR)
 
 async function getToken({ room_id, user_name, role = 'guest', env }) {
   const endpoint = process.env.NEXT_PUBLIC_TOKEN_ENDPOINT || '/api/token';

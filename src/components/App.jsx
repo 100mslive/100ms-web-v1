@@ -385,7 +385,7 @@ class OldAppUI extends React.Component {
         >
           <div className="app-header-left">
             <a href="https://100ms.live/" target="_blank">
-              <img src="/logo-blue-dark.svg" className="h-8" />
+              <img src={process.env.NEXT_PUBLIC_BRAND_LOGO||"/logo-blue-dark.svg"}   className="h-8" />
             </a>
           </div>
           <div className="app-header-right">

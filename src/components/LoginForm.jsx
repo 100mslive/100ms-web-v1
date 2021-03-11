@@ -126,7 +126,7 @@ class LoginForm extends React.Component {
         this.setState({ formStage: 'PERMISSION' });
       }
     } else {
-      let formStage = 'JOIN_ROOM';
+      let formStage = 'ROOM';
       console.log(`[FormStage: ${formStage}]`);
       if (this.props.loginInfo.roomId != '') {
         formStage = 'JOIN_ROOM';

@@ -23,6 +23,12 @@
     "NEXT_PUBLIC_SFU_ENV": {
       "description": "SFU ENV",
       "value": "prod-in"
+    },
+    "NEXT_PUBLIC_SECONDARY_COLOR":{
+      "description":" Button color"
+    },
+    "NEXT_PUBLIC_BRAND_LOGO":{
+      "description":"Image url"
     }
   }
 }

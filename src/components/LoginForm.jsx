@@ -854,6 +854,7 @@ class LoginForm extends React.Component {
                           onClick={() => {
                             this.startPreview(true);
                           }}
+                          ref={changeToSecondaryColor}
                         >
                           <span className="absolute left-0 inset-y-0 flex items-center pl-3"></span>
                           Prompt permission dialog

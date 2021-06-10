@@ -1,3 +1,6 @@
+> :warning: We have deprecated this older version of our sample web app. Kindly refer to [our new sample app](https://github.com/100mslive/100ms-web-v2)
+
+
 # 100ms Sample React App
 
 This is an example web app to demo 100ms' web SDK
